@@ -12,39 +12,38 @@ Depending on the participating bank's capabilities, merchants may be able to per
 - **Full Refund** – Refund the entire transaction amount.
 - **Partial Refund** – Refund a portion of the original transaction amount.
 
-> Refund support varies by participating bank and payment channel.
-
----
+<Note>
+Refund support varies by participating bank and payment channel.
+</Note>
 
 ## Refund Types
 
-### Full Refund
+<CardGroup cols={2}>
+  <Card title="Full Refund" icon="receipt-refund">
+    A Full Refund returns the entire amount of the original transaction to the customer.
 
-A Full Refund returns the entire amount of the original transaction to the customer.
+    **Example**
 
-#### Example
+    | Original Transaction Amount | Refund Amount |
+    |----------------------------|---------------|
+    | RM100.00 | RM100.00 |
+  </Card>
+  <Card title="Partial Refund" icon="percentage">
+    A Partial Refund returns only a portion of the original transaction amount.
 
-| Original Transaction Amount | Refund Amount |
-|----------------------------|---------------|
-| RM100.00 | RM100.00 |
+    **Example**
 
----
+    | Original Transaction Amount | Refund Amount |
+    |----------------------------|---------------|
+    | RM100.00 | RM30.00 |
 
-### Partial Refund
+    The remaining balance (RM70.00) remains retained from the original transaction.
 
-A Partial Refund returns only a portion of the original transaction amount.
-
-#### Example
-
-| Original Transaction Amount | Refund Amount |
-|----------------------------|---------------|
-| RM100.00 | RM30.00 |
-
-The remaining balance (RM70.00) remains retained from the original transaction.
-
-> Partial refund support is dependent on the participating bank.
-
----
+    <Note>
+    Partial refund support is dependent on the participating bank.
+    </Note>
+  </Card>
+</CardGroup>
 
 ## Refund Support by Participating Bank
 
@@ -62,8 +61,6 @@ The following information has been gathered from participating banks on a best-e
 Participating banks may introduce enhancements or changes to their refund capabilities without notifying CommercePay. Refund behaviour should always be validated during integration and testing.
 </Warning>
 
----
-
 ## Cross-Border Transactions
 
 ### Unsupported Refund Scenario
@@ -76,8 +73,6 @@ Merchants are advised to contact CommercePay Support should a refund be required
 #### Limitation
 Cross-border transactions do not support refund requests via API.
 </Warning>
-
----
 
 ## Important Considerations
 
@@ -103,5 +98,3 @@ CommercePay recommends that merchants:
 2. Handle refund failures gracefully within their application.
 3. Inform customers that refund completion times may vary depending on the bank's processing timeline.
 4. Periodically review CommercePay documentation for updates.
-
----

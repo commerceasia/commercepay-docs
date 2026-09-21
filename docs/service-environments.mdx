@@ -3,7 +3,17 @@ title: "Service Environments"
 description: "Staging and production base URLs for the CommercePay API."
 ---
 
-Environment | URL
----------|----------
- Staging | https://staging-payments.commerce.asia/
- Production | https://payments.commerce.asia/
+CommercePay provides two base URLs depending on the environment you're integrating against.
+
+<CardGroup cols={1}>
+  <Card title="Staging" icon="flask" type="warning">
+    For testing and development.
+
+    `https://staging-payments.commerce.asia/`
+  </Card>
+  <Card title="Production" icon="rocket" type="check">
+    Live environment for real transactions.
+
+    `https://payments.commerce.asia/`
+  </Card>
+</CardGroup>

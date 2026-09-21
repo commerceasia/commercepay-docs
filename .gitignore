@@ -1,0 +1,8 @@
+# Visual Studio local cache/index
+.vs/
+
+# Dependencies
+node_modules/
+
+# Mintlify local preview cache
+.mintlify/

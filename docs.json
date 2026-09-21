@@ -78,8 +78,8 @@
     ]
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/commercepay-logo-cropped.png",
+    "dark": "/logo/commercepay-logo-cropped.png"
   },
   "navbar": {
     "links": [

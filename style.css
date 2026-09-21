@@ -1,0 +1,6 @@
+/* Make the navbar logo more prominent — Mintlify's default nav-logo
+   height renders the sidebar logo quite small. */
+img.nav-logo {
+  height: 2.25rem !important;
+  width: auto !important;
+}

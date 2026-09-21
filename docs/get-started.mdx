@@ -3,12 +3,14 @@ title: "Setup Guide"
 description: "Set up your environment, obtain credentials, and choose an integration method."
 ---
 
-Welcome to the CommercePay API. This guide will help you set up your environment, obtain your credentials, and understand the core components required to integrate our payment gateway into your application.
+This guide walks through two steps: getting your credentials, then choosing how to integrate.
 
-## 1. Obtain Your API Credentials
+<Steps>
+<Step title="Obtain Your API Credentials">
+
 To begin integrating with CommercePay, you must first obtain your production or sandbox credentials. These are issued by the CommercePay Business Team.
 
-### How to Request Credentials
+#### How to Request Credentials
 Please contact your dedicated Account Manager or reach out to our Business Development Team at payments@commmerce.asia to initiate the onboarding process. Once approved, you will receive a secure package containing the following:
 
 Parameter | Description 
@@ -18,28 +20,39 @@ Parameter | Description
  Password | The secure password associated with your API username.
  Secret Key | A unique string used for generating request signatures and verifying webhooks. Keep this key confidential.
 
-> **Security Best Practice:** **NEVER hardcode** your Secret Key or Password in client-side code (JavaScript). **Always** store these credentials securely in your server-side environment variables or a dedicated key vault.
+<Warning>
+**Security Best Practice:** **NEVER hardcode** your Secret Key or Password in client-side code (JavaScript). **Always** store these credentials securely in your server-side environment variables or a dedicated key vault.
+</Warning>
 
-## 2. Explore Integration Methods
+</Step>
+<Step title="Explore Integration Methods">
+
 CommercePay offers multiple integration paths to suit different business needs, from low-code hosted solutions to fully customizable API integrations.
 
 <CardGroup cols={2}>
-  <Card title="Hosted Payment Page" icon="arrow-up-right-from-square" href="/docs/hosted-session-checkout">
-    The fastest way to get started. When a customer is ready to pay, you redirect them to a secure page hosted by CommercePay.
+<Card title="Hosted Payment Page" icon="arrow-up-right-from-square" href="/docs/hosted-session-checkout">
 
-    - **Best for:** Small to medium businesses wanting to minimize PCI compliance requirements.
-    - **Pros:** Requires minimal coding; CommercePay handles all security and UI updates.
-    - **Flow:** Your Server → Redirect to CommercePay → Payment Completion → Return to your Site.
-  </Card>
-  <Card title="Direct API Integration" icon="code" href="/docs/direct-integration">
-    For merchants who want to maintain a seamless brand experience by keeping the customer on their own website during the checkout process.
+The fastest way to get started. When a customer is ready to pay, you redirect them to a secure page hosted by CommercePay.
 
-    - **Best for:** Larger platforms with specific UI/UX requirements.
-    - **Pros:** Complete control over the checkout flow and customer journey.
-    - **Flow:** Customer stays on your site → Your Server calls CommercePay API → Transaction processed in background.
-  </Card>
+- **Best for:** Small to medium businesses wanting to minimize PCI compliance requirements.
+- **Pros:** Requires minimal coding; CommercePay handles all security and UI updates.
+- **Flow:** Your Server → Redirect to CommercePay → Payment Completion → Return to your Site.
+
+</Card>
+<Card title="Direct API Integration" icon="code" href="/docs/direct-integration">
+
+For merchants who want to maintain a seamless brand experience by keeping the customer on their own website during the checkout process.
+
+- **Best for:** Larger platforms with specific UI/UX requirements.
+- **Pros:** Complete control over the checkout flow and customer journey.
+- **Flow:** Customer stays on your site → Your Server calls CommercePay API → Transaction processed in background.
+
+</Card>
 </CardGroup>
 
 <Tip>
 **Next Step:** Once you have chosen your method, proceed to [Authentication & Security](/docs/generate-signature) to learn how to sign your first request.
 </Tip>
+
+</Step>
+</Steps>
