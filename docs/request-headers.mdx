@@ -1,0 +1,16 @@
+---
+title: "Request Headers"
+description: "Required headers for every CommercePay API request."
+---
+
+
+> In each API request call, the request headers should contain the following parameters:
+
+
+
+Parameter Name | Required | Description
+---------|----------|---------
+ Content-Type | Yes | Must be set to **application/json**.
+ Authorization | Yes | 	Your API credentials used for authentication (typically a Bearer token). Example: `Bearer {access token from authentication}`
+ Abp-TenantId | Yes | Your unique Merchant/Tenant ID assigned by CommercePay.
+ cap-signature | Yes | A unique security hash used to verify the integrity of the request body.

@@ -1,0 +1,106 @@
+---
+title: "Inquiry Wallet Histories"
+description: "Retrieve wallet transaction history."
+---
+
+An API endpoint used to retrieve wallet transaction history.
+
+Type | Details
+---------|----------
+ Endpoint URL | https://staging-payments.commerce.asia/api/services/app/PaymentGateway/QueryWalletHistory
+ HTTP Method | Post
+
+#
+---
+## Request
+### Headers
+Parameter Name | Description
+---------|----------
+ Abp-TenantId | Your unique Merchant ID assigned by CommercePay.
+ Authorization | Your API credentials used for authentication (typically a Bearer token). Example: `Bearer {access token from authentication}`
+ cap-signature | A unique security hash used to verify the integrity of the request body.
+
+
+ ### Body
+
+Parameter | Type | Requirement | Description
+---------|----------|---------|----------|
+ nextRecord | Int | Optional | For retrieving the next set of records. (This filed is not required to fetch first 100 records, to fetch subsequent records this field is mandatory and value can be fetched from previous response’s “nextRecords”.)
+ dateTimeFrom | String | Mandatory | The start date and time for the search. [Universal Time Coordinated (UTC)]
+ dateTimeTo | String | Mandatory | The end date and time for the search. [Universal Time Coordinated (UTC)]
+ walletId | Int | Mandatory | An unique wallet ID. you can obtain this from [Inquiry Wallets Endpoint](/api-reference/payout-api-querywallets)
+ 
+ ### Request Payload Sample
+ ```json Payload
+{
+  "nextRecord": 0,
+  "dateTimeFrom": "2026-04-26T10:57:32.089Z",
+  "dateTimeTo": "2026-04-26T10:57:32.089Z",
+  "walletId": 0
+}
+```
+
+---
+## Response
+### Body
+Parameter | Type | Description
+---------|----------|----------|
+ walletId | Int64 | An unique wallet ID.
+ walletBalance | Decimal | Available wallet balance.
+ walletHistories | Array[Object] | 
+ walletHistories.Id | Int64 | Transaction history ID.
+ walletHistories.createdDate | String | Transaction date and time. [Universal Time Coordinated (UTC)]
+ walletHistories.transactionNumber | String | Transaction number.
+ walletHistories.refenceCode | String | Transaction reference.
+ walletHistories.amount | Decimal | Transaction payment amount.
+ walletHistories.currencyCode | String | Transaction payment currency code.
+ walletHistories.type | Int | Payment type. [Topup = 1, Payout = 2, Reverse = 3, Refund = 4, Rebate = 5, Unknow = 6]
+ walletHistories.description | String | Transaction payment description.
+ walletHistories.postTransactionWalletBalance | Decimal | Wallet balance after transaction.
+ nextRecords | Int | Next record indicator.
+
+ ### Response Payload Sample
+ ```json Response_2XX
+{
+  "result": {
+    "walletId": 4,
+    "walletBalance": 5253.6,
+    "walletHistories": [
+      {
+        "id": 2030,
+        "createdDate": "2026-03-29T03:59:04.338023Z",
+        "transactionNumber": "101A5E976151454E9B0260329",
+        "refenceCode": "200BC14478FA9200C3F260329",
+        "amount": 100,
+        "currencyCode": "MYR",
+        "type": 2,
+        "description": "UOBATD001",
+        "postTransactionWalletBalance": 5353.6
+      }
+    ],
+    "nextRecords": 1
+  }
+}
+```
+
+---
+## Bad Response
+### Bad Response Payload Sample
+ ```json Response_400
+{
+  "result": null,
+  "error": {
+    "code": 1005,
+    "message": "Tenant Wallet Not Found"
+  }
+}
+```
+```json Response_400
+{
+  "result": {
+    "code": 1,
+    "message": "Invalid Signature."
+  },
+  "error": null
+}
+```

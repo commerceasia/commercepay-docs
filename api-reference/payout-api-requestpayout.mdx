@@ -1,0 +1,140 @@
+---
+title: "Request Payout"
+description: "Request a payout and transfer funds via bank account or DuitNow Proxy."
+---
+
+An API endpoint used to request a payout and transfer funds to the specified recipients through a bank account or DuitNow Proxy.
+
+Type | Details
+---------|----------
+ Endpoint URL | https://staging-payments.commerce.asia/api/services/app/PaymentGateway/RequestPayment
+ HTTP Method | Post
+
+#
+---
+## Request
+### Headers
+Parameter Name | Description
+---------|----------
+ Abp-TenantId | Your unique Merchant ID assigned by CommercePay.
+ Authorization | Your API credentials used for authentication (typically a Bearer token). Example: `Bearer {access token from authentication}`
+ cap-signature | A unique security hash used to verify the integrity of the request body.
+
+
+ ### Body
+
+Parameter | Type | Requirement | Description
+---------|----------|---------|----------|
+ channelId | Int | Mandatory | An identifier that represents CommercePay payments channel. [Production Payout ChannelId: 9 ; Staging Payout ChannelId: 15]  
+ providerChannelId | String | Mandatory | An identifier that represents the payment method (Bank or Duitnow Proxy). You can obtain the providerChannelId via the [Get Provider Channels API](/api-reference/get-provider-channels) or refer to it [here](/docs/payout-provider-channel).
+ currencyCode | String [Max Length: 3] | Mandatory | Currency code with a 3-letter ISO 4217 standard code. [Example: MYR]
+ amount | Int64 | Mandatory | Payout amount. This field accepts only integer values. For example, 1050 represents 10.50.
+ referenceCode | String [Max Length: 50] | Mandatory | Merchant reference code.
+ description | String [Max Length: 100] | Optional | Transaction description.
+ ipAddress | String [Max Length: 50] | Mandatory | Customer’s IP address captured by the merchant system.
+ userAgent | String [Max Length: 200] | Optional | Customer’s user agent.
+ returnUrl | String [Max Length: 500] | Mandatory | A return URL provided by the merchant. The user can be redirected to the final destination page from the CommercePay receipt page after the transaction payment has been completed.
+ callbackUrl | String [Max Length: 500] | Optional | A URL provided by the merchant to receive server-to-server notifications from the system regarding transaction status updates. This URL is called automatically once the payment process is completed or when the transaction status changes.
+ customer | Object | Mandatory | 
+ customer.email | String [Max Length: 150] | Optional | Customer’s Email Address.
+ customer.mobileNo | String [Max Length: 16] | Conditional | Customer’s mobile number. Required when processing a payout via DuitNow Proxy using a mobile number.
+ customer.name | String [Max Length: 36] | Conditional | Customer’s Name. Required when processing a payout via bank transfer.
+ customer.username | String [Max Length: 36] | Conditional | A field for bank account number, national ID (NRIC) or Business Registration Number.
+ localCitizen | boolean | Mandatory | If the customer is Malaysian, kindly set it to True; otherwise, set it to False.
+ timestamp | Int64 | Mandatory | Current Timestamp. [Example: 1621851652617]
+
+
+ ### Request Payload Sample
+ ```json Payout_With_Bank
+{
+  "channelId": 15,
+  "providerChannelId": "UOVBMYKL",      // Beneficiary Bank Swift Code 
+  "currencyCode": "MYR",
+  "amount": 1000,
+  "referenceCode": "BankPayout_1",
+  "description": "BankPayout_1",
+  "ipAddress": "202.184.234.13",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0",
+  "returnUrl": "https://staging-web-payments.commerce.asia",
+  "callbackUrl": "https://callback.com",
+  "customer": {
+    "email": "ATD@commerce.asia",
+    "mobileNo": "0101234567",
+    "name": "ACCOUNT DUITNOW - HYPHEN ACCOUNT DUITNOW - HYPHEN",      // Beneficiary Bank Account Name
+    "username": "2093011793"      // Beneficiary Bank Account Number
+  },
+  "localCitizen": true,
+  "timestamp": 1669862494
+}
+```
+
+```json Payout_With_DuitNow_Proxy
+{
+  "channelId": 15,
+  "providerChannelId": "NRIC",      // Proxy Mode 
+  "currencyCode": "MYR",
+  "amount": 1000,
+  "referenceCode": "ProxyPayout_1",
+  "description": "ProxyPayout_1",
+  "ipAddress": "202.184.234.13",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0",
+  "returnUrl": "https://staging-web-payments.commerce.asia",
+  "callbackUrl": "https://callback.com",
+  "customer": {
+    "email": "ATD@commerce.asia",
+    "mobileNo": "0101234567",
+    "name": "John",
+    "username": "660124020789"      // National ID Or Business Registration Number
+  },
+  "LocalCitizen": true,
+  "timestamp": 1669862494
+}
+```
+
+---
+## Response
+### Body
+Parameter | Type | Description
+---------|----------|----------|
+ currencyCode | String [Max Length: 3] | Payout currency.
+ amount | Int | Payout amount. For example, 1050 represents 10.50.
+ transactionNumber | String [Max Length: 24] | Unique CommercePay Transaction Number.
+ channelId | Int | An identifier that represents CommercePay payments channel.
+ redirectionType | Int | Represents the **redirectUrl** type. This field returns 1 (URL Redirection).
+ redirectUrl | String | URL used for the customer to redirect to the payment page.
+
+ ### Response Payload Sample
+ ```json Response_2XX
+{
+  "result": {
+    "currencyCode": "MYR",
+    "amount": 1000,
+    "transactionNumber": "20061769514A13A0A02260425",
+    "channelId": 15,
+    "redirectionType": 1,
+    "redirectUrl": "https://dev-payments.commerce.asia/paymentgateway/Return/15?exchangeToken=QVNNMGd5Nmh5NzAxNnp3RkRUOVdRbFIzakcrM0ZHRnJmRmZkUlp5aDNuaz0"
+  }
+}
+```
+
+---
+## Bad Response
+### Bad Response Payload Sample
+ ```json Response_400
+{
+  "result": null,
+  "error": {
+    "code": 2056,
+    "message": "Failed Payment Request"
+  }
+}
+```
+```json Response_400
+{
+  "result": {
+    "code": 1,
+    "message": "Invalid Signature."
+  },
+  "error": null
+}
+```

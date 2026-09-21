@@ -1,0 +1,95 @@
+---
+title: "Inquiry Wallets"
+description: "Retrieve wallet balance, status, and related details."
+---
+
+An API endpoint used to retrieve wallet information, including wallet balance, status, and other related details.
+
+Type | Details
+---------|----------
+ Endpoint URL | https://staging-payments.commerce.asia/api/services/app/PaymentGateway/QueryWallets
+ HTTP Method | Post
+
+#
+---
+## Request
+### Headers
+Parameter Name | Description
+---------|----------
+ Abp-TenantId | Your unique Merchant ID assigned by CommercePay.
+ Authorization | Your API credentials used for authentication (typically a Bearer token). Example: `Bearer {access token from authentication}`
+ cap-signature | A unique security hash used to verify the integrity of the request body.
+
+
+ ### Body
+
+Parameter | Type | Requirement | Description
+---------|----------|---------|----------|
+ tenantId | Int | Mandatory | Merchant ID.
+ timestamp | Int64 | Mandatory | Current timestamp. [Example: 1621851652617]
+ 
+
+
+ ### Request Payload Sample
+ ```json Payload
+{
+  "tenantId": 14,
+  "timestamp": 1621851652617
+}
+```
+
+---
+## Response
+### Body
+Parameter | Type | Description
+---------|----------|----------|
+ tenantId | Int | Merchant ID.
+ tenantName | String | Merchant name.
+ wallets | Array[Object] | 
+ wallets.id | Int64 | An unique wallet ID. 
+ wallets.currencyCode | String | Wallet currency.
+ wallets.balance | Decimal | Wallet balance.
+ wallets.walletType | Int | Type of wallet. [Basic = 0, Premium =1, Payout = 2]
+ wallets.walletStatus | Int | Wallet status. [Inactive = 0, active = 1]
+ 
+
+ ### Response Payload Sample
+ ```json Response_2XX
+{
+  "result": {
+    "tenantId": 14,
+    "tenantName": "CAPTest",
+    "wallets": [
+      {
+        "id": 4,
+        "currencyCode": "MYR",
+        "balance": 5253.6,
+        "walletType": 2,
+        "walletStatus": 1
+      }
+    ]
+  }
+}
+```
+
+---
+## Bad Response
+### Bad Response Payload Sample
+ ```json Response_400
+{
+  "result": null,
+  "error": {
+    "code": 1005,
+    "message": "Tenant Wallet Not Found"
+  }
+}
+```
+```json Response_400
+{
+  "result": {
+    "code": 1,
+    "message": "Invalid Signature."
+  },
+  "error": null
+}
+```

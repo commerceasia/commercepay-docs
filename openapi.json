@@ -1,0 +1,2859 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "CommercePay API",
+    "version": "v1",
+    "description": "---\n**Credentials Accounts**\n\nEvery account is provided with separate keys for testing and for running live transactions. Once the merchant application has been approved, developers can begin the process of integrating the CommercePay API. The following details will be provided to get started with the integration. \n\n<a href=\"https://docs.commercepay.asia/docs/api/d19b0f3289ae0-get-started\" target=\"_blank\">Get Started</a>\n",
+    "contact": {}
+  },
+  "paths": {
+    "/api/TokenAuth/Authenticate": {
+      "post": {
+        "tags": [
+          "TokenAuth"
+        ],
+        "operationId": "ApiTokenauthAuthenticatePost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateModel"
+              },
+              "examples": {
+                "Example Request": {
+                  "value": {
+                    "userNameOrEmailAddress": "userNameOrEmailAddress",
+                    "password": "password"
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticateResultModel"
+                },
+                "examples": {
+                  "Example Response": {
+                    "value": {
+                      "accessToken": "iCfIl7LW1Px2FPCXSoYqBtgHlkomxeSo1hxAAdAIjbB3M0jJABWWFxtCicSAKVJB9Mi1JkSIUOiIYVDwKUz5McSl9nCIghtetLI7A1XT6AltOEbNAyQj4Ta0XdwT0cfxEQPu0sA0iemn7fsIaBAYFPnGX0nh4MvjVR392eJi3RRMvuEQkl62hmHtAjYVJj2yXlmaMjO4k0HVmce5P3WzfveoFdqZ84bNSxQRYQCSo0m2ii6q0keN5K9pAMXEK6iJoDPdvnOiPFL5LozEFgN9VH8S7EUxaWB7xZrRVzcOz4UokvMGTpxIDMUqEtdF8wz5WZYtguxUEkyEY4Uclq5OjuTZnC1KebxpFtSQPzzj7TtzfinVkuurQf1H5C3kbW3Qer42IlomjEg8rJiojdIPgPJO5x8q4rqzpS3x8xL5KP8csC0BlLGd9opNiYlYbVk794WPrPXLvRfY7c6RwaXZ3wQsdUrjqf0LSt9w4rdUSdLzCxUxQEgp9KBy2OAjtxCxRKXWB4fNUJs14IkX661In705gPX6taSRxFLLLjrZFcAxNKyDwmtzjGX6w3bkHh0O0R7DaXU9zpRUbI4Ky0q6IGq5r7CMx8VnVQMpyX9DSBrKyYdySb0RrMNR31pT2T4W3hxgBV6BvGBlPDUOLXIbKskHJXqI5dw1UXJR8umd16WGAb3G6w6TMBuQTT3ScoxXw7Ijc7oWrfxfMFI9nilxCRoOpSvoGHGkKxL2Uv4Gd9wyOrwwNa03g9t0KkdTq5mT1V8k3kDDGPUI9XIrMERHgunsS77aaDBNogwH7cIM1Lz2wOCYixeM5Sm2pyoGLXWh327bURWl4HBWlV4HZHJoEynQrsCLQKmAPYwR3OdW7w9x2yBwSzk2xTTqgrVnbrtmu4SqBnekrzn5LYSvyYgj7o6MjaswTy4XyS6tbSfAj5q1jUOWufvbMdSpATJXO74Blf1FzROGKrYTl52bZ0pPnOqJiP2TOXetMgfxJkLSu1Z5XFbCnJ",
+                      "expireInSeconds": 86400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid user name or password"
+          }
+        },
+        "description": "The following input parameters are expected to be provided by the Merchant to retrieve the access token.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "name": "Abp-TenantId",
+            "required": true,
+            "description": "Fill in provided Merchant Id"
+          }
+        ],
+        "summary": "Authenticate"
+      },
+      "parameters": []
+    },
+    "/api/services/app/Channel/GetTenantChannelsByCountry": {
+      "get": {
+        "tags": [
+          "Channel"
+        ],
+        "operationId": "ApiServicesAppChannelGettenantchannelsbycountryGet",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "MY",
+              "maxLength": 2
+            },
+            "in": "query",
+            "name": "countryCode",
+            "description": "Country code with 2-letter of ISO Alpha-2 standard",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "name": "Abp-TenantId",
+            "description": "Fill in provided Tenant Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChannelDto"
+                  }
+                },
+                "examples": {
+                  "Example Response": {
+                    "value": [
+                      {
+                        "id": 2,
+                        "name": "FPX",
+                        "type": 1,
+                        "refundType": 0,
+                        "isProviderHostChannel": true,
+                        "currencies": [
+                          {
+                            "acceptedCurrencyCode": "MYR",
+                            "minRequestAmount": null,
+                            "maxRequestAmount": null,
+                            "dailyTransactionCount": null,
+                            "dailyTransactionAmount": null,
+                            "minSurchargeAmount": null,
+                            "maxSurchargeAmount": null,
+                            "isSurchargePercentage": null,
+                            "surcharge": null
+                          }
+                        ],
+                        "imageUrl": "https://commerceasiapayment.blob.core.windows.net/image/payment/channel/2/2.png",
+                        "groupId": null,
+                        "groupName": null,
+                        "groupImageUrl": null
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-internal": false,
+        "description": "The following input parameters are expected to be provided by the merchant to retrieve available channels by country code. ",
+        "summary": "Get Tenant Channels By Country",
+        "x-mint": {
+          "href": "/api-reference/get-tenant-channels-by-country"
+        }
+      },
+      "parameters": []
+    },
+    "/api/services/app/Channel/GetProviderChannels": {
+      "get": {
+        "tags": [
+          "Channel"
+        ],
+        "operationId": "ApiServicesAppChannelGetproviderchannelsGet",
+        "parameters": [
+          {
+            "name": "ChannelId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "An identifier that represents a CommercePay channel. Refer to the id on response endpoints of GetTenantChannelsByCountry.",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "name": "Abp-TenantId",
+            "description": "Fill in provided Tenant Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProviderChannelDto"
+                  }
+                },
+                "examples": {
+                  "Example Response": {
+                    "value": [
+                      {
+                        "id": "TEST0021",
+                        "name": "SBI Bank A SBI",
+                        "displayName": "SBI Bank A",
+                        "imageUrl": "https://commerceasiapayment.blob.core.windows.net/image/payment/channel/2/providerchannel/TEST0021.png",
+                        "status": 1
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error\n[Provider does not have channels]"
+          }
+        },
+        "summary": "Get Provider Channels",
+        "description": "The following input parameters are expected to be provided by the merchant to retrieve available payment provider channels.",
+        "x-mint": {
+          "href": "/api-reference/get-provider-channels"
+        }
+      }
+    },
+    "/api/services/app/PaymentGateway/Query": {
+      "get": {
+        "tags": [
+          "PaymentGateway"
+        ],
+        "summary": "Query Payment",
+        "description": "Payment gateway checks the existing payment status.\n\nThe following input parameters are expected to be provided by the merchant to verify transaction status or to obtain more details on the payment before approving the customer’s order.\n\n> Endpoint requires signature security checking. <br />\n> For signature generation, please refer to the \n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
+        "operationId": "ApiServicesAppPaymentgatewayQueryGet",
+        "parameters": [
+          {
+            "name": "TransactionNumber",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 24
+            },
+            "description": "Unique CAP Transaction Number **(Conditional: If it is query for specific transaction in either normal transaction or session transaction, then need pass the transaction number)**"
+          },
+          {
+            "name": "Timestamp",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1621851652617
+            },
+            "description": "new Date().getTime()"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "1871026bbf0953876f642051749808e64d990dc5812a30ed562d7d9886e916e8"
+            },
+            "in": "header",
+            "name": "cap-signature",
+            "description": "Refer to more information on <a href=\"docs/APIService.md\" target=\"_blank\">Hash Generation</a>",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Bearer {accessToken}"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Generated from <a href=\"swagger.json/paths/~1api~1TokenAuth~1Authenticate\" target=\"_blank\">Response accessToken (/api/TokenAuth/Authenticate) </a><br />Keyword <b>Bearer</b> with single SPACE, following with {accessToken}",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 24
+            },
+            "in": "query",
+            "name": "SessionNumber",
+            "description": "Unique CAP Session Number **(Conditional: If the query is query the session, then need pass the session number)**"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "name": "Abp-TenantId",
+            "description": "Fill in provided Merchant Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryPaymentOutputDto"
+                },
+                "examples": {
+                  "Example Response": {
+                    "value": {
+                      "transactionNumber": "string",
+                      "paymentSessionNumber": "string",
+                      "referenceCode": "string",
+                      "status": 0,
+                      "currencyCode": "MYR",
+                      "amount": 1000,
+                      "channelId": 1,
+                      "providerTransactionNumber": "string",
+                      "creationTime": "2022-02-10T08:50:30.565Z",
+                      "remark": "string",
+                      "providerChannelId": "string",
+                      "providerPaymentMethod": "string",
+                      "providerErrorMessage": "string",
+                      "loyaltyType": 1,
+                      "redemptionPoint": 100,
+                      "redemptionAmount": 100,
+                      "rewardPoint": 100,
+                      "paidAmount": 900,
+                      "loyaltyRedemptionStatus": 0,
+                      "loyaltyRewardStatus": 0
+                    }
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryPaymentOutputDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/services/app/PaymentGateway/RequestPayment": {
+      "post": {
+        "summary": "Request Payment",
+        "description": "**The payment gateway requests a new payment**\n\nThe following input parameters are expected to be provided by the merchant to perform an online payment transaction.\n\n> - Channel Id may refer to the [Get Channel List Endpoint](/api-reference/get-tenant-channels-by-country)\n> - If merchants would like to use [CommercePay Hosted Payment Web solution](/docs/hosted-session-checkout), merchants may skip Channel Id parameter.\n\n> Endpoint requires signature security checking. <br />\n> For signature generation, please refer to the \n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
+        "operationId": "ApiServicesAppPaymentgatewayRequestpaymentPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestPaymentInputDto"
+              },
+              "examples": {
+                "Example Request": {
+                  "value": {
+                    "channelId": 0,
+                    "providerChannelId": "string",
+                    "currencyCode": "MYR",
+                    "amount": 0,
+                    "referenceCode": "string",
+                    "description": "string",
+                    "ipAddress": "string",
+                    "userAgent": "string",
+                    "returnUrl": "string",
+                    "callbackUrl": "string",
+                    "savePayment": false,
+                    "customer": {
+                      "email": "string",
+                      "mobileNo": "string",
+                      "name": "string",
+                      "username": "string",
+                      "identificationNumber": "string",
+                      "identificationType": 1
+                    },
+                    "subMerchant": {
+                      "uniqueId": "string",
+                      "name": "string"
+                    },
+                    "localCitizen": true,
+                    "recurringPaymentInfo": {
+                      "id": "string",
+                      "mode": 1,
+                      "numberOfPayments": 1,
+                      "effectiveDate": "string",
+                      "maximumPaymentAmount": 0,
+                      "expiryDate": "string",
+                      "isFixedAmount": true
+                    },
+                    "requestPaymentExtraInfo": {
+                      "channelGroupId": 0
+                    },
+                    "platformCharge": {
+                      "partnerId": "string",
+                      "amount": 0
+                    },
+                    "timestamp": 0
+                  }
+                },
+                "Sample Input": {
+                  "value": {
+                    "channelId": 2,
+                    "providerChannelId": "TEST0021",
+                    "currencyCode": "MYR",
+                    "amount": 100,
+                    "referenceCode": "string",
+                    "description": "Order details",
+                    "ipAddress": "string",
+                    "userAgent": "string",
+                    "returnUrl": "https://returnurl.com/",
+                    "callbackUrl": "https://callback.com/",
+                    "customer": {
+                      "email": "email@gmail.com",
+                      "mobileNo": "0123456789",
+                      "name": "name",
+                      "username": "username"
+                    },
+                    "timestamp": 1621851652617
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestPaymentOutputDto"
+                },
+                "examples": {
+                  "Example Response": {
+                    "value": {
+                      "currencyCode": "MYR",
+                      "amount": 0,
+                      "transactionNumber": "string",
+                      "channelId": 0,
+                      "redirectionType": 1,
+                      "redirectUrl": "string",
+                      "clientScript": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\nInvalid Timestamp.\nInvalid Signature."
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "1871026bbf0953876f642051749808e64d990dc5812a30ed562d7d9886e916e8"
+            },
+            "in": "header",
+            "name": "cap-signature",
+            "required": true,
+            "description": "Refer to more information on <a href=\"docs/APIService.md\" target=\"_blank\">Hash Generation</a>"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Bearer {accessToken}"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Generated from <a href=\"swagger.json/paths/~1api~1TokenAuth~1Authenticate\" target=\"_blank\">Response accessToken (/api/TokenAuth/Authenticate) </a><br />Keyword <b>Bearer</b> with single SPACE, following with {accessToken}",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "name": "Abp-TenantId",
+            "required": true,
+            "description": "Fill in provided Merchant Id"
+          }
+        ],
+        "tags": [
+          "PaymentGateway"
+        ]
+      }
+    },
+    "/api/services/app/PaymentGateway/ProcessPayment": {
+      "post": {
+        "summary": "Process Payment",
+        "tags": [
+          "PaymentGateway"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/ProcessPaymentOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "ApiServicesAppPaymentgatewayProcesspaymentPost",
+        "description": "**The payment gateway process a new payment**\r\n\r\nThe following input parameters are expected to be provided by the merchant to perform pre-auth, full payment or partial payment operation.\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/ProcessPaymentInputDto"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "1871026bbf0953876f642051749808e64d990dc5812a30ed562d7d9886e916e8"
+            },
+            "in": "header",
+            "name": "cap-signature",
+            "description": "Refer to more information on <a href=\"docs/APIService.md\" target=\"_blank\">Hash Generation</a>",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Bearer {accessToken}"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Generated from <a href=\"swagger.json/paths/~1api~1TokenAuth~1Authenticate\" target=\"_blank\">Response accessToken (/api/TokenAuth/Authenticate) </a><br />Keyword <b>Bearer</b> with single SPACE, following with {accessToken}",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "name": "Abp-TenantId",
+            "description": "Fill in provided Merchant Id",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/services/app/PaymentGateway/CheckSavedPayment": {
+      "post": {
+        "tags": [
+          "PaymentGateway"
+        ],
+        "operationId": "ApiServicesAppPaymentgatewayChecksavedpaymentPost",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckSavedPaymentInputDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckSavedPaymentInputDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckSavedPaymentInputDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckSavedPaymentInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckSavedPaymentOutputDto"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "isSavedPayment": true,
+                      "maskedAccountNumber": "string"
+                    }
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckSavedPaymentOutputDto"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckSavedPaymentOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Check Saved Payment",
+        "description": "Payment gateway check existing saved payment status. (Only for TNG)",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "name": "Abp-TenantId",
+            "description": "Fill in provided Merchant Id",
+            "required": true
+          }
+        ],
+        "x-mint": {
+          "href": "/api-reference/check-saved-payment"
+        }
+      }
+    },
+    "/api/services/app/PaymentGateway/AddSavePayment": {
+      "post": {
+        "tags": [
+          "PaymentGateway"
+        ],
+        "operationId": "ApiServicesAppPaymentgatewayAddsavepaymentPost",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddSavePaymentInputDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddSavePaymentInputDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddSavePaymentInputDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddSavePaymentInputDto"
+              }
+            }
+          },
+          "description": ""
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddSavePaymentOutputDto"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "transactionNumber": "string",
+                      "redirectUrl": "string"
+                    }
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddSavePaymentOutputDto"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddSavePaymentOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Add New Save Payment",
+        "description": "**Pre add customer payer payment details in Payment Gateway**\r\n\r\nAllow merchants save their customer payment details and using their system generated Unique Id to identify each of customers.\r\n\r\n> - Merchants shall pass their customers Unique Id to **\"customer.username\"** parameter\r\n> - Merchants may get customers saved payment details by using [Check Saved Payment Endpoint](/api-reference/check-saved-payment)\r\n> - Channel Id may refer to the [Get Channel List Endpoint](/api-reference/get-tenant-channels-by-country)\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "description": "Fill in provided Merchant Id",
+            "required": true,
+            "name": "Abp-TenantId"
+          }
+        ]
+      }
+    },
+    "/api/services/app/PaymentGateway/RefundPayment": {
+      "post": {
+        "tags": [
+          "PaymentGateway"
+        ],
+        "operationId": "ApiServicesAppPaymentgatewayRefundpaymentPost",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefundPaymentInputDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefundPaymentInputDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefundPaymentInputDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefundPaymentInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-examples": {
+                    "Example 1": {
+                      "tenantId": 0,
+                      "transactionNumber": "string",
+                      "refundTransactionNumber": "string",
+                      "referenceCode": "string",
+                      "amount": 100,
+                      "currencyCode": "MYR",
+                      "refundStatus": 0,
+                      "responseMessage": "string",
+                      "paymentSessionNumber": "string",
+                      "refundPaymentList": {
+                        "transactionNumber": "string",
+                        "amount": 100,
+                        "currencyCode": "MYR",
+                        "refundReason": "string",
+                        "refundStatus": 0
+                      }
+                    }
+                  },
+                  "nullable": true,
+                  "properties": {
+                    "tenantId": {
+                      "type": "integer"
+                    },
+                    "transactionNumber": {
+                      "type": "string"
+                    },
+                    "refundTransactionNumber": {
+                      "type": "string"
+                    },
+                    "referenceCode": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "integer"
+                    },
+                    "currencyCode": {
+                      "type": "string"
+                    },
+                    "refundStatus": {
+                      "type": "integer"
+                    },
+                    "responseMessage": {
+                      "type": "string"
+                    },
+                    "paymentSessionNumber": {
+                      "type": "string"
+                    },
+                    "refundPaymentList": {
+                      "type": "object",
+                      "properties": {
+                        "transactionNumber": {
+                          "type": "string"
+                        },
+                        "amount": {
+                          "type": "integer"
+                        },
+                        "currencyCode": {
+                          "type": "string"
+                        },
+                        "refundReason": {
+                          "type": "string"
+                        },
+                        "refundStatus": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "tenantId": 0,
+                      "transactionNumber": "string",
+                      "refundTransactionNumber": "string",
+                      "referenceCode": "string",
+                      "amount": 0,
+                      "currencyCode": "string",
+                      "refundStatus": 0,
+                      "responseMessage": "string",
+                      "paymentSessionNumber": "string",
+                      "refundPaymentList": {
+                        "transactionNumber": "string",
+                        "amount": 0,
+                        "currencyCode": "string",
+                        "refundReason": "string",
+                        "refundStatus": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestRefundOutputDto"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestRefundOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Refund Payment",
+        "description": "**The payment gateway requests a refund payment**\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "description": "Fill in provided Merchant Id",
+            "required": true,
+            "name": "Abp-TenantId"
+          }
+        ]
+      }
+    },
+    "/api/services/app/PaymentGateway/QueryRefund": {
+      "get": {
+        "tags": [
+          "PaymentGateway"
+        ],
+        "operationId": "ApiServicesAppPaymentgatewayQueryrefundGet",
+        "parameters": [
+          {
+            "name": "TransactionNumber",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 24
+            },
+            "description": "Unique CAP Transaction Number",
+            "required": true
+          },
+          {
+            "name": "Timestamp",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1621851652617
+            },
+            "description": "new Date().getTime()",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "name": "Abp-TenantId",
+            "description": "Fill in provided Merchant Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-examples": {
+                    "Example 1": {
+                      "tenantId": 0,
+                      "transactionNumber": "string",
+                      "paymentSessionNumber": "string",
+                      "refundTransactionNumber": "string",
+                      "referenceCode": "string",
+                      "amount": 0,
+                      "currencyCode": "string",
+                      "refundStatus": 0,
+                      "refundPaymentList": [
+                        {
+                          "transactionNumber": "string",
+                          "amount": 0,
+                          "currencyCode": "string",
+                          "refundReason": "string",
+                          "refundStatus": 0
+                        }
+                      ],
+                      "responseMessage": "string"
+                    }
+                  },
+                  "properties": {
+                    "tenantId": {
+                      "type": "integer"
+                    },
+                    "transactionNumber": {
+                      "type": "string"
+                    },
+                    "paymentSessionNumber": {
+                      "type": "string"
+                    },
+                    "refundTransactionNumber": {
+                      "type": "string"
+                    },
+                    "referenceCode": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "integer"
+                    },
+                    "currencyCode": {
+                      "type": "string"
+                    },
+                    "refundStatus": {
+                      "type": "integer"
+                    },
+                    "refundPaymentList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "transactionNumber": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "integer"
+                          },
+                          "currencyCode": {
+                            "type": "string"
+                          },
+                          "refundReason": {
+                            "type": "string"
+                          },
+                          "refundStatus": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "responseMessage": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "tenantId": 0,
+                      "transactionNumber": "string",
+                      "paymentSessionNumber": "string",
+                      "refundTransactionNumber": "string",
+                      "referenceCode": "string",
+                      "amount": 0,
+                      "currencyCode": "string",
+                      "refundStatus": 0,
+                      "refundPaymentList": [
+                        {
+                          "transactionNumber": "string",
+                          "amount": 0,
+                          "currencyCode": "string",
+                          "refundReason": "string",
+                          "refundStatus": 0
+                        }
+                      ],
+                      "responseMessage": "string"
+                    }
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestRefundOutputDto"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestRefundOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Query Refund Payment",
+        "description": "**The payment gateway requests a query refund payment status**\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>."
+      }
+    },
+    "/api/services/app/PaymentGateway/QueryWallets": {
+      "post": {
+        "summary": "Query Wallets",
+        "tags": [
+          "PaymentGateway"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryWalletOutputDto"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "tenantId": 0,
+                      "tenantName": "string",
+                      "wallets": [
+                        {
+                          "currencyCode": "MYR",
+                          "balance": 0,
+                          "walletType": 0,
+                          "walletStatus": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": " - Tenant not found\r\n - Tenant wallet not found"
+          }
+        },
+        "operationId": "get-api-services-app-PaymentGateway-QueryWallets",
+        "description": "Inquiry the wallet balance.\r\n\r\nThe following input parameters are expected to be provided by the merchant to retrieve the wallet balances.\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "1871026bbf0953876f642051749808e64d990dc5812a30ed562d7d9886e916e8"
+            },
+            "in": "header",
+            "name": "cap-signature",
+            "required": true,
+            "description": "Refer to more information on <a href=\"docs/APIService.md\" target=\"_blank\">Hash Generation</a>"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Bearer {accessToken}"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Generated from <a href=\"swagger.json/paths/~1api~1TokenAuth~1Authenticate\" target=\"_blank\">Response accessToken (/api/TokenAuth/Authenticate) </a><br />Keyword <b>Bearer</b> with single SPACE, following with {accessToken}",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "description": "Fill in provided Merchant Id",
+            "required": true,
+            "name": "Abp-TenantId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryWalletInputDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/services/app/PaymentGateway/InitialSession": {
+      "post": {
+        "summary": "Initial Session",
+        "tags": [
+          "PaymentGateway"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentSessionOutputDto"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "redirectionType": 1,
+                      "redirectUrl": "string",
+                      "sessionNumber": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: \r\nInvalid Timestamp.\r\nInvalid Signature."
+          }
+        },
+        "operationId": "post-api-services-app-PaymentGateway-InitialSession",
+        "description": "Payment gateway initial session payment.\r\n\r\nThe following input parameters are expected to be provided by the merchant to initial a session payment.\r\n\r\n> 🚧 **Beta Feature:**\r\n> This feature is currently in **Beta** and may change. If facing any bugs or problems, please inform us.\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "1871026bbf0953876f642051749808e64d990dc5812a30ed562d7d9886e916e8"
+            },
+            "in": "header",
+            "name": "cap-signature",
+            "description": "Refer to more information on <a href=\"docs/APIService.md\" target=\"_blank\">Hash Generation</a>",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Bearer {accessToken}"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Generated from <a href=\"swagger.json/paths/~1api~1TokenAuth~1Authenticate\" target=\"_blank\">Response accessToken (/api/TokenAuth/Authenticate) </a><br />Keyword <b>Bearer</b> with single SPACE, following with {accessToken}",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "required": true,
+            "name": "Abp-TenantId",
+            "description": "Fill in provided Merchant Id"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentSessionInputDto"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "x-mint": {
+          "href": "/api-reference/initial-session"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "#/definitions/LogLevel": {
+        "$ref": "#/components/schemas/LogLevel",
+        "x-internal": true
+      },
+      "#/definitions/PaymentStatus": {
+        "$ref": "#/components/schemas/PaymentStatus",
+        "x-internal": true,
+        "title": "Payment Status"
+      },
+      "#/definitions/String": {
+        "type": "string",
+        "x-internal": true,
+        "x-examples": {}
+      },
+      "AuthenticateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "x-internal": false,
+        "required": [
+          "userNameOrEmailAddress",
+          "password"
+        ],
+        "properties": {
+          "userNameOrEmailAddress": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Credentials will be given by Commerce.Asia",
+            "example": "userNameOrEmailAddress"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Credentials will be given by Commerce.Asia",
+            "example": "password"
+          }
+        }
+      },
+      "AuthenticateResultModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "x-examples": {},
+        "x-internal": false,
+        "required": [
+          "accessToken"
+        ],
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Get the access token from the result and place it into the Authorization Bearer token type for security purposes.",
+            "nullable": true
+          },
+          "expireInSeconds": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Expire in seconds",
+            "example": 20
+          }
+        }
+      },
+      "ChannelCurrencyDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "x-internal": false,
+        "properties": {
+          "acceptedCurrencyCode": {
+            "type": "string",
+            "description": "Currency code with a 3-letter ISO4217 standard code",
+            "nullable": true
+          },
+          "minRequestAmount": {
+            "type": "number",
+            "format": "double",
+            "description": "Minimum Request Amount",
+            "nullable": true
+          },
+          "maxRequestAmount": {
+            "type": "number",
+            "format": "double",
+            "description": "Maximum Request Amount",
+            "nullable": true
+          },
+          "dailyTransactionCount": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Daily Transaction Count",
+            "nullable": true
+          },
+          "dailyTransactionAmount": {
+            "type": "number",
+            "format": "double",
+            "description": "Daily Transaction Amount",
+            "nullable": true
+          },
+          "minSurchargeAmount": {
+            "type": "number",
+            "format": "double",
+            "description": "Minimum Surcharge Amount",
+            "nullable": true
+          },
+          "maxSurchargeAmount": {
+            "type": "number",
+            "format": "double",
+            "description": "Maximum Surcharge Amount",
+            "nullable": true
+          },
+          "isSurchargePercentage": {
+            "type": "boolean",
+            "description": "Indicate Surcharge Amount is Percentage",
+            "nullable": true
+          },
+          "surcharge": {
+            "type": "number",
+            "format": "double",
+            "description": "Surcharge Amount",
+            "nullable": true
+          }
+        }
+      },
+      "ChannelDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "x-internal": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "An identifier that represents CommercePay channel."
+          },
+          "name": {
+            "type": "string",
+            "description": "Channel Name",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ChannelType"
+          },
+          "refundType": {
+            "$ref": "#/components/schemas/ChannelRefundType"
+          },
+          "isProviderHostChannel": {
+            "type": "boolean",
+            "description": "If \"isProviderHostChannel\" is indicated as true, it means that the provider has its own one or more hosted channels. To get provider channels, merchants are required to call the endpoint: /api/services/app/Channel/GetProviderChannels."
+          },
+          "currencies": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ChannelCurrencyDto"
+            }
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Url image of Payment Provider channel",
+            "nullable": true
+          },
+          "groupId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "groupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "groupImageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "savePayment": {
+            "type": "boolean",
+            "description": "Availability to save user info for subsequent payments"
+          }
+        }
+      },
+      "ChannelType": {
+        "enum": [
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "OnlinePayment",
+          "OnlinePayout",
+          "OnlineRecurringPayment"
+        ],
+        "description": "Channel Type: [1= OnlinePayment, 2= OnlinePayout, 3= OnlineRecurringPayment]"
+      },
+      "IdentificationType": {
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "type": "integer",
+        "x-enumNames": [
+          "NewIdentityNumber",
+          "OldIdentityNumber",
+          "PassportNumber",
+          "BusinessRegistration",
+          "Others"
+        ],
+        "x-examples": {},
+        "description": "**[Conditional for FPX Recurring]**\n\nNew Identity Number = 1, Old Identity Number = 2, Passport Number = 3, Business Registration = 4, Others = 5"
+      },
+      "ProviderChannelDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "An identifier that represents the payment provider channel",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Payment Provider channel Name",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Payment Provider channel Display Name",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Url image of Payment Provider channel ",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/ThirdPartyChannelStatus"
+          }
+        }
+      },
+      "RequestPaymentInputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "x-examples": {
+          "Example 1": {
+            "channelId": 2,
+            "providerChannelId": "TEST0021",
+            "currencyCode": "MYR",
+            "amount": 100,
+            "referenceCode": "string",
+            "description": "Order details",
+            "ipAddress": "string",
+            "userAgent": "string",
+            "returnUrl": "https://returnurl.com/",
+            "callbackUrl": "https://callback.com/",
+            "savePayment": true,
+            "customer": {
+              "email": "email@gmail.com",
+              "mobileNo": "0123456789",
+              "name": "name",
+              "username": "username",
+              "identificationNumber": "string",
+              "identificationType": 1
+            },
+            "subMerchant": {
+              "uniqueId": "string",
+              "name": "string"
+            },
+            "localCitizen": true,
+            "recurringPaymentInfo": {
+              "id": "string",
+              "mode": 1,
+              "numberOfPayments": 0,
+              "effectiveDate": "string",
+              "maximumPaymentAmount": 0,
+              "expiryDate": "string",
+              "isFixedAmount": true
+            },
+            "requestPaymentExtraInfo": {
+              "channelGroupId": 0
+            },
+            "platformCharge": {
+              "partnerId": "string",
+              "amount": 0
+            },
+            "timestamp": 1621851652617
+          }
+        },
+        "required": [
+          "currencyCode",
+          "amount",
+          "referenceCode",
+          "ipAddress",
+          "returnUrl",
+          "timestamp"
+        ],
+        "properties": {
+          "channelId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "An identifier that represents Commerce.Asia payments channel. Refer to the id on response endpoints of [GetTenantChannelsByCountry](/api-reference/get-tenant-channels-by-country)\n\nOptional: Send without channelId parameter to call Payment web",
+            "example": 2,
+            "nullable": true
+          },
+          "providerChannelId": {
+            "type": "string",
+            "description": "An identifier that represents the payment provider channel. To get providerChannelId, kindly refer to [Get Provider Channels](/api-reference/get-provider-channels) for more information",
+            "example": "TEST0021",
+            "nullable": true
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "maxLength": 3,
+            "example": "MYR"
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "**Please take note:** The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.\n\nInvalid Format: 1,000.00",
+            "example": 100
+          },
+          "referenceCode": {
+            "type": "string",
+            "description": "Merchant Reference Code",
+            "maxLength": 50
+          },
+          "description": {
+            "type": "string",
+            "description": "Transaction Description",
+            "example": "Order details",
+            "maxLength": 100,
+            "nullable": true
+          },
+          "ipAddress": {
+            "type": "string",
+            "description": "Customer’s IP address captured by the merchant system",
+            "maxLength": 50
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "**[Conditional]** Customer’s user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay",
+            "maxLength": 200,
+            "nullable": true
+          },
+          "returnUrl": {
+            "type": "string",
+            "description": "Return URL supplied by the merchant server for the payment response and used by CommercePay to redirect the customer's browser back to the desired page on the Merchant’s site",
+            "example": "https://returnurl.com/",
+            "maxLength": 500
+          },
+          "callbackUrl": {
+            "type": "string",
+            "example": "https://callback.com/",
+            "maxLength": 500,
+            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. Refer to the Merchant Callback URL to know more",
+            "nullable": true
+          },
+          "savePayment": {
+            "type": "boolean",
+            "description": "**[Conditional for Tokenize Payment]** To save user info for subsequent payment"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/PayeeDto"
+          },
+          "subMerchant": {
+            "$ref": "#/components/schemas/SubMerchant"
+          },
+          "localCitizen": {
+            "type": "boolean",
+            "description": "**[Conditional for certain channel]** Example: If the customer is from Malaysia, kindly set it as True; else, set it as False"
+          },
+          "recurringPaymentInfo": {
+            "$ref": "#/components/schemas/RecurringPaymentInfoDto"
+          },
+          "requestPaymentExtraInfo": {
+            "$ref": "#/components/schemas/RequestPaymentExtraInfo"
+          },
+          "platformCharge": {
+            "$ref": "#/components/schemas/PlatformChargeDto"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "new Date().getTime()",
+            "example": 1621851652617
+          },
+          "ChannelDetails": {
+            "$ref": "#/components/schemas/ChannelDetailsDto"
+          },
+          "BrowserInfo": {
+            "$ref": "#/components/schemas/BrowserInfoDto"
+          },
+          "VirtualAccountCode": {
+            "type": "string",
+            "maxLength": 30,
+            "description": "Code to identify virtual account to make payment.",
+            "nullable": true
+          },
+          "loyaltyPaymentInfoDto": {
+            "$ref": "#/components/schemas/LoyaltyPaymentInfoDto"
+          }
+        }
+      },
+      "RequestPaymentOutputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "x-examples": {
+          "example-1": {
+            "currencyCode": "MYR",
+            "amount": 100,
+            "transactionNumber": "string",
+            "channelId": -2147483648,
+            "redirectionType": 1,
+            "redirectUrl": "string",
+            "clientScript": "string"
+          }
+        },
+        "x-internal": false,
+        "properties": {
+          "currencyCode": {
+            "type": "string",
+            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "example": "MYR",
+            "maxLength": 3,
+            "nullable": true
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "**Please take note:** The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend",
+            "example": 100
+          },
+          "transactionNumber": {
+            "type": "string",
+            "description": "Unique CAP Transaction Number",
+            "maxLength": 24,
+            "nullable": true
+          },
+          "channelId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Refer to endpoints in GetTenantChannelsByCountry",
+            "nullable": true
+          },
+          "redirectionType": {
+            "$ref": "#/components/schemas/RedirectionType"
+          },
+          "redirectUrl": {
+            "type": "string",
+            "description": "URL used for the customer to redirect to the payment page",
+            "nullable": true
+          },
+          "clientScript": {
+            "type": "string",
+            "description": "Client script used for the customer to redirect to the payment page",
+            "nullable": true
+          },
+          "transactionExpired": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Transaction Expired Date Time"
+          }
+        }
+      },
+      "QueryPaymentOutputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "x-examples": {},
+        "properties": {
+          "transactionNumber": {
+            "type": "string",
+            "description": "Unique CAP transaction number",
+            "maxLength": 24,
+            "nullable": true
+          },
+          "paymentSessionNumber": {
+            "type": "string",
+            "description": "Unique CAP session number",
+            "maxLength": 24,
+            "nullable": true
+          },
+          "referenceCode": {
+            "type": "string",
+            "description": "Merchant Reference Code",
+            "maxLength": 50,
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/PaymentStatus"
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "example": "MYR",
+            "maxLength": 3,
+            "nullable": true
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "This is Request Amount.\n",
+            "example": 100
+          },
+          "channelId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Refer to endpoints in 'GetTenantChannelsByCountry'"
+          },
+          "providerTransactionNumber": {
+            "type": "string",
+            "description": "Provider Transaction Number",
+            "nullable": true
+          },
+          "creationTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Payment Transaction Creation Time",
+            "example": "2022-02-10T08:50:30.565Z"
+          },
+          "remark": {
+            "type": "string",
+            "description": "A description that additional information or clarify details for the transaction.",
+            "nullable": true
+          },
+          "providerChannelId": {
+            "type": "string",
+            "description": "An identifier that represents the payment provider channel",
+            "nullable": true
+          },
+          "providerPaymentMethod": {
+            "type": "string",
+            "description": "Provider Payment Method",
+            "nullable": true
+          },
+          "providerErrorMessage": {
+            "type": "string",
+            "description": "Provider Error Message",
+            "nullable": true
+          },
+          "loyaltyType": {
+            "$ref": "#/components/schemas/LoyaltyProviderType"
+          },
+          "redemptionPoint": {
+            "type": "integer",
+            "format": "int64",
+            "description": "**[Conditional for Loyalty Payment]** Redemption Point."
+          },
+          "redemptionAmount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "**[Conditional for Loyalty Payment]** Redemption Amount."
+          },
+          "rewardPoint": {
+            "type": "integer",
+            "format": "int64",
+            "description": "**[Conditional for Loyalty Payment]** Reward Point."
+          },
+          "paidAmount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "**[Conditional for Loyalty Payment]** This is Paid Amount.\r\n",
+            "example": 100
+          },
+          "loyaltyRedemptionStatus": {
+            "$ref": "#/components/schemas/LoyaltyRedemptionStatus"
+          },
+          "loyaltyRewardStatus": {
+            "$ref": "#/components/schemas/LoyaltyRewardStatus"
+          }
+        }
+      },
+      "LogLevel": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "Trace",
+          "Debug",
+          "Information",
+          "Warning",
+          "Error",
+          "Critical",
+          "None"
+        ],
+        "x-internal": true
+      },
+      "PayeeDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "x-examples": {},
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Customer’s Email Address",
+            "example": "email@gmail.com",
+            "maxLength": 150,
+            "nullable": true
+          },
+          "mobileNo": {
+            "type": "string",
+            "description": "Customer’s Mobile Number",
+            "example": "0123456789",
+            "maxLength": 16,
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Customer’s Name",
+            "example": "name",
+            "maxLength": 36,
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "description": "Customer’s unique ID for recurring payments or next saved payments",
+            "example": "username",
+            "maxLength": 36,
+            "nullable": true
+          },
+          "identificationNumber": {
+            "type": "string",
+            "description": "**[Conditional for FPX Recurring]**"
+          },
+          "identificationType": {
+            "$ref": "#/components/schemas/IdentificationType"
+          }
+        }
+      },
+      "PaymentStatus": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "Pending",
+          "Success",
+          "Failed",
+          "Cancelled",
+          "TransactionLimitExceeded",
+          "MinTransactionAmountNotMeet",
+          "InsufficientFunds",
+          "InvalidTransaction"
+        ],
+        "description": "Payment Status: Refer on Appendix 3.1 Payment Status Code Table"
+      },
+      "RedirectionType": {
+        "enum": [
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "UrlRedirection",
+          "RenderScriptRedirection"
+        ],
+        "description": "Notes: 1 = UrlRedirection\n"
+      },
+      "ThirdPartyChannelStatus": {
+        "enum": [
+          0,
+          1,
+          2,
+          -1
+        ],
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "Inactive",
+          "Active",
+          "Offline",
+          "Unknown"
+        ],
+        "description": "Status of the payment provider channel"
+      },
+      "SubMerchant": {
+        "type": "object",
+        "properties": {
+          "uniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RecurringPaymentInfoDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "[Conditional for Recurring Payment]",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique ID provided by the merchant to identify a subscription or account for recurring payments",
+            "nullable": true
+          },
+          "mode": {
+            "$ref": "#/components/schemas/RecurringMode"
+          },
+          "numberOfPayments": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Maximum Recurring Frequency: 999 (Example: Frequency value 1 => 1 day / 1 week / 1 month / 1 year)",
+            "nullable": true
+          },
+          "effectiveDate": {
+            "type": "string",
+            "description": "Recurring effective start date Format ddMMyyyy (E.g 20122022)",
+            "nullable": true
+          },
+          "maximumPaymentAmount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Maximum payment amount of the each recurring payment",
+            "minimum": 0,
+            "nullable": true
+          },
+          "expiryDate": {
+            "type": "string",
+            "description": "Recurring expiry date format ddMMyyyy (E.g 20122022)",
+            "nullable": true
+          },
+          "isFixedAmount": {
+            "type": "boolean",
+            "description": "Whether every recurring is a fixed amount or not",
+            "nullable": true
+          }
+        }
+      },
+      "RecurringMode": {
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "Daily",
+          "Weekly",
+          "Monthly",
+          "Yearly"
+        ],
+        "description": "Daily = 1, Weekly = 2, Monthly = 3, Yearly = 4",
+        "title": ""
+      },
+      "CheckSavedPaymentInputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "uniqueAccountId"
+        ],
+        "properties": {
+          "uniqueAccountId": {
+            "type": "string",
+            "description": "Transaction Username"
+          },
+          "channelId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "An identifier that represents Commerce.Asia payments channel Refer id on response end points GetTenantChannelsByCountry"
+          },
+          "tenantId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Fill in provided Tenant Id",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "new Date().getTime()",
+            "example": 1621851652617
+          }
+        }
+      },
+      "CheckSavedPaymentOutputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSavedPayment": {
+            "type": "boolean",
+            "description": "Saved user info for subsequent payment."
+          },
+          "maskedAccountNumber": {
+            "type": "string",
+            "description": "Masked account number.\nExample: (Phone Number: 60XXXXX123), (Credit Card Number:43******1234) ",
+            "nullable": true
+          }
+        }
+      },
+      "RequestPaymentExtraInfo": {
+        "type": "object",
+        "description": "[Optional]",
+        "properties": {
+          "ChannelGroupId": {
+            "type": "integer",
+            "description": "Optional: Used for displaying selected channel groups on CommercePay hosted payment web",
+            "format": "int32",
+            "nullable": true
+          },
+          "HiddenChannel": {
+            "type": "array",
+            "description": "Optional: To hide channels on CommercePay hosted payment web",
+            "deprecated": true,
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          "WhitelistChannelGroup": {
+            "type": "array",
+            "description": "Optional: Specific channel group channel display on the CommercePay hosted payment page.",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "WhitelistChannel": {
+            "type": "array",
+            "description": "Optional: Specific channel display on the CommercePay hosted payment page.",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "PlatformChargeDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Optional: Only Authorized Partners by CommercePay are allowed to charge platform fees to the merchant",
+        "properties": {
+          "partnerId": {
+            "type": "string",
+            "description": "Unique Id to identify authorized partner.",
+            "nullable": true
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Platform charge amount.",
+            "nullable": true
+          }
+        }
+      },
+      "AddSavePaymentInputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "referenceCode",
+          "ipAddress",
+          "returnUrl"
+        ],
+        "properties": {
+          "currencyCode": {
+            "type": "string",
+            "description": "Currency code with a 3-letter ISO 4217 standard code.",
+            "example": "MYR",
+            "nullable": true
+          },
+          "channelId": {
+            "type": "integer",
+            "format": "int32",
+            "default": 1,
+            "description": "An identifier that represents Commerce.Asia payments channel Refer id on response end points GetTenantChannelsByCountry."
+          },
+          "referenceCode": {
+            "type": "string",
+            "description": "Merchant Reference Code",
+            "maxLength": 50
+          },
+          "ipAddress": {
+            "type": "string",
+            "description": "Customer’s IP address captured by the merchant system",
+            "maxLength": 50
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "**[Conditional]** Customer’s user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay",
+            "maxLength": 200,
+            "nullable": true
+          },
+          "returnUrl": {
+            "type": "string",
+            "description": "Return URL supplied by the merchant server for the payment response and used by CommercePay to redirect the customer's browser back to the desired page on the Merchant’s site",
+            "maxLength": 500,
+            "example": "https://returnurl.com/"
+          },
+          "callbackUrl": {
+            "type": "string",
+            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. Refer to the Merchant Callback URL to know more",
+            "maxLength": 500,
+            "example": "https://callback.com/",
+            "nullable": true
+          },
+          "customer": {
+            "$ref": "#/components/schemas/UserInfoDto"
+          },
+          "tenantId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Fill in provided Tenant Id.",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "new Date().getTime()",
+            "example": 1621851652617
+          }
+        }
+      },
+      "AddSavePaymentOutputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "transactionNumber": {
+            "type": "string",
+            "description": "Unique CAP Transaction Number",
+            "maxLength": 24,
+            "nullable": true
+          },
+          "redirectUrl": {
+            "type": "string",
+            "description": "URL used for the customer to redirect to the payment page",
+            "nullable": true
+          }
+        }
+      },
+      "UserInfoDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "email@gmail.com",
+            "description": "Customer’s Email Address",
+            "nullable": true
+          },
+          "mobileNo": {
+            "type": "string",
+            "maxLength": 16,
+            "example": "0123456789",
+            "description": "Customer’s Mobile Number",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 36,
+            "example": "name",
+            "description": "Customer’s Name",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "maxLength": 36,
+            "example": "username",
+            "description": "Customer’s unique ID for recurring payments or next saved payments",
+            "nullable": true
+          },
+          "identificationNumber": {
+            "type": "string",
+            "description": "**[Conditional for FPX Recurring]**",
+            "nullable": true
+          },
+          "identificationType": {
+            "$ref": "#/components/schemas/IdentificationType"
+          }
+        }
+      },
+      "RefundPaymentInputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "transactionNumber",
+          "reason",
+          "timestamp"
+        ],
+        "properties": {
+          "transactionNumber": {
+            "type": "string",
+            "description": "Unique CAP Transaction Number",
+            "maxLength": 24,
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "description": "A description for refund.",
+            "example": "Purchase wrong item",
+            "nullable": true
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Please take note: The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.Show all...\r\n\r\n\r\nExample: 100\r\n\r\n[Please pass the required amount if issuing a partial refund; ignore this attribute if issuing a full refund.]",
+            "format": "int32",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "new Date().getTime()",
+            "example": 1621851652617
+          }
+        }
+      },
+      "RequestRefundOutputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "x-internal": false,
+        "properties": {
+          "tenantId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "transactionNumber": {
+            "type": "string",
+            "description": "Unique CAP transaction number",
+            "maxLength": 24,
+            "nullable": true
+          },
+          "refundTransactionNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "referenceCode": {
+            "type": "string",
+            "description": "Merchant Reference Code",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Please take note: The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.\r\n\r\nInvalid Format: 1,000.00",
+            "example": 100
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "example": "MYR",
+            "maxLength": 3,
+            "nullable": true
+          },
+          "refundStatus": {
+            "$ref": "#/components/schemas/PaymentStatus"
+          },
+          "responseMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentSessionNumber": {
+            "type": "string",
+            "description": "Unique CAP Session Number",
+            "maxLength": 24,
+            "nullable": true
+          },
+          "refundPaymentList": {
+            "$ref": "#/components/schemas/RefundPaymentListDto"
+          }
+        },
+        "x-examples": {
+          "Example 1": {
+            "tenantId": 0,
+            "transactionNumber": "string",
+            "paymentSessionNumber": "string",
+            "refundTransactionNumber": "string",
+            "referenceCode": "string",
+            "amount": 0,
+            "currencyCode": "string",
+            "refundStatus": 0,
+            "refundPaymentList": [
+              {
+                "transactionNumber": "string",
+                "amount": 0,
+                "currencyCode": "string",
+                "refundReason": "string",
+                "refundStatus": 0
+              }
+            ],
+            "responseMessage": "string"
+          }
+        }
+      },
+      "ChannelDetailsDto": {
+        "type": "object",
+        "x-examples": {
+          "Example 1": {
+            "cardNumber": "5123450000000008",
+            "expiryMonth": "01",
+            "expiryYear": "39",
+            "holderName": "test",
+            "securityCode": "100",
+            "AuthType": 1
+          }
+        },
+        "description": "[Optional]",
+        "properties": {
+          "cardNumber": {
+            "type": "string",
+            "description": "Card Number",
+            "example": "48481000XXXXXXXX",
+            "nullable": true
+          },
+          "expiryMonth": {
+            "type": "string",
+            "description": "Card Expiry Month",
+            "example": "01",
+            "nullable": true
+          },
+          "expiryYear": {
+            "type": "string",
+            "description": "Card Expiry Year",
+            "example": "99",
+            "nullable": true
+          },
+          "holderName": {
+            "type": "string",
+            "description": "Card Holder Name",
+            "example": "ALEXXXXXXXX",
+            "nullable": true
+          },
+          "securityCode": {
+            "type": "string",
+            "description": "Card Security Code",
+            "maxLength": 3,
+            "example": "999"
+          },
+          "AuthType": {
+            "$ref": "#/components/schemas/AuthType"
+          }
+        }
+      },
+      "BrowserInfoDto": {
+        "type": "object",
+        "x-examples": {
+          "Example 1": {
+            "javaEnabled": true,
+            "colorDepth": 24,
+            "screenHeight": 600,
+            "screenWidth": 800,
+            "timeZoneOffset": "+08:00"
+          }
+        },
+        "properties": {
+          "javaEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "colorDepth": {
+            "type": "integer",
+            "nullable": true
+          },
+          "screenHeight": {
+            "type": "integer",
+            "nullable": true
+          },
+          "screenWidth": {
+            "type": "integer",
+            "nullable": true
+          },
+          "timeZoneOffset": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "description": "[Optional]"
+      },
+      "AuthType": {
+        "title": "AuthType",
+        "enum": [
+          1
+        ],
+        "x-enumNames": [
+          "PreAuth"
+        ]
+      },
+      "ProcessPaymentInputDto": {
+        "type": "object",
+        "x-examples": {
+          "Example 1": {
+            "type": 2,
+            "transactionNumber": "2008C53A039CEF31ADF240923",
+            "amount": 10000,
+            "channelDetails": {
+              "cardNumber": "5123450000000008",
+              "expiryMonth": "01",
+              "expiryYear": "39"
+            },
+            "savePayment": true
+          }
+        },
+        "required": [
+          "type",
+          "transactionNumber",
+          "amount"
+        ],
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ProcessPaymentType"
+          },
+          "transactionNumber": {
+            "type": "string",
+            "description": "Unique CAP Transaction Number",
+            "maxLength": 24
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Please take note: The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.\r\n\r\nInvalid Format: 1,000.00",
+            "example": 100
+          },
+          "channelDetails": {
+            "type": "object",
+            "$ref": "#/components/schemas/ChannelDetailsDto"
+          },
+          "savePayment": {
+            "type": "boolean",
+            "description": "**[Conditional for Tokenize Payment]** To save user info for subsequent payment",
+            "nullable": true
+          },
+          "LastPayment": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "ProcessPaymentType": {
+        "title": "ProcessPaymentType",
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "x-enumNames": [
+          "PreAuth",
+          "FullPayment",
+          "PartialPayment"
+        ],
+        "x-examples": {},
+        "description": "1 = PreAuth, 2 = FullPayment, 3 = PartialPayment, 4 = Verify"
+      },
+      "ProcessPaymentOutputDto": {
+        "type": "object",
+        "x-examples": {
+          "Example 1": {
+            "status": 1,
+            "type": 3,
+            "transactionNumber": "20087A1A552804BAC0D240924",
+            "partialTransactionNumber": "200E6E0ABBE2E7A1F04240924",
+            "amount": 5000
+          }
+        },
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/PaymentStatus"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ProcessPaymentType"
+          },
+          "transactionNumber": {
+            "type": "string",
+            "description": "Unique CAP Transaction Number",
+            "maxLength": 24
+          },
+          "partialTransactionNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Please take note: The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.\r\n\r\nInvalid Format: 1,000.00",
+            "example": 100
+          }
+        }
+      },
+      "ChannelRefundChargesType": {
+        "title": "ChannelRefundChargesType",
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "PostRefundCharges",
+          "AlwaysRefundCharges"
+        ],
+        "enum": [
+          0,
+          1
+        ],
+        "description": "Type Of Channel Refund Charges: [0= Post Refund Charges, 1= Always Refund Charges]"
+      },
+      "ChannelRefundType": {
+        "title": "ChannelRefundType",
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "UnSupportedRefund",
+          "FullRefund",
+          "FullRefundOrPartialRefund"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "description": "Channel Support Refund Type: [0= UnSupported Refund, 1= Only Full Refund, 2= Full Refund And Partial Refund]"
+      },
+      "QueryWalletInputDto": {
+        "title": "QueryWalletInputDto",
+        "type": "object",
+        "required": [
+          "tenantId",
+          "timestamp"
+        ],
+        "properties": {
+          "tenantId": {
+            "type": "integer",
+            "description": "Fill in provided Tenant Id"
+          },
+          "timestamp": {
+            "type": "integer",
+            "description": "new Date().getTime()",
+            "example": 1621851652617,
+            "format": "int64"
+          }
+        }
+      },
+      "QueryWalletOutputDto": {
+        "title": "QueryWalletOutputDto",
+        "type": "object",
+        "properties": {
+          "tenantId": {
+            "type": "integer"
+          },
+          "tenantName": {
+            "type": "string"
+          },
+          "wallets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WalletDetailDto"
+            }
+          }
+        }
+      },
+      "WalletDetailDto": {
+        "title": "WalletDetailDto",
+        "type": "object",
+        "properties": {
+          "currencyCode": {
+            "type": "string",
+            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "maxLength": 3,
+            "example": "MYR"
+          },
+          "balance": {
+            "type": "number",
+            "format": "double",
+            "description": "Wallet Balance",
+            "example": 1000
+          },
+          "walletType": {
+            "$ref": "#/components/schemas/WalletType"
+          },
+          "walletStatus": {
+            "$ref": "#/components/schemas/WalletStatus"
+          }
+        }
+      },
+      "WalletType": {
+        "title": "WalletType",
+        "description": "Basic = 0 , Premium = 1 , Payout = 2",
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "WalletStatus": {
+        "title": "WalletStatus",
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "description": "InActive = 0 , Active = 1 , Suspend = 2"
+      },
+      "PaymentSessionInputDto": {
+        "title": "PaymentSessionInputDto",
+        "type": "object",
+        "x-examples": {
+          "Example 1": {
+            "currencyCode": "MYR",
+            "amount": 100,
+            "referenceCode": "string",
+            "description": "Order details",
+            "ipAddress": "string",
+            "userAgent": "string",
+            "returnUrl": "https://returnurl.com/",
+            "callbackUrl": "https://callback.com/",
+            "Customer": {
+              "email": "email@gmail.com",
+              "mobileNo": "0123456789",
+              "name": "name",
+              "username": "username",
+              "identificationNumber": "string",
+              "identificationType": 1
+            },
+            "SubMerchant": {
+              "uniqueId": "string",
+              "name": "string"
+            },
+            "PlatformCharge": {
+              "partnerId": "string",
+              "amount": 0
+            },
+            "virtualAccountCode": "string",
+            "RequestPaymentExtraInfo": {
+              "channelGroupId": 0,
+              "hiddenChannel": [
+                0
+              ]
+            },
+            "expiredInMinutes": 15,
+            "tenantId": 0,
+            "timestamp": 1621851652617
+          }
+        },
+        "required": [
+          "currencyCode",
+          "amount",
+          "referenceCode",
+          "ipAddress",
+          "returnUrl",
+          "timestamp"
+        ],
+        "properties": {
+          "currencyCode": {
+            "type": "string",
+            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "maxLength": 3,
+            "example": "MYR"
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Please take note: The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.\r\n\r\nInvalid Format: 1,000.00",
+            "example": 100
+          },
+          "referenceCode": {
+            "type": "string",
+            "description": "Merchant Reference Code",
+            "maxLength": 50
+          },
+          "description": {
+            "type": "string",
+            "description": "Transaction Description",
+            "maxLength": 100,
+            "example": "Order details",
+            "nullable": true
+          },
+          "ipAddress": {
+            "type": "string",
+            "description": "Customer’s IP address captured by the merchant system",
+            "maxLength": 50
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "**[Conditional]** Customer’s user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay",
+            "maxLength": 200,
+            "nullable": true
+          },
+          "returnUrl": {
+            "type": "string",
+            "description": "Return URL supplied by the merchant server for the payment response and used by CommercePay to redirect the customer's browser back to the desired page on the Merchant’s site",
+            "maxLength": 500,
+            "example": "https://returnurl.com/"
+          },
+          "callbackUrl": {
+            "type": "string",
+            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. Refer to the Merchant Callback URL to know more",
+            "maxLength": 500,
+            "example": "https://callback.com/",
+            "nullable": true
+          },
+          "Customer": {
+            "$ref": "#/components/schemas/UserInfoDto"
+          },
+          "SubMerchant": {
+            "$ref": "#/components/schemas/SubMerchant"
+          },
+          "PlatformCharge": {
+            "$ref": "#/components/schemas/PlatformChargeDto"
+          },
+          "virtualAccountCode": {
+            "type": "string",
+            "description": "Code to identify virtual account to make payment.",
+            "maxLength": 30,
+            "nullable": true
+          },
+          "RequestPaymentExtraInfo": {
+            "$ref": "#/components/schemas/RequestPaymentExtraInfo"
+          },
+          "expiredInMinutes": {
+            "type": "integer",
+            "description": "Set the session expired in minutes",
+            "example": 30,
+            "nullable": true
+          },
+          "tenantId": {
+            "type": "integer",
+            "description": "Fill in tenant id",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "new Date().getTime()",
+            "example": 1621851652617
+          }
+        }
+      },
+      "PaymentSessionOutputDto": {
+        "title": "PaymentSessionOutputDto",
+        "type": "object",
+        "properties": {
+          "redirectionType": {
+            "$ref": "#/components/schemas/RedirectionType"
+          },
+          "redirectUrl": {
+            "type": "string",
+            "description": "URL used for the customer to redirect to the payment page",
+            "nullable": true
+          },
+          "sessionNumber": {
+            "type": "string",
+            "description": "Unique CAP Session Number",
+            "nullable": true
+          }
+        }
+      },
+      "LoyaltyProviderType": {
+        "title": "LoyaltyProviderType",
+        "enum": [
+          1
+        ],
+        "description": "**[Conditional for Loyalty Payment]**\n\n1 = BCard"
+      },
+      "LoyaltyRedemptionStatus": {
+        "title": "LoyaltyRedemptionStatus",
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "description": "**[Conditional for Loyalty Payment]**\n\n0 = Pending, 1 = Success, 2 = Failed, 3 = Void"
+      },
+      "LoyaltyRewardStatus": {
+        "title": "LoyaltyRewardStatus",
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "description": "**[Conditional for Loyalty Payment]**\n\n0 = Pending, 1 = Success, 2 = Failed, 3 = Void"
+      },
+      "SettlementStatus": {
+        "title": "SettlementStatus",
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "description": "0 = Unsettled, 1 = Settled, 2 = InProgress, 3 = Locked, 4 = CompleteProcessing"
+      },
+      "LoyaltyPaymentInfoDto": {
+        "title": "LoyaltyPaymentInfoDto",
+        "type": "object",
+        "description": "[Conditional for Loyalty payment]",
+        "properties": {
+          "cardNumber": {
+            "type": "string",
+            "description": "Card Number"
+          },
+          "cardPassword": {
+            "type": "string",
+            "description": "Card Password"
+          },
+          "redemptionPoint": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Redemption Point",
+            "example": 10
+          }
+        }
+      },
+      "RefundPaymentListDto": {
+        "title": "RefundPaymentListDto",
+        "type": "object",
+        "properties": {
+          "transactionNumber": {
+            "type": "string",
+            "description": "Unique CAP Transaction Number",
+            "maxLength": 24,
+            "nullable": true
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Refund Amount.",
+            "example": 100
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "maxLength": 3,
+            "example": "MYR",
+            "nullable": true
+          },
+          "refundReason": {
+            "type": "string",
+            "description": "A description for refund.",
+            "nullable": true
+          },
+          "refundStatus": {
+            "$ref": "#/components/schemas/PaymentStatus"
+          }
+        }
+      }
+    },
+    "securitySchemes": {}
+  },
+  "servers": [
+    {
+      "description": "Staging",
+      "url": "https://staging-payments.commerce.asia"
+    },
+    {
+      "url": "https://payments.commerce.asia",
+      "description": "Production"
+    }
+  ]
+}

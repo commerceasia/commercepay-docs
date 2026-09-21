@@ -1,0 +1,117 @@
+---
+title: "Direct Integration - Request Payment"
+description: "Initiate a checkout transaction and obtain the payment provider redirection URL."
+---
+
+An API endpoint used to initiate a checkout transaction and obtain the secure payment provider redirection URL.
+
+| Type | Details |
+| --- | --- |
+| Endpoint URL | `https://staging-payments.commerce.asia/api/services/app/PaymentGateway/RequestPayment` |
+| HTTP Method | POST |
+
+---
+
+## Request
+
+### Headers
+
+| Parameter Name | Description |
+| --- | --- |
+| Abp-TenantId | Your unique Merchant ID assigned by CommercePay. |
+| Authorization | Your API credentials used for authentication (typically a Bearer token). Example: `Bearer {access token}` |
+| cap-signature | A unique security hash used to verify the integrity of the request body. |
+
+### Body
+
+| Parameter | Type | Requirement | Description |
+| --- | --- | --- | --- |
+| channelId | Int | Optional | An identifier that represents the CommercePay payment channel. Refer to the `id` from the response of the Get Tenant Channels by Country endpoint. This parameter can be omitted if you choose to utilize the CommercePay Hosted Payment Web interface. |
+| providerChannelId | String | Optional | An identifier that represents the specific upstream payment provider sub-channel (e.g., a bank code for online banking). This becomes **Mandatory** if the chosen channel configuration has `"isProviderHostChannel": true`. |
+| currencyCode | String | Mandatory | Currency code formatted to standard 3-letter ISO 4217 specifications (e.g., "MYR"). |
+| amount | Int64 | Mandatory | The transaction payment value. Note: This field exclusively accepts integer units where the final decimals are represented as whole values (e.g., an amount value of `1000` translates to `10.00` in the system backend). |
+| referenceCode | String | Mandatory | The merchant-side unique order reference or invoice tracking sequence code. Max 50 characters. |
+| ipAddress | String | Mandatory | The customer's valid IP address captured directly by the merchant server. Max 50 characters. |
+| returnUrl | String | Mandatory | The synchronous return URL where the customer's browser is forwarded automatically after completing payment checkout steps. Max 500 characters. |
+| timestamp | Int64 | Mandatory | Numeric timestamp in milliseconds representing request validation freshness (e.g., generated via `new Date().getTime()`). |
+| description | String | Optional | Text description summarized for transaction tracing logs. Max 100 characters. |
+| callbackUrl | String | Optional | Target address utilized for asynchronous host-to-host webhook payment status change push actions. Max 500 characters. |
+
+### Request Payload Sample
+
+```json
+{
+  "channelId": 2,
+  "providerChannelId": "TEST0021",
+  "currencyCode": "MYR",
+  "amount": 1000,
+  "referenceCode": "INV-2026-00941",
+  "ipAddress": "172.56.21.89",
+  "returnUrl": "https://yourmerchantstore.com/checkout/result",
+  "callbackUrl": "https://yourmerchantstore.com/api/webhook",
+  "description": "Order checkout payment item description",
+  "timestamp": 1774845600000
+}
+
+```
+
+---
+
+## Response
+
+### Body
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| currencyCode | String | Currency code with a 3-letter ISO 4217 standard code (e.g., "MYR"). Maximum length of 3 characters. |
+| amount | Int64 | The transaction payment value returned in pure integer units (e.g., `1000` is equivalent to `10.00` for the backend processing rules). |
+| transactionNumber | String | Unique CAP Transaction Number mapped internally for auditing. Maximum length of 24 characters. |
+| channelId | Int | The primary identity mapping identifier. Corresponds to the entry endpoints defined in `GetTenantChannelsByCountry`. |
+| redirectionType | Int | Defines the browser execution pathway. Notes: `1` = UrlRedirection, `2` = Script execution redirection. |
+| redirectUrl | String | The secure target destination link utilized to send the consumer browser to the payment selection page. |
+| clientScript | String | Customized script sequence injected onto client browsers to force payment redirection behaviors. |
+| transactionExpired | String | Expiration threshold deadline represented as an ISO 8601 date-time timestamp block. |
+
+### Response Payload Sample
+
+```json
+{
+  "result": {
+    "currencyCode": "MYR",
+    "amount": 1000,
+    "transactionNumber": "200F75CD1F0053299EB260528",
+    "channelId": 2,
+    "redirectionType": 1,
+    "redirectUrl": "{URL}",
+    "clientScript": null,
+    "transactionExpired": "2026-05-28T16:39:00.000Z"
+  },
+  "targetUrl": null,
+  "success": true,
+  "error": null,
+  "unAuthorizedRequest": false,
+  "__abp": true
+}
+
+```
+
+---
+
+## Bad Response
+
+### Bad Response Payload Samples
+
+```json
+{
+  "result": null,
+  "targetUrl": null,
+  "success": false,
+  "error": {
+    "code": 1,
+    "message": "Invalid Signature."
+  },
+  "unAuthorizedRequest": true,
+  "__abp": true
+}
+
+```

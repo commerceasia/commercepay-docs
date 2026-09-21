@@ -1,0 +1,107 @@
+---
+title: "Refund Integration"
+description: "Initiate full or partial refunds for successful payment transactions."
+---
+
+## Overview
+
+The Refund API allows merchants to initiate refunds for successful payment transactions through CommercePay.
+
+Depending on the participating bank's capabilities, merchants may be able to perform:
+
+- **Full Refund** – Refund the entire transaction amount.
+- **Partial Refund** – Refund a portion of the original transaction amount.
+
+> Refund support varies by participating bank and payment channel.
+
+---
+
+## Refund Types
+
+### Full Refund
+
+A Full Refund returns the entire amount of the original transaction to the customer.
+
+#### Example
+
+| Original Transaction Amount | Refund Amount |
+|----------------------------|---------------|
+| RM100.00 | RM100.00 |
+
+---
+
+### Partial Refund
+
+A Partial Refund returns only a portion of the original transaction amount.
+
+#### Example
+
+| Original Transaction Amount | Refund Amount |
+|----------------------------|---------------|
+| RM100.00 | RM30.00 |
+
+The remaining balance (RM70.00) remains retained from the original transaction.
+
+> Partial refund support is dependent on the participating bank.
+
+---
+
+## Refund Support by Participating Bank
+
+The following information has been gathered from participating banks on a best-effort basis and is subject to change without prior notice.
+
+| BANK | FULL REFUND | PARTIAL REFUND |
+|------|:-----------:|:---------------:|
+| BSN | ✅ | ❌ |
+| Ryt Bank (YTL) | ❌ | ❌ |
+| Public Bank Berhad (PBB) | ✅ | ❌ |
+| Koperasi Co-opbank Pertama Malaysia Berhad (CBP) | ✅ | ❌ |
+
+<Warning>
+#### Important
+Participating banks may introduce enhancements or changes to their refund capabilities without notifying CommercePay. Refund behaviour should always be validated during integration and testing.
+</Warning>
+
+---
+
+## Cross-Border Transactions
+
+### Unsupported Refund Scenario
+
+API refunds are currently **not supported for cross-border transactions**.
+
+Merchants are advised to contact CommercePay Support should a refund be required for a cross-border payment.
+
+<Warning>
+#### Limitation
+Cross-border transactions do not support refund requests via API.
+</Warning>
+
+---
+
+## Important Considerations
+
+### Bank-Dependent Capabilities
+
+Refund processing capabilities are controlled by the participating bank. CommercePay facilitates the refund request but does not determine whether a particular bank supports:
+
+- Full refunds
+- Partial refunds
+- Multiple refund attempts
+
+### Future Enhancements
+
+Banks may introduce new refund features or modify existing refund capabilities at any time.
+
+As such, merchants should not assume refund support remains unchanged indefinitely.
+
+### Recommended Merchant Handling
+
+CommercePay recommends that merchants:
+
+1. Validate refund requirements before initiating a refund request.
+2. Handle refund failures gracefully within their application.
+3. Inform customers that refund completion times may vary depending on the bank's processing timeline.
+4. Periodically review CommercePay documentation for updates.
+
+---
