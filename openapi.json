@@ -54,7 +54,7 @@
             "description": "Invalid user name or password"
           }
         },
-        "description": "The following input parameters are expected to be provided by the Merchant to retrieve the access token.",
+        "description": "The following input parameters are expected to be provided by the Merchant to retrieve the access token.\n\n> - Pass the returned **accessToken** as `Authorization: Bearer {accessToken}` on subsequent API calls.\n> - The token expires after **24 hours** (`expireInSeconds`: 86400). Request a new token once it expires.",
         "parameters": [
           {
             "schema": {
@@ -67,7 +67,15 @@
             "description": "Fill in provided Merchant Id"
           }
         ],
-        "summary": "Authenticate"
+        "summary": "Get Access Token",
+        "x-mint": {
+          "href": "/api-reference/get-access-token",
+          "metadata": {
+            "title": "Get Access Token",
+            "sidebarTitle": "Get Access Token"
+          },
+          "content": "<Note>\n  **No signature required for this call.** Unlike other CommercePay endpoints, Authenticate does not require signature security checking — it's how you obtain the credentials used to sign every other request.\n</Note>"
+        }
       },
       "parameters": []
     },
@@ -149,7 +157,11 @@
         "description": "The following input parameters are expected to be provided by the merchant to retrieve available channels by country code. ",
         "summary": "Get Tenant Channels By Country",
         "x-mint": {
-          "href": "/api-reference/get-tenant-channels-by-country"
+          "href": "/api-reference/get-tenant-channels-by-country",
+          "metadata": {
+            "title": "Get Tenant Channels By Country",
+            "sidebarTitle": "Get Tenant Channels By Country"
+          }
         }
       },
       "parameters": []
@@ -216,7 +228,11 @@
         "summary": "Get Provider Channels",
         "description": "The following input parameters are expected to be provided by the merchant to retrieve available payment provider channels.",
         "x-mint": {
-          "href": "/api-reference/get-provider-channels"
+          "href": "/api-reference/get-provider-channels",
+          "metadata": {
+            "title": "Get Provider Channels",
+            "sidebarTitle": "Get Provider Channels"
+          }
         }
       }
     },
@@ -226,6 +242,12 @@
           "PaymentGateway"
         ],
         "summary": "Query Payment",
+        "x-mint": {
+          "metadata": {
+            "title": "Query Payment",
+            "sidebarTitle": "Query Payment"
+          }
+        },
         "description": "Payment gateway checks the existing payment status.\n\nThe following input parameters are expected to be provided by the merchant to verify transaction status or to obtain more details on the payment before approving the customer’s order.\n\n> Endpoint requires signature security checking. <br />\n> For signature generation, please refer to the \n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
         "operationId": "ApiServicesAppPaymentgatewayQueryGet",
         "parameters": [
@@ -336,6 +358,12 @@
     "/api/services/app/PaymentGateway/RequestPayment": {
       "post": {
         "summary": "Request Payment",
+        "x-mint": {
+          "metadata": {
+            "title": "Request Payment",
+            "sidebarTitle": "Request Payment"
+          }
+        },
         "description": "**The payment gateway requests a new payment**\n\nThe following input parameters are expected to be provided by the merchant to perform an online payment transaction.\n\n> - Channel Id may refer to the [Get Channel List Endpoint](/api-reference/get-tenant-channels-by-country)\n> - If merchants would like to use [CommercePay Hosted Payment Web solution](/docs/hosted-session-checkout), merchants may skip Channel Id parameter.\n\n> Endpoint requires signature security checking. <br />\n> For signature generation, please refer to the \n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
         "operationId": "ApiServicesAppPaymentgatewayRequestpaymentPost",
         "requestBody": {
@@ -484,6 +512,12 @@
     "/api/services/app/PaymentGateway/ProcessPayment": {
       "post": {
         "summary": "Process Payment",
+        "x-mint": {
+          "metadata": {
+            "title": "Process Payment",
+            "sidebarTitle": "Process Payment"
+          }
+        },
         "tags": [
           "PaymentGateway"
         ],
@@ -621,7 +655,11 @@
           }
         ],
         "x-mint": {
-          "href": "/api-reference/check-saved-payment"
+          "href": "/api-reference/check-saved-payment",
+          "metadata": {
+            "title": "Check Saved Payment",
+            "sidebarTitle": "Check Saved Payment"
+          }
         }
       }
     },
@@ -684,10 +722,28 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutputDto"
+                },
+                "examples": {
+                  "UserIsSavedPayment": {
+                    "value": {
+                      "code": 2103,
+                      "message": "This customer already has a saved payment method on this channel."
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "summary": "Add New Save Payment",
-        "description": "**Pre add customer payer payment details in Payment Gateway**\r\n\r\nAllow merchants save their customer payment details and using their system generated Unique Id to identify each of customers.\r\n\r\n> - Merchants shall pass their customers Unique Id to **\"customer.username\"** parameter\r\n> - Merchants may get customers saved payment details by using [Check Saved Payment Endpoint](/api-reference/check-saved-payment)\r\n> - Channel Id may refer to the [Get Channel List Endpoint](/api-reference/get-tenant-channels-by-country)\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
+        "summary": "Add Saved Payment",
+        "description": "**Pre add customer payer payment details in Payment Gateway**\r\n\r\nAllow merchants save their customer payment details and using their system generated Unique Id to identify each of customers.\r\n\r\n> - Merchants shall pass their customers Unique Id to **\"customer.username\"** parameter\r\n> - Merchants may get customers saved payment details by using [Check Saved Payment](/api-reference/check-saved-payment)\r\n> - Channel Id may refer to the [Get Tenant Channels By Country](/api-reference/get-tenant-channels-by-country)",
         "parameters": [
           {
             "schema": {
@@ -699,7 +755,74 @@
             "required": true,
             "name": "Abp-TenantId"
           }
-        ]
+        ],
+        "x-mint": {
+          "href": "/api-reference/add-saved-payment",
+          "metadata": {
+            "title": "Add Saved Payment",
+            "sidebarTitle": "Add Saved Payment"
+          },
+          "content": "<Note>\n  **This call places a real 1.00-unit verification transaction.** CommercePay charges the customer's payment method a minimal amount (1.00 in the transaction currency) through the provider to verify the card/wallet is valid, then automatically refunds it once the save completes. Expect the normal payment callback/webhook activity for this verification transaction — no separate refund call is needed on your side.\n</Note>\n\n<Warning>\n  **One saved payment per customer per channel.** If `customer.username` already has a saved payment method on the given `channelId`, this call fails with `UserIsSavedPayment` (2103) instead of replacing it. To save a new payment method for that customer/channel, first revoke the existing one via [Revoke Saved Payment](/api-reference/revoke-saved-payment).\n</Warning>\n\n> Endpoint requires signature security checking. <br />\n> For signature generation, please refer to the \n> <a href=\"/docs/generate-signature\">Generate Signature</a>.\n\n## Errors\n\nIn addition to standard signature errors, this endpoint can return:\n\n| Code | Name | Meaning |\n| ---- | ---- | ------- |\n| 2001 | `InvalidChannel` | `channelId` does not match an existing channel. |\n| 2102 | `UsernameIsRequired` | `customer.username` was not supplied. |\n| 2103 | `UserIsSavedPayment` | This customer already has a saved payment method on this channel. |\n| 2104 | `ChannelNotSupportPreAddPayment` | The channel's provider does not support saving payment methods. |"
+        }
+      }
+    },
+    "/api/services/app/PaymentGateway/RevokeTokenize": {
+      "post": {
+        "tags": [
+          "PaymentGateway"
+        ],
+        "operationId": "ApiServicesAppPaymentgatewayRevoketokenizePost",
+        "summary": "Revoke Saved Payment",
+        "description": "**Revoke a customer's saved payment method in Payment Gateway**\n\nAllow merchants to permanently remove a customer's previously saved (tokenized) payment details for a given channel. Once revoked, the saved payment method can no longer be used for future payments — the customer must save their payment method again (via the [Add Saved Payment Endpoint](/api-reference/add-saved-payment)) if they wish to pay this way again.\n\n> - Merchants shall pass their customer's Unique Id to the **\"username\"** parameter — the same Unique Id originally supplied to `customer.username` when the payment method was saved.\n> - Channel Id may refer to the [Get Channel List Endpoint](/api-reference/get-tenant-channels-by-country).\n> - Only channels/providers that support saved payments can be revoked through this endpoint. If the channel does not support it, or no saved payment is found for the given username on that channel, the request will fail.\n> - This endpoint returns no response body on success (HTTP 200, empty). Treat the absence of an error as confirmation the saved payment method was revoked.\n\n> Endpoint requires signature security checking. <br />\n> For signature generation, please refer to the \n> <a href=\"/docs/generate-signature\">Generate Signature</a>.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "{1}"
+            },
+            "in": "header",
+            "name": "Abp-TenantId",
+            "required": true,
+            "description": "Fill in provided Merchant Id"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenizeInputDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenizeInputDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenizeInputDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenizeInputDto"
+              }
+            }
+          },
+          "description": ""
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "x-mint": {
+          "href": "/api-reference/revoke-saved-payment",
+          "metadata": {
+            "title": "Revoke Saved Payment",
+            "sidebarTitle": "Revoke Saved Payment"
+          }
+        }
       }
     },
     "/api/services/app/PaymentGateway/RefundPayment": {
@@ -847,6 +970,12 @@
           }
         },
         "summary": "Refund Payment",
+        "x-mint": {
+          "metadata": {
+            "title": "Refund Payment",
+            "sidebarTitle": "Refund Payment"
+          }
+        },
         "description": "**The payment gateway requests a refund payment**\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
         "parameters": [
           {
@@ -1022,12 +1151,24 @@
           }
         },
         "summary": "Query Refund Payment",
-        "description": "**The payment gateway requests a query refund payment status**\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>."
+        "description": "**The payment gateway requests a query refund payment status**\r\n\r\n> Endpoint requires signature security checking. <br />\r\n> For signature generation, please refer to the \r\n> <a href=\"/docs/generate-signature\">Online Documentation URL</a>.",
+        "x-mint": {
+          "metadata": {
+            "title": "Query Refund Payment",
+            "sidebarTitle": "Query Refund Payment"
+          }
+        }
       }
     },
     "/api/services/app/PaymentGateway/QueryWallets": {
       "post": {
         "summary": "Query Wallets",
+        "x-mint": {
+          "metadata": {
+            "title": "Query Wallets",
+            "sidebarTitle": "Query Wallets"
+          }
+        },
         "tags": [
           "PaymentGateway"
         ],
@@ -1183,7 +1324,11 @@
           }
         },
         "x-mint": {
-          "href": "/api-reference/initial-session"
+          "href": "/api-reference/initial-session",
+          "metadata": {
+            "title": "Initial Session",
+            "sidebarTitle": "Initial Session"
+          }
         }
       }
     }
@@ -1216,13 +1361,13 @@
           "userNameOrEmailAddress": {
             "type": "string",
             "maxLength": 50,
-            "description": "Credentials will be given by Commerce.Asia",
+            "description": "Credentials will be given by CommercePay Team",
             "example": "userNameOrEmailAddress"
           },
           "password": {
             "type": "string",
             "maxLength": 50,
-            "description": "Credentials will be given by Commerce.Asia",
+            "description": "Credentials will be given by CommercePay Team",
             "example": "password"
           }
         }
@@ -1486,7 +1631,7 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "An identifier that represents Commerce.Asia payments channel. Refer to the id on response endpoints of [GetTenantChannelsByCountry](/api-reference/get-tenant-channels-by-country)\n\nOptional: Send without channelId parameter to call Payment web",
+            "description": "An identifier that represents a CommercePay payments channel. Refer to the id on response endpoints of [GetTenantChannelsByCountry](/api-reference/get-tenant-channels-by-country)\n\nOptional: Send without channelId parameter to call Payment web",
             "example": 2,
             "nullable": true
           },
@@ -1967,7 +2112,7 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "An identifier that represents Commerce.Asia payments channel Refer id on response end points GetTenantChannelsByCountry"
+            "description": "An identifier that represents a CommercePay payments channel Refer id on response end points GetTenantChannelsByCountry"
           },
           "tenantId": {
             "type": "integer",
@@ -2076,7 +2221,7 @@
             "type": "integer",
             "format": "int32",
             "default": 1,
-            "description": "An identifier that represents Commerce.Asia payments channel Refer id on response end points GetTenantChannelsByCountry."
+            "description": "An identifier that represents a CommercePay payments channel. Refer id on response end points GetTenantChannelsByCountry. Must be a channel whose provider supports saved payments, otherwise the request fails with ChannelNotSupportPreAddPayment (2104)."
           },
           "referenceCode": {
             "type": "string",
@@ -2102,7 +2247,7 @@
           },
           "callbackUrl": {
             "type": "string",
-            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. Refer to the Merchant Callback URL to know more",
+            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given, including for the automatic 1.00-unit verification charge and its refund. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. Refer to the Merchant Callback URL to know more",
             "maxLength": 500,
             "example": "https://callback.com/",
             "nullable": true
@@ -2130,13 +2275,27 @@
         "properties": {
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP Transaction Number",
+            "description": "Unique CAP Transaction Number for the underlying 1.00-unit verification transaction (automatically refunded).",
             "maxLength": 24,
             "nullable": true
           },
           "redirectUrl": {
             "type": "string",
             "description": "URL used for the customer to redirect to the payment page",
+            "nullable": true
+          }
+        }
+      },
+      "ErrorOutputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "See the Errors table above."
+          },
+          "message": {
+            "type": "string",
             "nullable": true
           }
         }
@@ -2180,6 +2339,39 @@
           },
           "identificationType": {
             "$ref": "#/components/schemas/IdentificationType"
+          }
+        }
+      },
+      "RevokeTokenizeInputDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "username",
+          "channelId",
+          "timestamp"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Customer's unique ID whose saved payment method should be revoked. Same value originally passed to customer.username when the payment method was saved.",
+            "example": "username"
+          },
+          "channelId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "An identifier that represents a CommercePay payments channel. Refer id on response end points GetTenantChannelsByCountry."
+          },
+          "tenantId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Fill in provided Tenant Id.",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "new Date().getTime()",
+            "example": 1621851652617
           }
         }
       },

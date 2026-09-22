@@ -54,11 +54,30 @@
         "openapi": "openapi.json",
         "groups": [
           {
-            "group": "Direct Integration APIs",
+            "group": "Authentication",
+            "pages": [
+              "POST /api/TokenAuth/Authenticate"
+            ]
+          },
+          {
+            "group": "Channel APIs",
             "pages": [
               "GET /api/services/app/Channel/GetTenantChannelsByCountry",
-              "GET /api/services/app/Channel/GetProviderChannels",
+              "GET /api/services/app/Channel/GetProviderChannels"
+            ]
+          },
+          {
+            "group": "Payin APIs",
+            "pages": [
               "api-reference/direct-integration-api-request-payment"
+            ]
+          },
+          {
+            "group": "Saved Payment APIs",
+            "pages": [
+              "POST /api/services/app/PaymentGateway/AddSavePayment",
+              "POST /api/services/app/PaymentGateway/CheckSavedPayment",
+              "POST /api/services/app/PaymentGateway/RevokeTokenize"
             ]
           },
           {
