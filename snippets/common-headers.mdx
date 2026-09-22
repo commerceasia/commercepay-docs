@@ -1,0 +1,11 @@
+<ParamField header="Abp-TenantId" type="string" required>
+  Your unique Merchant ID assigned by CommercePay.
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Your API credentials used for authentication (typically a Bearer token).
+</ParamField>
+
+<ParamField header="cap-signature" type="string" required>
+  A unique security hash used to verify the integrity of the request body. See [Generate Signature](/docs/generate-signature) for how to generate this.
+</ParamField>

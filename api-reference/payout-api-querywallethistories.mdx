@@ -1,37 +1,40 @@
 ---
 title: "Inquiry Wallet Histories"
 description: "Retrieve wallet transaction history."
+api: "POST https://staging-payments.commerce.asia/api/services/app/PaymentGateway/QueryWalletHistory"
 ---
+
+import CommonHeaders from "/snippets/common-headers.mdx";
 
 An API endpoint used to retrieve wallet transaction history.
 
-Type | Details
----------|----------
- Endpoint URL | https://staging-payments.commerce.asia/api/services/app/PaymentGateway/QueryWalletHistory
- HTTP Method | Post
-
-#
----
 ## Request
+
 ### Headers
-Parameter Name | Description
----------|----------
- Abp-TenantId | Your unique Merchant ID assigned by CommercePay.
- Authorization | Your API credentials used for authentication (typically a Bearer token). Example: `Bearer {access token from authentication}`
- cap-signature | A unique security hash used to verify the integrity of the request body.
 
+<CommonHeaders />
 
- ### Body
+### Body
 
-Parameter | Type | Requirement | Description
----------|----------|---------|----------|
- nextRecord | Int | Optional | For retrieving the next set of records. (This filed is not required to fetch first 100 records, to fetch subsequent records this field is mandatory and value can be fetched from previous response’s “nextRecords”.)
- dateTimeFrom | String | Mandatory | The start date and time for the search. [Universal Time Coordinated (UTC)]
- dateTimeTo | String | Mandatory | The end date and time for the search. [Universal Time Coordinated (UTC)]
- walletId | Int | Mandatory | An unique wallet ID. you can obtain this from [Inquiry Wallets Endpoint](/api-reference/payout-api-querywallets)
- 
- ### Request Payload Sample
- ```json Payload
+<ParamField body="nextRecord" type="integer">
+  For retrieving the next set of records. Not required to fetch the first 100 records; to fetch subsequent records this field is mandatory, and its value can be obtained from the previous response's `nextRecords`.
+</ParamField>
+
+<ParamField body="dateTimeFrom" type="string" required>
+  The start date and time for the search (UTC).
+</ParamField>
+
+<ParamField body="dateTimeTo" type="string" required>
+  The end date and time for the search (UTC).
+</ParamField>
+
+<ParamField body="walletId" type="integer" required>
+  A unique wallet ID. You can obtain this from the [Inquiry Wallets endpoint](/api-reference/payout-api-querywallets).
+</ParamField>
+
+### Request Payload Sample
+
+```json Payload
 {
   "nextRecord": 0,
   "dateTimeFrom": "2026-04-26T10:57:32.089Z",
@@ -40,27 +43,57 @@ Parameter | Type | Requirement | Description
 }
 ```
 
----
 ## Response
-### Body
-Parameter | Type | Description
----------|----------|----------|
- walletId | Int64 | An unique wallet ID.
- walletBalance | Decimal | Available wallet balance.
- walletHistories | Array[Object] | 
- walletHistories.Id | Int64 | Transaction history ID.
- walletHistories.createdDate | String | Transaction date and time. [Universal Time Coordinated (UTC)]
- walletHistories.transactionNumber | String | Transaction number.
- walletHistories.refenceCode | String | Transaction reference.
- walletHistories.amount | Decimal | Transaction payment amount.
- walletHistories.currencyCode | String | Transaction payment currency code.
- walletHistories.type | Int | Payment type. [Topup = 1, Payout = 2, Reverse = 3, Refund = 4, Rebate = 5, Unknow = 6]
- walletHistories.description | String | Transaction payment description.
- walletHistories.postTransactionWalletBalance | Decimal | Wallet balance after transaction.
- nextRecords | Int | Next record indicator.
 
- ### Response Payload Sample
- ```json Response_2XX
+### Body
+
+<ResponseField name="walletId" type="int64">
+  A unique wallet ID.
+</ResponseField>
+
+<ResponseField name="walletBalance" type="decimal">
+  Available wallet balance.
+</ResponseField>
+
+<ResponseField name="walletHistories" type="object[]">
+  <Expandable title="properties">
+    <ResponseField name="walletHistories.id" type="int64">
+      Transaction history ID.
+    </ResponseField>
+    <ResponseField name="walletHistories.createdDate" type="string">
+      Transaction date and time (UTC).
+    </ResponseField>
+    <ResponseField name="walletHistories.transactionNumber" type="string">
+      Transaction number.
+    </ResponseField>
+    <ResponseField name="walletHistories.refenceCode" type="string">
+      Transaction reference.
+    </ResponseField>
+    <ResponseField name="walletHistories.amount" type="decimal">
+      Transaction payment amount.
+    </ResponseField>
+    <ResponseField name="walletHistories.currencyCode" type="string">
+      Transaction payment currency code.
+    </ResponseField>
+    <ResponseField name="walletHistories.type" type="integer">
+      Payment type. Topup = 1, Payout = 2, Reverse = 3, Refund = 4, Rebate = 5, Unknown = 6.
+    </ResponseField>
+    <ResponseField name="walletHistories.description" type="string">
+      Transaction payment description.
+    </ResponseField>
+    <ResponseField name="walletHistories.postTransactionWalletBalance" type="decimal">
+      Wallet balance after the transaction.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="nextRecords" type="integer">
+  Next record indicator.
+</ResponseField>
+
+### Response Payload Sample
+
+```json Response_2XX
 {
   "result": {
     "walletId": 4,
@@ -83,10 +116,14 @@ Parameter | Type | Description
 }
 ```
 
----
-## Bad Response
-### Bad Response Payload Sample
- ```json Response_400
+## Error Responses
+
+| Code | Message |
+| ---- | ------- |
+| 1005 | `Tenant Wallet Not Found` |
+| 1 | `Invalid Signature.` |
+
+```json Response_400
 {
   "result": null,
   "error": {
@@ -95,6 +132,7 @@ Parameter | Type | Description
   }
 }
 ```
+
 ```json Response_400
 {
   "result": {

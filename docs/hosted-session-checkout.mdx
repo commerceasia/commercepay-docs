@@ -63,7 +63,7 @@ The complete end-to-end payment flow operates as follows:
     The customer decides to check out an order on the merchant's website.
   </Step>
   <Step title="Initiate Session Request">
-    The merchant backend calls the [Initial Session API](/api-reference/initial-session) to create a payment session for the order. Upon success, CommercePay returns a session URL for the hosted payment page.
+    The merchant backend calls the [Hosted Session Checkout](/api-reference/initial-session) endpoint to create a payment session for the order. Upon success, CommercePay returns a session URL for the hosted payment page.
   </Step>
   <Step title="Redirect to Session Page">
     The merchant redirects the customer's browser to the returned session URL, landing them on the persistent hosted payment page.

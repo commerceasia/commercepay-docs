@@ -1,51 +1,89 @@
 ---
 title: "Request Payout"
 description: "Request a payout and transfer funds via bank account or DuitNow Proxy."
+api: "POST https://staging-payments.commerce.asia/api/services/app/PaymentGateway/RequestPayment"
 ---
+
+import CommonHeaders from "/snippets/common-headers.mdx";
 
 An API endpoint used to request a payout and transfer funds to the specified recipients through a bank account or DuitNow Proxy.
 
-Type | Details
----------|----------
- Endpoint URL | https://staging-payments.commerce.asia/api/services/app/PaymentGateway/RequestPayment
- HTTP Method | Post
-
-#
----
 ## Request
+
 ### Headers
-Parameter Name | Description
----------|----------
- Abp-TenantId | Your unique Merchant ID assigned by CommercePay.
- Authorization | Your API credentials used for authentication (typically a Bearer token). Example: `Bearer {access token from authentication}`
- cap-signature | A unique security hash used to verify the integrity of the request body.
 
+<CommonHeaders />
 
- ### Body
+### Body
 
-Parameter | Type | Requirement | Description
----------|----------|---------|----------|
- channelId | Int | Mandatory | An identifier that represents CommercePay payments channel. [Production Payout ChannelId: 9 ; Staging Payout ChannelId: 15]  
- providerChannelId | String | Mandatory | An identifier that represents the payment method (Bank or Duitnow Proxy). You can obtain the providerChannelId via the [Get Provider Channels API](/api-reference/get-provider-channels) or refer to it [here](/docs/payout-provider-channel).
- currencyCode | String [Max Length: 3] | Mandatory | Currency code with a 3-letter ISO 4217 standard code. [Example: MYR]
- amount | Int64 | Mandatory | Payout amount. This field accepts only integer values. For example, 1050 represents 10.50.
- referenceCode | String [Max Length: 50] | Mandatory | Merchant reference code.
- description | String [Max Length: 100] | Optional | Transaction description.
- ipAddress | String [Max Length: 50] | Mandatory | Customer’s IP address captured by the merchant system.
- userAgent | String [Max Length: 200] | Optional | Customer’s user agent.
- returnUrl | String [Max Length: 500] | Mandatory | A return URL provided by the merchant. The user can be redirected to the final destination page from the CommercePay receipt page after the transaction payment has been completed.
- callbackUrl | String [Max Length: 500] | Optional | A URL provided by the merchant to receive server-to-server notifications from the system regarding transaction status updates. This URL is called automatically once the payment process is completed or when the transaction status changes.
- customer | Object | Mandatory | 
- customer.email | String [Max Length: 150] | Optional | Customer’s Email Address.
- customer.mobileNo | String [Max Length: 16] | Conditional | Customer’s mobile number. Required when processing a payout via DuitNow Proxy using a mobile number.
- customer.name | String [Max Length: 36] | Conditional | Customer’s Name. Required when processing a payout via bank transfer.
- customer.username | String [Max Length: 36] | Conditional | A field for bank account number, national ID (NRIC) or Business Registration Number.
- localCitizen | boolean | Mandatory | If the customer is Malaysian, kindly set it to True; otherwise, set it to False.
- timestamp | Int64 | Mandatory | Current Timestamp. [Example: 1621851652617]
+<ParamField body="channelId" type="integer" required>
+  An identifier that represents a CommercePay payments channel. Production Payout ChannelId: 9. Staging Payout ChannelId: 15.
+</ParamField>
 
+<ParamField body="providerChannelId" type="string" required>
+  An identifier that represents the payment method (Bank or DuitNow Proxy). You can obtain the providerChannelId via the [Get Provider Channels API](/api-reference/get-provider-channels) or refer to it [here](/docs/payout-provider-channel).
+</ParamField>
 
- ### Request Payload Sample
- ```json Payout_With_Bank
+<ParamField body="currencyCode" type="string" required>
+  Currency code with a 3-letter ISO 4217 standard code. Maximum length: 3. Example: `MYR`.
+</ParamField>
+
+<ParamField body="amount" type="int64" required>
+  Payout amount. This field accepts only integer values. For example, 1050 represents 10.50.
+</ParamField>
+
+<ParamField body="referenceCode" type="string" required>
+  Merchant reference code. Maximum length: 50.
+</ParamField>
+
+<ParamField body="description" type="string">
+  Transaction description. Maximum length: 100.
+</ParamField>
+
+<ParamField body="ipAddress" type="string" required>
+  Customer's IP address captured by the merchant system. Maximum length: 50.
+</ParamField>
+
+<ParamField body="userAgent" type="string">
+  Customer's user agent. Maximum length: 200.
+</ParamField>
+
+<ParamField body="returnUrl" type="string" required>
+  A return URL provided by the merchant. The user can be redirected to the final destination page from the CommercePay receipt page after the transaction payment has been completed. Maximum length: 500.
+</ParamField>
+
+<ParamField body="callbackUrl" type="string">
+  A URL provided by the merchant to receive server-to-server notifications from the system regarding transaction status updates. This URL is called automatically once the payment process is completed or when the transaction status changes. Maximum length: 500.
+</ParamField>
+
+<ParamField body="customer" type="object" required>
+  <Expandable title="properties">
+    <ParamField body="customer.email" type="string">
+      Customer's email address. Maximum length: 150.
+    </ParamField>
+    <ParamField body="customer.mobileNo" type="string">
+      Customer's mobile number. Required when processing a payout via DuitNow Proxy using a mobile number. Maximum length: 16.
+    </ParamField>
+    <ParamField body="customer.name" type="string">
+      Customer's name. Required when processing a payout via bank transfer. Maximum length: 36.
+    </ParamField>
+    <ParamField body="customer.username" type="string">
+      A field for bank account number, national ID (NRIC) or Business Registration Number. Maximum length: 36.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="localCitizen" type="boolean" required>
+  If the customer is Malaysian, set this to true; otherwise, set it to false.
+</ParamField>
+
+<ParamField body="timestamp" type="int64" required>
+  Current timestamp. Example: `1621851652617`.
+</ParamField>
+
+### Request Payload Sample
+
+```json Payout_With_Bank
 {
   "channelId": 15,
   "providerChannelId": "UOVBMYKL",      // Beneficiary Bank Swift Code 
@@ -91,20 +129,37 @@ Parameter | Type | Requirement | Description
 }
 ```
 
----
 ## Response
-### Body
-Parameter | Type | Description
----------|----------|----------|
- currencyCode | String [Max Length: 3] | Payout currency.
- amount | Int | Payout amount. For example, 1050 represents 10.50.
- transactionNumber | String [Max Length: 24] | Unique CommercePay Transaction Number.
- channelId | Int | An identifier that represents CommercePay payments channel.
- redirectionType | Int | Represents the **redirectUrl** type. This field returns 1 (URL Redirection).
- redirectUrl | String | URL used for the customer to redirect to the payment page.
 
- ### Response Payload Sample
- ```json Response_2XX
+### Body
+
+<ResponseField name="currencyCode" type="string">
+  Payout currency. Maximum length: 3.
+</ResponseField>
+
+<ResponseField name="amount" type="integer">
+  Payout amount. For example, 1050 represents 10.50.
+</ResponseField>
+
+<ResponseField name="transactionNumber" type="string">
+  Unique CommercePay Transaction Number. Maximum length: 24.
+</ResponseField>
+
+<ResponseField name="channelId" type="integer">
+  An identifier that represents a CommercePay payments channel.
+</ResponseField>
+
+<ResponseField name="redirectionType" type="integer">
+  Represents the **redirectUrl** type. This field returns 1 (URL redirection).
+</ResponseField>
+
+<ResponseField name="redirectUrl" type="string">
+  URL used for the customer to redirect to the payment page.
+</ResponseField>
+
+### Response Payload Sample
+
+```json Response_2XX
 {
   "result": {
     "currencyCode": "MYR",
@@ -117,10 +172,14 @@ Parameter | Type | Description
 }
 ```
 
----
-## Bad Response
-### Bad Response Payload Sample
- ```json Response_400
+## Error Responses
+
+| Code | Message |
+| ---- | ------- |
+| 2056 | `Failed Payment Request` |
+| 1 | `Invalid Signature.` |
+
+```json Response_400
 {
   "result": null,
   "error": {
@@ -129,6 +188,7 @@ Parameter | Type | Description
   }
 }
 ```
+
 ```json Response_400
 {
   "result": {

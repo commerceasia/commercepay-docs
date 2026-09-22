@@ -1,45 +1,68 @@
 ---
-title: "Direct Integration - Request Payment"
+title: "Direct Integration"
 description: "Initiate a checkout transaction and obtain the payment provider redirection URL."
+api: "POST https://staging-payments.commerce.asia/api/services/app/PaymentGateway/RequestPayment"
 ---
+
+import CommonHeaders from "/snippets/common-headers.mdx";
 
 An API endpoint used to initiate a checkout transaction and obtain the secure payment provider redirection URL.
-
-| Type | Details |
-| --- | --- |
-| Endpoint URL | `https://staging-payments.commerce.asia/api/services/app/PaymentGateway/RequestPayment` |
-| HTTP Method | POST |
-
----
 
 ## Request
 
 ### Headers
 
-| Parameter Name | Description |
-| --- | --- |
-| Abp-TenantId | Your unique Merchant ID assigned by CommercePay. |
-| Authorization | Your API credentials used for authentication (typically a Bearer token). Example: `Bearer {access token}` |
-| cap-signature | A unique security hash used to verify the integrity of the request body. |
+<CommonHeaders />
 
 ### Body
 
-| Parameter | Type | Requirement | Description |
-| --- | --- | --- | --- |
-| channelId | Int | Optional | An identifier that represents the CommercePay payment channel. Refer to the `id` from the response of the Get Tenant Channels by Country endpoint. This parameter can be omitted if you choose to utilize the CommercePay Hosted Payment Web interface. |
-| providerChannelId | String | Optional | An identifier that represents the specific upstream payment provider sub-channel (e.g., a bank code for online banking). This becomes **Mandatory** if the chosen channel configuration has `"isProviderHostChannel": true`. |
-| currencyCode | String | Mandatory | Currency code formatted to standard 3-letter ISO 4217 specifications (e.g., "MYR"). |
-| amount | Int64 | Mandatory | The transaction payment value. Note: This field exclusively accepts integer units where the final decimals are represented as whole values (e.g., an amount value of `1000` translates to `10.00` in the system backend). |
-| referenceCode | String | Mandatory | The merchant-side unique order reference or invoice tracking sequence code. Max 50 characters. |
-| ipAddress | String | Mandatory | The customer's valid IP address captured directly by the merchant server. Max 50 characters. |
-| returnUrl | String | Mandatory | The synchronous return URL where the customer's browser is forwarded automatically after completing payment checkout steps. Max 500 characters. |
-| timestamp | Int64 | Mandatory | Numeric timestamp in milliseconds representing request validation freshness (e.g., generated via `new Date().getTime()`). |
-| description | String | Optional | Text description summarized for transaction tracing logs. Max 100 characters. |
-| callbackUrl | String | Optional | Target address utilized for asynchronous host-to-host webhook payment status change push actions. Max 500 characters. |
+<Note>
+  Omitting `channelId` routes the customer to CommercePay's hosted payment page instead, where they pick their own payment method. If you'd rather let CommercePay handle channel selection this way, see [Hosted Session Checkout](/api-reference/initial-session).
+</Note>
+
+<ParamField body="channelId" type="integer">
+  An identifier that represents the CommercePay payment channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country) endpoint. This parameter can be omitted if you choose to utilize the CommercePay Hosted Payment Web interface.
+</ParamField>
+
+<ParamField body="providerChannelId" type="string">
+  An identifier that represents the specific upstream payment provider sub-channel (e.g., a bank code for online banking). This becomes **mandatory** if the chosen channel configuration has `isProviderHostChannel: true`. Obtain valid values from the [Get Provider Channels](/api-reference/get-provider-channels) endpoint.
+</ParamField>
+
+<ParamField body="currencyCode" type="string" required>
+  Currency code formatted to standard 3-letter ISO 4217 specifications (e.g., `MYR`).
+</ParamField>
+
+<ParamField body="amount" type="int64" required>
+  The transaction payment value. This field exclusively accepts integer units where the final decimals are represented as whole values (e.g., an amount value of `1000` translates to `10.00` in the system backend).
+</ParamField>
+
+<ParamField body="referenceCode" type="string" required>
+  The merchant-side unique order reference or invoice tracking sequence code. Maximum length: 50.
+</ParamField>
+
+<ParamField body="ipAddress" type="string" required>
+  The customer's valid IP address captured directly by the merchant server. Maximum length: 50.
+</ParamField>
+
+<ParamField body="returnUrl" type="string" required>
+  The synchronous return URL where the customer's browser is forwarded automatically after completing payment checkout steps. Maximum length: 500.
+</ParamField>
+
+<ParamField body="timestamp" type="int64" required>
+  Numeric timestamp in milliseconds representing request validation freshness (e.g., generated via `new Date().getTime()`).
+</ParamField>
+
+<ParamField body="description" type="string">
+  Text description summarized for transaction tracing logs. Maximum length: 100.
+</ParamField>
+
+<ParamField body="callbackUrl" type="string">
+  Target address utilized for asynchronous host-to-host webhook payment status change push actions. Maximum length: 500.
+</ParamField>
 
 ### Request Payload Sample
 
-```json
+```json Payload
 {
   "channelId": 2,
   "providerChannelId": "TEST0021",
@@ -52,29 +75,47 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
   "description": "Order checkout payment item description",
   "timestamp": 1774845600000
 }
-
 ```
-
----
 
 ## Response
 
 ### Body
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| currencyCode | String | Currency code with a 3-letter ISO 4217 standard code (e.g., "MYR"). Maximum length of 3 characters. |
-| amount | Int64 | The transaction payment value returned in pure integer units (e.g., `1000` is equivalent to `10.00` for the backend processing rules). |
-| transactionNumber | String | Unique CAP Transaction Number mapped internally for auditing. Maximum length of 24 characters. |
-| channelId | Int | The primary identity mapping identifier. Corresponds to the entry endpoints defined in `GetTenantChannelsByCountry`. |
-| redirectionType | Int | Defines the browser execution pathway. Notes: `1` = UrlRedirection, `2` = Script execution redirection. |
-| redirectUrl | String | The secure target destination link utilized to send the consumer browser to the payment selection page. |
-| clientScript | String | Customized script sequence injected onto client browsers to force payment redirection behaviors. |
-| transactionExpired | String | Expiration threshold deadline represented as an ISO 8601 date-time timestamp block. |
+<ResponseField name="currencyCode" type="string">
+  Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`). Maximum length: 3.
+</ResponseField>
+
+<ResponseField name="amount" type="int64">
+  The transaction payment value returned in pure integer units (e.g., `1000` is equivalent to `10.00` for the backend processing rules).
+</ResponseField>
+
+<ResponseField name="transactionNumber" type="string">
+  Unique CAP Transaction Number mapped internally for auditing. Maximum length: 24.
+</ResponseField>
+
+<ResponseField name="channelId" type="integer">
+  The primary identity mapping identifier. Corresponds to the entry endpoints defined in [Get Channel List](/api-reference/get-tenant-channels-by-country).
+</ResponseField>
+
+<ResponseField name="redirectionType" type="integer">
+  Defines the browser execution pathway. `1` = UrlRedirection, `2` = Script execution redirection.
+</ResponseField>
+
+<ResponseField name="redirectUrl" type="string">
+  The secure target destination link utilized to send the consumer browser to the payment selection page.
+</ResponseField>
+
+<ResponseField name="clientScript" type="string">
+  Customized script sequence injected onto client browsers to force payment redirection behaviors.
+</ResponseField>
+
+<ResponseField name="transactionExpired" type="string">
+  Expiration threshold deadline represented as an ISO 8601 date-time timestamp block.
+</ResponseField>
 
 ### Response Payload Sample
 
-```json
+```json Response_2XX
 {
   "result": {
     "currencyCode": "MYR",
@@ -92,16 +133,15 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
   "unAuthorizedRequest": false,
   "__abp": true
 }
-
 ```
 
----
+## Error Responses
 
-## Bad Response
+| Code | Message |
+| ---- | ------- |
+| 1 | `Invalid Signature.` |
 
-### Bad Response Payload Samples
-
-```json
+```json Response_400
 {
   "result": null,
   "targetUrl": null,
@@ -113,5 +153,4 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
   "unAuthorizedRequest": true,
   "__abp": true
 }
-
 ```

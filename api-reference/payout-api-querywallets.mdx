@@ -1,60 +1,73 @@
 ---
 title: "Inquiry Wallets"
 description: "Retrieve wallet balance, status, and related details."
+api: "POST https://staging-payments.commerce.asia/api/services/app/PaymentGateway/QueryWallets"
 ---
+
+import CommonHeaders from "/snippets/common-headers.mdx";
 
 An API endpoint used to retrieve wallet information, including wallet balance, status, and other related details.
 
-Type | Details
----------|----------
- Endpoint URL | https://staging-payments.commerce.asia/api/services/app/PaymentGateway/QueryWallets
- HTTP Method | Post
-
-#
----
 ## Request
+
 ### Headers
-Parameter Name | Description
----------|----------
- Abp-TenantId | Your unique Merchant ID assigned by CommercePay.
- Authorization | Your API credentials used for authentication (typically a Bearer token). Example: `Bearer {access token from authentication}`
- cap-signature | A unique security hash used to verify the integrity of the request body.
 
+<CommonHeaders />
 
- ### Body
+### Body
 
-Parameter | Type | Requirement | Description
----------|----------|---------|----------|
- tenantId | Int | Mandatory | Merchant ID.
- timestamp | Int64 | Mandatory | Current timestamp. [Example: 1621851652617]
- 
+<ParamField body="tenantId" type="integer" required>
+  Merchant ID.
+</ParamField>
 
+<ParamField body="timestamp" type="int64" required>
+  Current timestamp. Example: `1621851652617`.
+</ParamField>
 
- ### Request Payload Sample
- ```json Payload
+### Request Payload Sample
+
+```json Payload
 {
   "tenantId": 14,
   "timestamp": 1621851652617
 }
 ```
 
----
 ## Response
-### Body
-Parameter | Type | Description
----------|----------|----------|
- tenantId | Int | Merchant ID.
- tenantName | String | Merchant name.
- wallets | Array[Object] | 
- wallets.id | Int64 | An unique wallet ID. 
- wallets.currencyCode | String | Wallet currency.
- wallets.balance | Decimal | Wallet balance.
- wallets.walletType | Int | Type of wallet. [Basic = 0, Premium =1, Payout = 2]
- wallets.walletStatus | Int | Wallet status. [Inactive = 0, active = 1]
- 
 
- ### Response Payload Sample
- ```json Response_2XX
+### Body
+
+<ResponseField name="tenantId" type="integer">
+  Merchant ID.
+</ResponseField>
+
+<ResponseField name="tenantName" type="string">
+  Merchant name.
+</ResponseField>
+
+<ResponseField name="wallets" type="object[]">
+  <Expandable title="properties">
+    <ResponseField name="wallets.id" type="int64">
+      A unique wallet ID.
+    </ResponseField>
+    <ResponseField name="wallets.currencyCode" type="string">
+      Wallet currency.
+    </ResponseField>
+    <ResponseField name="wallets.balance" type="decimal">
+      Wallet balance.
+    </ResponseField>
+    <ResponseField name="wallets.walletType" type="integer">
+      Type of wallet. Basic = 0, Premium = 1, Payout = 2.
+    </ResponseField>
+    <ResponseField name="wallets.walletStatus" type="integer">
+      Wallet status. Inactive = 0, Active = 1.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Response Payload Sample
+
+```json Response_2XX
 {
   "result": {
     "tenantId": 14,
@@ -72,10 +85,14 @@ Parameter | Type | Description
 }
 ```
 
----
-## Bad Response
-### Bad Response Payload Sample
- ```json Response_400
+## Error Responses
+
+| Code | Message |
+| ---- | ------- |
+| 1005 | `Tenant Wallet Not Found` |
+| 1 | `Invalid Signature.` |
+
+```json Response_400
 {
   "result": null,
   "error": {
@@ -84,6 +101,7 @@ Parameter | Type | Description
   }
 }
 ```
+
 ```json Response_400
 {
   "result": {

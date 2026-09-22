@@ -63,13 +63,13 @@ The complete end-to-end payment flow operates as follows:
     The customer decides to checkout an order on the merchant's website.
   </Step>
   <Step title="Fetch Tenant Channels">
-    The merchant's checkout page calls the [Get Tenant Channels by Country API](/api-reference/get-tenant-channels-by-country) to retrieve all available payment methods for the customer's region and displays them on the native checkout page.
+    The merchant's checkout page calls the [Get Channel List](/api-reference/get-tenant-channels-by-country) to retrieve all available payment methods for the customer's region and displays them on the native checkout page.
   </Step>
   <Step title="Fetch Provider Options (Conditional)">
-    If the payer selects a channel where `"isProviderHostChannel": true`, the merchant system must call the [Get Provider Channels API](/api-reference/get-provider-channels). This retrieves deep-tier options (e.g., specific bank listings for FPX) so the customer can pick their preferred option directly on the merchant's page.
+    If the payer selects a channel where `"isProviderHostChannel": true`, the merchant system must call the [Get Provider Channels](/api-reference/get-provider-channels). This retrieves deep-tier options (e.g., specific bank listings for FPX) so the customer can pick their preferred option directly on the merchant's page.
   </Step>
   <Step title="Initiate Payment Request">
-    Once the customer confirms their selection and clicks pay, the merchant backend calls the [Request Payment API](/api-reference/direct-integration-api-request-payment), sending the required payload alongside the channelId (and providerChannelId if applicable).
+    Once the customer confirms their selection and clicks pay, the merchant backend calls the [Direct Integration](/api-reference/direct-integration-api-request-payment) endpoint, sending the required payload alongside the channelId (and providerChannelId if applicable).
   </Step>
   <Step title="Provider Redirection Fetch (Internal Hop)">
     Upon receiving the request, the CommercePay Gateway immediately communicates with the selected Payment Provider's system to initialize the transaction and fetch the official provider-side redirection URL.

@@ -69,7 +69,9 @@
           {
             "group": "Payin APIs",
             "pages": [
-              "api-reference/direct-integration-api-request-payment"
+              "api-reference/direct-integration-api-request-payment",
+              "POST /api/services/app/PaymentGateway/InitialSession",
+              "GET /api/services/app/PaymentGateway/Query"
             ]
           },
           {
@@ -86,6 +88,13 @@
               "api-reference/payout-api-requestpayout",
               "api-reference/payout-api-querywallets",
               "api-reference/payout-api-querywallethistories"
+            ]
+          },
+          {
+            "group": "Refund APIs",
+            "pages": [
+              "POST /api/services/app/PaymentGateway/RefundPayment",
+              "GET /api/services/app/PaymentGateway/QueryRefund"
             ]
           },
           {
