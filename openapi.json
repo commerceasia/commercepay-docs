@@ -901,7 +901,7 @@
             "title": "Refund Payment",
             "sidebarTitle": "Refund Payment"
           },
-          "content": "## Errors\n\nIn addition to standard signature errors, this endpoint can return:\n\n| Code | Name | Meaning |\n| ---- | ---- | ------- |\n| 2010 | `TransactionNotFound` | `transactionNumber` does not match a transaction, or the transaction is not in `Success` status. |\n| 2042 | `FailedToRequestRefund` | Generic refund failure. The message names the specific cause, e.g. a refund is already in progress for this transaction, the requested amount exceeds what's still available to refund, the channel doesn't support partial refunds, or the provider is unavailable for this channel. |\n| 2044 | `MissingRequireField` | `reason` was not supplied. |\n| 2094 | `InvalidTenantProfile` | Tenant could not be resolved (no session tenant and no `tenantId` in the request body). |\n| 2124 | `RequestRefundTimeOut` | The provider's refund API timed out while processing the request. |\n| 2130 | `ChannelNotSupportRefund` | The original transaction's channel is configured to not support refunds. |\n| 2160 | `InvalidPaymentGatewaySetting` | The channel's provider settings are missing or misconfigured for this tenant. |\n\n> A refund amount of `0` (or negative) is also rejected via `FailedToRequestRefund` (2042), with the message \"Refund amount cannot be 0\"."
+          "content": "<Note>\nPass `amount` only when issuing a **partial refund**. Omit it (or leave it null) when issuing a **full refund**.\n</Note>\n\n## Errors\n\nIn addition to standard signature errors, this endpoint can return:\n\n| Code | Name | Meaning |\n| ---- | ---- | ------- |\n| 2010 | `TransactionNotFound` | `transactionNumber` does not match a transaction, or the transaction is not in `Success` status. |\n| 2042 | `FailedToRequestRefund` | Generic refund failure. The message names the specific cause, e.g. a refund is already in progress for this transaction, the requested amount exceeds what's still available to refund, the channel doesn't support partial refunds, or the provider is unavailable for this channel. |\n| 2044 | `MissingRequireField` | `reason` was not supplied. |\n| 2094 | `InvalidTenantProfile` | Tenant could not be resolved (no session tenant and no `tenantId` in the request body). |\n| 2124 | `RequestRefundTimeOut` | The provider's refund API timed out while processing the request. |\n| 2130 | `ChannelNotSupportRefund` | The original transaction's channel is configured to not support refunds. |\n| 2160 | `InvalidPaymentGatewaySetting` | The channel's provider settings are missing or misconfigured for this tenant. |\n\n> A refund amount of `0` (or negative) is also rejected via `FailedToRequestRefund` (2042), with the message \"Refund amount cannot be 0\"."
         },
         "description": "**The payment gateway requests a refund payment**\n\nInitiate a full or partial refund for a successful payment transaction. See [Refund Integration](/docs/refund-integration) for full vs. partial refund behavior and bank support. The response's `refundStatus` reflects the outcome directly — if it comes back as `ProcessingRefund`, use [Query Refund Payment](/api-reference/query-refund-payment) to check when it completes.",
         "parameters": [
@@ -1541,7 +1541,7 @@
           "amount": {
             "type": "integer",
             "format": "int64",
-            "description": "**Please take note:** The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.\n\nInvalid Format: 1,000.00",
+            "description": "The transaction payment value. This field exclusively accepts integer units where the final decimals are represented as whole values (e.g., an amount value of `1000` translates to `10.00` in the system backend).",
             "example": 100
           },
           "referenceCode": {
@@ -1577,7 +1577,7 @@
             "type": "string",
             "example": "https://callback.com/",
             "maxLength": 500,
-            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. Refer to the Merchant Callback URL to know more",
+            "description": "Target address utilized for asynchronous host-to-host webhook payment status change push actions.",
             "nullable": true
           },
           "savePayment": {
@@ -2194,7 +2194,7 @@
           },
           "callbackUrl": {
             "type": "string",
-            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given, including for the automatic MYR 1.00 verification charge and its refund. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. Refer to the Merchant Callback URL to know more",
+            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given, including for the automatic MYR 1.00 verification charge and its refund. If the URL is provided, the callback will be triggered; otherwise, it would not trigger.",
             "maxLength": 500,
             "example": "https://callback.com/",
             "nullable": true
@@ -2345,7 +2345,7 @@
           },
           "amount": {
             "type": "integer",
-            "description": "Please take note: The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.Show all...\r\n\r\n\r\nExample: 100\r\n\r\n[Please pass the required amount if issuing a partial refund; ignore this attribute if issuing a full refund.]",
+            "description": "The transaction payment value. This field exclusively accepts integer units where the final decimals are represented as whole values (e.g., an amount value of `1000` translates to `10.00` in the system backend).",
             "format": "int32",
             "nullable": true
           },
@@ -2561,7 +2561,7 @@
           },
           "amount": {
             "type": "integer",
-            "description": "Please take note: The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.\r\n\r\nInvalid Format: 1,000.00",
+            "description": "The transaction payment value. This field exclusively accepts integer units where the final decimals are represented as whole values (e.g., an amount value of `1000` translates to `10.00` in the system backend).",
             "example": 100
           },
           "channelDetails": {
@@ -2798,7 +2798,7 @@
           "amount": {
             "type": "integer",
             "format": "int64",
-            "description": "Please take note: The Amount parameter only accepts integer units. For example, 1000 is equivalent to 10.00 for the backend.\r\n\r\nInvalid Format: 1,000.00",
+            "description": "The transaction payment value. This field exclusively accepts integer units where the final decimals are represented as whole values (e.g., an amount value of `1000` translates to `10.00` in the system backend).",
             "example": 100
           },
           "referenceCode": {
@@ -2832,7 +2832,7 @@
           },
           "callbackUrl": {
             "type": "string",
-            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. Refer to the Merchant Callback URL to know more",
+            "description": "Target address utilized for asynchronous host-to-host webhook payment status change push actions.",
             "maxLength": 500,
             "example": "https://callback.com/",
             "nullable": true

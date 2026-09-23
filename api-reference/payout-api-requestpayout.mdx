@@ -31,7 +31,7 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ParamField>
 
 <ParamField body="amount" type="int64" required>
-  Payout amount. This field accepts only integer values. For example, 1050 represents 10.50.
+  The transaction payment value. This field exclusively accepts integer units where the final decimals are represented as whole values (e.g., an amount value of `1050` translates to `10.50` in the system backend).
 </ParamField>
 
 <ParamField body="referenceCode" type="string" required>
