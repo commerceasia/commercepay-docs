@@ -793,77 +793,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "x-examples": {
-                    "Example 1": {
-                      "tenantId": 0,
-                      "transactionNumber": "string",
-                      "refundTransactionNumber": "string",
-                      "referenceCode": "string",
-                      "amount": 100,
-                      "currencyCode": "MYR",
-                      "refundStatus": 0,
-                      "responseMessage": "string",
-                      "paymentSessionNumber": "string",
-                      "refundPaymentList": {
-                        "transactionNumber": "string",
-                        "amount": 100,
-                        "currencyCode": "MYR",
-                        "refundReason": "string",
-                        "refundStatus": 0
-                      }
-                    }
-                  },
-                  "nullable": true,
-                  "properties": {
-                    "tenantId": {
-                      "type": "integer"
-                    },
-                    "transactionNumber": {
-                      "type": "string"
-                    },
-                    "refundTransactionNumber": {
-                      "type": "string"
-                    },
-                    "referenceCode": {
-                      "type": "string"
-                    },
-                    "amount": {
-                      "type": "integer"
-                    },
-                    "currencyCode": {
-                      "type": "string"
-                    },
-                    "refundStatus": {
-                      "type": "integer"
-                    },
-                    "responseMessage": {
-                      "type": "string"
-                    },
-                    "paymentSessionNumber": {
-                      "type": "string"
-                    },
-                    "refundPaymentList": {
-                      "type": "object",
-                      "properties": {
-                        "transactionNumber": {
-                          "type": "string"
-                        },
-                        "amount": {
-                          "type": "integer"
-                        },
-                        "currencyCode": {
-                          "type": "string"
-                        },
-                        "refundReason": {
-                          "type": "string"
-                        },
-                        "refundStatus": {
-                          "type": "integer"
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/RequestRefundOutputDto"
                 },
                 "examples": {
                   "Example 1": {
@@ -874,7 +804,7 @@
                       "referenceCode": "string",
                       "amount": 0,
                       "currencyCode": "string",
-                      "refundStatus": 0,
+                      "refundStatus": 11,
                       "responseMessage": "string",
                       "paymentSessionNumber": "string",
                       "refundPaymentList": {
@@ -882,7 +812,7 @@
                         "amount": 0,
                         "currencyCode": "string",
                         "refundReason": "string",
-                        "refundStatus": 0
+                        "refundStatus": 11
                       }
                     }
                   }
@@ -899,16 +829,42 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutputDto"
+                },
+                "examples": {
+                  "TransactionNotFound": {
+                    "value": {
+                      "code": 2010,
+                      "message": "transactionNumber does not match a transaction, or the transaction is not in Success status."
+                    }
+                  },
+                  "FailedToRequestRefund": {
+                    "value": {
+                      "code": 2042,
+                      "message": "Refund amount cannot be 0"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "summary": "Refund Payment",
         "x-mint": {
+          "href": "/api-reference/refund-payment",
           "metadata": {
             "title": "Refund Payment",
             "sidebarTitle": "Refund Payment"
-          }
+          },
+          "content": "## Errors\n\nIn addition to standard signature errors, this endpoint can return:\n\n| Code | Name | Meaning |\n| ---- | ---- | ------- |\n| 2010 | `TransactionNotFound` | `transactionNumber` does not match a transaction, or the transaction is not in `Success` status. |\n| 2042 | `FailedToRequestRefund` | Generic refund failure. The message names the specific cause, e.g. a refund is already in progress for this transaction, the requested amount exceeds what's still available to refund, the channel doesn't support partial refunds, or the provider is unavailable for this channel. |\n| 2044 | `MissingRequireField` | `reason` was not supplied. |\n| 2094 | `InvalidTenantProfile` | Tenant could not be resolved (no session tenant and no `tenantId` in the request body). |\n| 2124 | `RequestRefundTimeOut` | The provider's refund API timed out while processing the request. |\n| 2130 | `ChannelNotSupportRefund` | The original transaction's channel is configured to not support refunds. |\n| 2160 | `InvalidPaymentGatewaySetting` | The channel's provider settings are missing or misconfigured for this tenant. |\n\n> A refund amount of `0` (or negative) is also rejected via `FailedToRequestRefund` (2042), with the message \"Refund amount cannot be 0\"."
         },
-        "description": "**The payment gateway requests a refund payment**",
+        "description": "**The payment gateway requests a refund payment**\n\nInitiate a full or partial refund for a successful payment transaction. See [Refund Integration](/docs/refund-integration) for full vs. partial refund behavior and bank support. The response's `refundStatus` reflects the outcome directly — if it comes back as `ProcessingRefund`, use [Query Refund Payment](/api-reference/query-refund-payment) to check when it completes.",
         "parameters": [
           {
             "$ref": "#/components/parameters/AbpTenantId"
@@ -966,81 +922,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "x-examples": {
-                    "Example 1": {
-                      "tenantId": 0,
-                      "transactionNumber": "string",
-                      "paymentSessionNumber": "string",
-                      "refundTransactionNumber": "string",
-                      "referenceCode": "string",
-                      "amount": 0,
-                      "currencyCode": "string",
-                      "refundStatus": 0,
-                      "refundPaymentList": [
-                        {
-                          "transactionNumber": "string",
-                          "amount": 0,
-                          "currencyCode": "string",
-                          "refundReason": "string",
-                          "refundStatus": 0
-                        }
-                      ],
-                      "responseMessage": "string"
-                    }
-                  },
-                  "properties": {
-                    "tenantId": {
-                      "type": "integer"
-                    },
-                    "transactionNumber": {
-                      "type": "string"
-                    },
-                    "paymentSessionNumber": {
-                      "type": "string"
-                    },
-                    "refundTransactionNumber": {
-                      "type": "string"
-                    },
-                    "referenceCode": {
-                      "type": "string"
-                    },
-                    "amount": {
-                      "type": "integer"
-                    },
-                    "currencyCode": {
-                      "type": "string"
-                    },
-                    "refundStatus": {
-                      "type": "integer"
-                    },
-                    "refundPaymentList": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "transactionNumber": {
-                            "type": "string"
-                          },
-                          "amount": {
-                            "type": "integer"
-                          },
-                          "currencyCode": {
-                            "type": "string"
-                          },
-                          "refundReason": {
-                            "type": "string"
-                          },
-                          "refundStatus": {
-                            "type": "integer"
-                          }
-                        }
-                      }
-                    },
-                    "responseMessage": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/RequestRefundOutputDto"
                 },
                 "examples": {
                   "Example 1": {
@@ -1052,16 +934,14 @@
                       "referenceCode": "string",
                       "amount": 0,
                       "currencyCode": "string",
-                      "refundStatus": 0,
-                      "refundPaymentList": [
-                        {
-                          "transactionNumber": "string",
-                          "amount": 0,
-                          "currencyCode": "string",
-                          "refundReason": "string",
-                          "refundStatus": 0
-                        }
-                      ],
+                      "refundStatus": 11,
+                      "refundPaymentList": {
+                        "transactionNumber": "string",
+                        "amount": 0,
+                        "currencyCode": "string",
+                        "refundReason": "string",
+                        "refundStatus": 11
+                      },
                       "responseMessage": "string"
                     }
                   }
@@ -1078,15 +958,35 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutputDto"
+                },
+                "examples": {
+                  "TransactionNotFound": {
+                    "value": {
+                      "code": 2010,
+                      "message": "transactionNumber does not match a transaction, or the refund hasn't been processed yet."
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "summary": "Query Refund Payment",
-        "description": "**The payment gateway requests a query refund payment status**",
+        "description": "**The payment gateway requests a query refund payment status**\n\nCheck the status of a refund previously requested via [Refund Payment](/api-reference/refund-payment). Use this to confirm whether a refund has completed, is still processing, or failed.",
         "x-mint": {
+          "href": "/api-reference/query-refund-payment",
           "metadata": {
             "title": "Query Refund Payment",
             "sidebarTitle": "Query Refund Payment"
-          }
+          },
+          "content": "## Errors\n\nIn addition to standard signature errors, this endpoint can return:\n\n| Code | Name | Meaning |\n| ---- | ---- | ------- |\n| 2010 | `TransactionNotFound` | `transactionNumber` does not match a transaction, or (for a refund-only lookup) the refund hasn't been processed yet. |\n| 2043 | `FailedToRefundQuery` | The transaction's channel/provider does not support querying refund status. |\n| 2130 | `ChannelNotSupportRefund` | The transaction's channel is configured to not support refunds. |\n| 2160 | `InvalidPaymentGatewaySetting` | The channel's provider settings are missing or misconfigured for this tenant. |"
         }
       }
     },
@@ -1910,6 +1810,27 @@
         ],
         "description": "Payment Status: Refer on Appendix 3.1 Payment Status Code Table"
       },
+      "RefundStatus": {
+        "enum": [
+          11,
+          12,
+          13,
+          16,
+          17,
+          18
+        ],
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "Refunded",
+          "ProcessingRefund",
+          "FailedRefund",
+          "RefundWithCharges",
+          "RefundReverse",
+          "Voided"
+        ],
+        "description": "Status of the refund itself (not the original payment).\n\n| Value | Name | Meaning |\n| ----- | ---- | ------- |\n| 11 | `Refunded` | Refund completed successfully. |\n| 12 | `ProcessingRefund` | Refund request accepted, being processed by the provider. |\n| 13 | `FailedRefund` | Refund attempt failed. |\n| 16 | `RefundWithCharges` | Refund completed, but provider/processing charges were deducted from the refunded amount. |\n| 17 | `RefundReverse` | A previously completed refund was reversed by the provider. |\n| 18 | `Voided` | The original transaction was voided instead of refunded, e.g. same-day cancellation. |"
+      },
       "RedirectionType": {
         "enum": [
           1,
@@ -2334,16 +2255,18 @@
         "properties": {
           "tenantId": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "Merchant ID."
           },
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP transaction number",
+            "description": "Unique CAP Transaction Number of the original payment being refunded.",
             "maxLength": 24,
             "nullable": true
           },
           "refundTransactionNumber": {
             "type": "string",
+            "description": "Unique CAP Transaction Number for the refund transaction itself, distinct from the original payment's transactionNumber.",
             "nullable": true
           },
           "referenceCode": {
@@ -2365,10 +2288,11 @@
             "nullable": true
           },
           "refundStatus": {
-            "$ref": "#/components/schemas/PaymentStatus"
+            "$ref": "#/components/schemas/RefundStatus"
           },
           "responseMessage": {
             "type": "string",
+            "description": "Human-readable status message for the refund request.",
             "nullable": true
           },
           "paymentSessionNumber": {
@@ -2930,8 +2854,8 @@
             "nullable": true
           },
           "amount": {
-            "type": "integer",
-            "format": "int64",
+            "type": "number",
+            "format": "double",
             "description": "Refund Amount.",
             "example": 100
           },
@@ -2948,7 +2872,7 @@
             "nullable": true
           },
           "refundStatus": {
-            "$ref": "#/components/schemas/PaymentStatus"
+            "$ref": "#/components/schemas/RefundStatus"
           }
         }
       }
