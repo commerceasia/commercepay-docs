@@ -58,13 +58,12 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "example": "{1}"
+              "type": "string"
             },
             "in": "header",
             "name": "Abp-TenantId",
             "required": true,
-            "description": "Fill in provided Merchant Id"
+            "description": "Your unique Merchant ID assigned by CommercePay."
           }
         ],
         "summary": "Get Access Token",
@@ -183,6 +182,26 @@
             "required": true
           },
           {
+            "name": "CurrencyCode",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 3,
+              "example": "MYR"
+            },
+            "description": "**[Optional]** Currency code (3-letter ISO 4217). When supplied, only provider channels that support this currency are returned."
+          },
+          {
+            "name": "Amount",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10000
+            },
+            "description": "**[Optional]** Transaction amount in minor units (e.g. 10000 = 100.00). When supplied, only provider channels that support this amount are returned."
+          },
+          {
             "$ref": "#/components/parameters/AbpTenantId"
           },
           {
@@ -220,7 +239,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error\n[Provider does not have channels]"
+            "description": "Internal Server Error. Possible causes:\n- **InvalidChannel** (2001) — `channelId` is missing or does not match an active channel.\n- **ProviderDoesNotHaveChannels** (2017) — this channel's provider integration does not support listing provider channels.\n- **FailedToGetProviderChannels** (2018) — the provider was queried but returned no channels."
           }
         },
         "summary": "Get Provider Channels",
@@ -241,10 +260,12 @@
         ],
         "summary": "Query Payment",
         "x-mint": {
+          "href": "/api-reference/query-payment",
           "metadata": {
             "title": "Query Payment",
             "sidebarTitle": "Query Payment"
-          }
+          },
+          "content": "> - **Live queries are conditional.** A provider is only queried in real time when the stored status is `Pending`, `Authorized`, or `InstallmentInProgress`. For any other stored status (already `Success`, `Failed`, etc.), the last known status is returned immediately without a provider round-trip.\n> - **Querying by `SessionNumber` alone returns a session-level result, not one fixed transaction.** Up to 3 pending transactions under that session are checked in order; the first one found `Success` is returned. If none are, the response reflects the session's own status with `transactionNumber: null` rather than any individual transaction.\n\n## Errors\n\nIn addition to standard signature errors, this endpoint can return:\n\n| Code | Name | Meaning |\n| ---- | ---- | ------- |\n| 2010 | `TransactionNotFound` | Neither `transactionNumber` nor `sessionNumber` resolves to a record. |\n| 2014 | `ChannelNotAllowedQuery` | The transaction's channel/provider does not support status queries. |\n| 2116 | `QueryProviderError` | The live provider query failed, timed out, or threw an error. |"
         },
         "description": "Payment gateway checks the existing payment status.\n\nThe following input parameters are expected to be provided by the merchant to verify transaction status or to obtain more details on the payment before approving the customer’s order.",
         "operationId": "ApiServicesAppPaymentgatewayQueryGet",
@@ -256,7 +277,7 @@
               "type": "string",
               "maxLength": 24
             },
-            "description": "Unique CAP Transaction Number **(Conditional: If it is query for specific transaction in either normal transaction or session transaction, then need pass the transaction number)**"
+            "description": "Unique CommercePay Transaction Number **(Conditional: If it is query for specific transaction in either normal transaction or session transaction, then need pass the transaction number)**"
           },
           {
             "name": "Timestamp",
@@ -284,7 +305,7 @@
             },
             "in": "query",
             "name": "SessionNumber",
-            "description": "Unique CAP Session Number **(Conditional: If the query is query the session, then need pass the session number)**"
+            "description": "Unique CommercePay Session Number **(Conditional: If the query is query the session, then need pass the session number)**"
           }
         ],
         "responses": {
@@ -325,6 +346,24 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/QueryPaymentOutputDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOutputDto"
+                },
+                "examples": {
+                  "TransactionNotFound": {
+                    "value": {
+                      "code": 2010,
+                      "message": "Neither transactionNumber nor sessionNumber resolves to a record."
+                    }
+                  }
                 }
               }
             }
@@ -892,7 +931,7 @@
               "type": "string",
               "maxLength": 24
             },
-            "description": "Unique CAP Transaction Number",
+            "description": "Unique CommercePay Transaction Number",
             "required": true
           },
           {
@@ -1285,15 +1324,26 @@
             "description": "Channel Name",
             "nullable": true
           },
+          "displayName": {
+            "type": "string",
+            "description": "Merchant-facing display name for the channel (may differ from `name`).",
+            "nullable": true
+          },
           "type": {
             "$ref": "#/components/schemas/ChannelType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ChannelStatus"
           },
           "refundType": {
             "$ref": "#/components/schemas/ChannelRefundType"
           },
+          "refundChargesType": {
+            "$ref": "#/components/schemas/ChannelRefundChargesType"
+          },
           "isProviderHostChannel": {
             "type": "boolean",
-            "description": "If \"isProviderHostChannel\" is indicated as true, it means that the provider has its own one or more hosted channels. To get provider channels, merchants are required to call the endpoint: /api/services/app/Channel/GetProviderChannels."
+            "description": "Indicates whether this channel has provider-hosted sub-channels (e.g. a list of banks for FPX).\n\nWhen `true`, call [Get Provider Channels](/api-reference/get-provider-channels) with this channel's `id` to retrieve its list of sub-channels before requesting payment.\n\nWhen `false`, the channel can be used directly with no further lookup."
           },
           "currencies": {
             "type": "array",
@@ -1329,7 +1379,8 @@
       "ChannelType": {
         "enum": [
           1,
-          2
+          2,
+          3
         ],
         "type": "integer",
         "format": "int32",
@@ -1338,7 +1389,20 @@
           "OnlinePayout",
           "OnlineRecurringPayment"
         ],
-        "description": "Channel Type: [1= OnlinePayment, 2= OnlinePayout, 3= OnlineRecurringPayment]"
+        "description": "| Value | Name | Meaning |\n| ----- | ---- | ------- |\n| 1 | `OnlinePayment` | Channel is used for payin (customer-to-merchant) transactions. |\n| 2 | `OnlinePayout` | Channel is used for payout (merchant-to-customer) transactions. |\n| 3 | `OnlineRecurringPayment` | Channel is used for recurring/saved-payment transactions. |"
+      },
+      "ChannelStatus": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "Inactive",
+          "Active"
+        ],
+        "description": "| Value | Name | Meaning |\n| ----- | ---- | ------- |\n| 0 | `Inactive` | Channel is unavailable — may be under scheduled maintenance or pending required onboarding. |\n| 1 | `Active` | Channel is available for use. |"
       },
       "IdentificationType": {
         "enum": [
@@ -1385,6 +1449,16 @@
           },
           "status": {
             "$ref": "#/components/schemas/ThirdPartyChannelStatus"
+          },
+          "whitelist": {
+            "type": "object",
+            "description": "Reserved for future use. Currently always null.",
+            "nullable": true
+          },
+          "options": {
+            "type": "object",
+            "description": "Reserved for future use. Currently always null.",
+            "nullable": true
           }
         }
       },
@@ -1583,7 +1657,7 @@
           },
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP Transaction Number",
+            "description": "Unique CommercePay Transaction Number",
             "maxLength": 24,
             "nullable": true
           },
@@ -1620,13 +1694,13 @@
         "properties": {
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP transaction number",
+            "description": "Unique CommercePay transaction number",
             "maxLength": 24,
             "nullable": true
           },
           "paymentSessionNumber": {
             "type": "string",
-            "description": "Unique CAP session number",
+            "description": "Unique CommercePay session number",
             "maxLength": 24,
             "nullable": true
           },
@@ -1638,6 +1712,9 @@
           },
           "status": {
             "$ref": "#/components/schemas/PaymentStatus"
+          },
+          "settlementStatus": {
+            "$ref": "#/components/schemas/SettlementStatus"
           },
           "currencyCode": {
             "type": "string",
@@ -1690,6 +1767,12 @@
           },
           "loyaltyType": {
             "$ref": "#/components/schemas/LoyaltyProviderType"
+          },
+          "loyaltyId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "**[Conditional for Loyalty Payment]** Identifier of the loyalty provider used for this transaction.",
+            "nullable": true
           },
           "redemptionPoint": {
             "type": "integer",
@@ -1794,7 +1877,20 @@
           4,
           5,
           6,
-          7
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
         ],
         "type": "integer",
         "format": "int32",
@@ -1806,9 +1902,22 @@
           "TransactionLimitExceeded",
           "MinTransactionAmountNotMeet",
           "InsufficientFunds",
-          "InvalidTransaction"
+          "InvalidTransaction",
+          "UserCancelled",
+          "Authorized",
+          "TransactionExpired",
+          "Refunded",
+          "ProcessingRefund",
+          "FailedRefund",
+          "ProcessingTimeOut",
+          "Verified",
+          "RefundWithCharges",
+          "RefundReverse",
+          "Voided",
+          "Cancelling",
+          "InstallmentInProgress"
         ],
-        "description": "Payment Status: Refer on Appendix 3.1 Payment Status Code Table"
+        "description": "| Value | Name | Meaning |\n| ----- | ---- | ------- |\n| 0 | `Pending` | Transaction is pending. |\n| 1 | `Success` | Transaction completed successfully. |\n| 2 | `Failed` | Transaction failed. |\n| 3 | `Cancelled` | Transaction was cancelled. |\n| 4 | `TransactionLimitExceeded` | Transaction exceeded the allowed limit. |\n| 5 | `MinTransactionAmountNotMeet` | Transaction amount is below the minimum allowed. |\n| 6 | `InsufficientFunds` | Customer's account had insufficient funds. |\n| 7 | `InvalidTransaction` | Transaction is invalid. |\n| 8 | `UserCancelled` | Customer abandoned or cancelled the transaction at the provider. |\n| 9 | `Authorized` | Pre-auth held, not yet captured. |\n| 10 | `TransactionExpired` | Transaction expired before completion. |\n| 11 | `Refunded` | Transaction was refunded. |\n| 12 | `ProcessingRefund` | Refund is being processed. |\n| 13 | `FailedRefund` | Refund attempt failed. |\n| 14 | `ProcessingTimeOut` | Provider did not respond in time. |\n| 15 | `Verified` | Transaction was verified. |\n| 16 | `RefundWithCharges` | Refunded, but provider/processing charges were deducted from the refunded amount. |\n| 17 | `RefundReverse` | A previously completed refund was reversed by the provider. |\n| 18 | `Voided` | Transaction was voided. |\n| 19 | `Cancelling` | Cancellation is in progress. |\n| 20 | `InstallmentInProgress` | Transaction is being processed as an installment plan. |"
       },
       "RefundStatus": {
         "enum": [
@@ -1859,7 +1968,7 @@
           "Offline",
           "Unknown"
         ],
-        "description": "Status of the payment provider channel"
+        "description": "| Value | Name | Meaning |\n| ----- | ---- | ------- |\n| 0 | `Inactive` | Provider channel is disabled and not available for use. |\n| 1 | `Active` | Provider channel is available for use. |\n| 2 | `Offline` | Provider channel is temporarily unreachable (e.g. the provider's own system is down). |\n| -1 | `Unknown` | Provider channel status could not be determined. |"
       },
       "SubMerchant": {
         "type": "object",
@@ -2113,7 +2222,7 @@
         "properties": {
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP Transaction Number for the underlying MYR 1.00 verification transaction (automatically refunded).",
+            "description": "Unique CommercePay Transaction Number for the underlying MYR 1.00 verification transaction (automatically refunded).",
             "maxLength": 24,
             "nullable": true
           },
@@ -2224,7 +2333,7 @@
         "properties": {
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP Transaction Number",
+            "description": "Unique CommercePay Transaction Number",
             "maxLength": 24,
             "nullable": true
           },
@@ -2260,13 +2369,13 @@
           },
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP Transaction Number of the original payment being refunded.",
+            "description": "Unique CommercePay Transaction Number of the original payment being refunded.",
             "maxLength": 24,
             "nullable": true
           },
           "refundTransactionNumber": {
             "type": "string",
-            "description": "Unique CAP Transaction Number for the refund transaction itself, distinct from the original payment's transactionNumber.",
+            "description": "Unique CommercePay Transaction Number for the refund transaction itself, distinct from the original payment's transactionNumber.",
             "nullable": true
           },
           "referenceCode": {
@@ -2297,7 +2406,7 @@
           },
           "paymentSessionNumber": {
             "type": "string",
-            "description": "Unique CAP Session Number",
+            "description": "Unique CommercePay Session Number",
             "maxLength": 24,
             "nullable": true
           },
@@ -2447,7 +2556,7 @@
           },
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP Transaction Number",
+            "description": "Unique CommercePay Transaction Number",
             "maxLength": 24
           },
           "amount": {
@@ -2506,7 +2615,7 @@
           },
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP Transaction Number",
+            "description": "Unique CommercePay Transaction Number",
             "maxLength": 24
           },
           "partialTransactionNumber": {
@@ -2532,7 +2641,7 @@
           0,
           1
         ],
-        "description": "Type Of Channel Refund Charges: [0= Post Refund Charges, 1= Always Refund Charges]"
+        "description": "| Value | Name | Meaning |\n| ----- | ---- | ------- |\n| 0 | `PostRefundCharges` | Refund charges are applied after/on top of the refund. |\n| 1 | `AlwaysRefundCharges` | Refund charges are always refunded back to the customer along with the refund. |"
       },
       "ChannelRefundType": {
         "title": "ChannelRefundType",
@@ -2548,7 +2657,7 @@
           1,
           2
         ],
-        "description": "Channel Support Refund Type: [0= UnSupported Refund, 1= Only Full Refund, 2= Full Refund And Partial Refund]"
+        "description": "| Value | Name | Meaning |\n| ----- | ---- | ------- |\n| 0 | `UnSupportedRefund` | Channel does not support refunds. |\n| 1 | `FullRefund` | Channel only supports a full refund of the original transaction amount. |\n| 2 | `FullRefundOrPartialRefund` | Channel supports both full and partial refunds. |"
       },
       "QueryWalletInputDto": {
         "title": "QueryWalletInputDto",
@@ -2779,7 +2888,7 @@
           },
           "sessionNumber": {
             "type": "string",
-            "description": "Unique CAP Session Number",
+            "description": "Unique CommercePay Session Number",
             "nullable": true
           }
         }
@@ -2849,7 +2958,7 @@
         "properties": {
           "transactionNumber": {
             "type": "string",
-            "description": "Unique CAP Transaction Number",
+            "description": "Unique CommercePay Transaction Number",
             "maxLength": 24,
             "nullable": true
           },

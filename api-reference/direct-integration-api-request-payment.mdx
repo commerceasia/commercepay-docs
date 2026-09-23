@@ -37,15 +37,21 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
 </ParamField>
 
 <ParamField body="referenceCode" type="string" required>
-  The merchant-side unique order reference or invoice tracking sequence code. Maximum length: 50.
+  The merchant-side unique order reference or invoice tracking sequence code.
+
+  Maximum string length: `50`
 </ParamField>
 
 <ParamField body="ipAddress" type="string" required>
-  The customer's valid IP address captured directly by the merchant server. Maximum length: 50.
+  The customer's valid IP address captured directly by the merchant server.
+
+  Maximum string length: `50`
 </ParamField>
 
 <ParamField body="returnUrl" type="string" required>
-  The synchronous return URL where the customer's browser is forwarded automatically after completing payment checkout steps. Maximum length: 500.
+  The synchronous return URL where the customer's browser is forwarded automatically after completing payment checkout steps.
+
+  Maximum string length: `500`
 </ParamField>
 
 <ParamField body="timestamp" type="int64" required>
@@ -53,11 +59,15 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
 </ParamField>
 
 <ParamField body="description" type="string">
-  Text description summarized for transaction tracing logs. Maximum length: 100.
+  Text description summarized for transaction tracing logs.
+
+  Maximum string length: `100`
 </ParamField>
 
 <ParamField body="callbackUrl" type="string">
-  Target address utilized for asynchronous host-to-host webhook payment status change push actions. Maximum length: 500.
+  Target address utilized for asynchronous host-to-host webhook payment status change push actions.
+
+  Maximum string length: `500`
 </ParamField>
 
 ### Request Payload Sample
@@ -82,7 +92,9 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
 ### Body
 
 <ResponseField name="currencyCode" type="string">
-  Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`). Maximum length: 3.
+  Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).
+
+  Maximum string length: `3`
 </ResponseField>
 
 <ResponseField name="amount" type="int64">
@@ -90,7 +102,9 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
 </ResponseField>
 
 <ResponseField name="transactionNumber" type="string">
-  Unique CAP Transaction Number mapped internally for auditing. Maximum length: 24.
+  Unique CommercePay Transaction Number mapped internally for auditing.
+
+  Maximum string length: `24`
 </ResponseField>
 
 <ResponseField name="channelId" type="integer">

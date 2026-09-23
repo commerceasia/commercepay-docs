@@ -25,7 +25,9 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ParamField>
 
 <ParamField body="currencyCode" type="string" required>
-  Currency code with a 3-letter ISO 4217 standard code. Maximum length: 3. Example: `MYR`.
+  Currency code with a 3-letter ISO 4217 standard code. Example: `MYR`.
+
+  Maximum string length: `3`
 </ParamField>
 
 <ParamField body="amount" type="int64" required>
@@ -33,42 +35,62 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ParamField>
 
 <ParamField body="referenceCode" type="string" required>
-  Merchant reference code. Maximum length: 50.
+  Merchant reference code.
+
+  Maximum string length: `50`
 </ParamField>
 
 <ParamField body="description" type="string">
-  Transaction description. Maximum length: 100.
+  Transaction description.
+
+  Maximum string length: `100`
 </ParamField>
 
 <ParamField body="ipAddress" type="string" required>
-  Customer's IP address captured by the merchant system. Maximum length: 50.
+  Customer's IP address captured by the merchant system.
+
+  Maximum string length: `50`
 </ParamField>
 
 <ParamField body="userAgent" type="string">
-  Customer's user agent. Maximum length: 200.
+  Customer's user agent.
+
+  Maximum string length: `200`
 </ParamField>
 
 <ParamField body="returnUrl" type="string" required>
-  A return URL provided by the merchant. The user can be redirected to the final destination page from the CommercePay receipt page after the transaction payment has been completed. Maximum length: 500.
+  A return URL provided by the merchant. The user can be redirected to the final destination page from the CommercePay receipt page after the transaction payment has been completed.
+
+  Maximum string length: `500`
 </ParamField>
 
 <ParamField body="callbackUrl" type="string">
-  A URL provided by the merchant to receive server-to-server notifications from the system regarding transaction status updates. This URL is called automatically once the payment process is completed or when the transaction status changes. Maximum length: 500.
+  A URL provided by the merchant to receive server-to-server notifications from the system regarding transaction status updates. This URL is called automatically once the payment process is completed or when the transaction status changes.
+
+  Maximum string length: `500`
 </ParamField>
 
 <ParamField body="customer" type="object" required>
   <Expandable title="properties">
     <ParamField body="customer.email" type="string">
-      Customer's email address. Maximum length: 150.
+      Customer's email address.
+
+      Maximum string length: `150`
     </ParamField>
     <ParamField body="customer.mobileNo" type="string">
-      Customer's mobile number. Required when processing a payout via DuitNow Proxy using a mobile number. Maximum length: 16.
+      Customer's mobile number. Required when processing a payout via DuitNow Proxy using a mobile number.
+
+      Maximum string length: `16`
     </ParamField>
     <ParamField body="customer.name" type="string">
-      Customer's name. Required when processing a payout via bank transfer. Maximum length: 36.
+      Customer's name. Required when processing a payout via bank transfer.
+
+      Maximum string length: `36`
     </ParamField>
     <ParamField body="customer.username" type="string">
-      A field for bank account number, national ID (NRIC) or Business Registration Number. Maximum length: 36.
+      A field for bank account number, national ID (NRIC) or Business Registration Number.
+
+      Maximum string length: `36`
     </ParamField>
   </Expandable>
 </ParamField>
@@ -134,7 +156,9 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 ### Body
 
 <ResponseField name="currencyCode" type="string">
-  Payout currency. Maximum length: 3.
+  Payout currency.
+
+  Maximum string length: `3`
 </ResponseField>
 
 <ResponseField name="amount" type="integer">
@@ -142,7 +166,9 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ResponseField>
 
 <ResponseField name="transactionNumber" type="string">
-  Unique CommercePay Transaction Number. Maximum length: 24.
+  Unique CommercePay Transaction Number.
+
+  Maximum string length: `24`
 </ResponseField>
 
 <ResponseField name="channelId" type="integer">
