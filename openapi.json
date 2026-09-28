@@ -2196,7 +2196,7 @@
           },
           "callbackUrl": {
             "type": "string",
-            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given, including for the automatic MYR 1.00 verification charge and its refund. If the URL is provided, the callback will be triggered; otherwise, it would not trigger.",
+            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given, including for the automatic MYR 1.00 verification charge and its refund. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. See [Callback Notifications](/docs/callback-notifications) for the payload and signature verification steps.",
             "maxLength": 500,
             "example": "https://callback.com/",
             "nullable": true
@@ -2834,7 +2834,7 @@
           },
           "callbackUrl": {
             "type": "string",
-            "description": "Target address utilized for asynchronous host-to-host webhook payment status change push actions.",
+            "description": "Target address utilized for asynchronous host-to-host webhook payment status change push actions. See [Callback Notifications](/docs/callback-notifications) for the payload and signature verification steps.",
             "maxLength": 500,
             "example": "https://callback.com/",
             "nullable": true

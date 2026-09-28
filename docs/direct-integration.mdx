@@ -81,7 +81,7 @@ The complete end-to-end payment flow operates as follows:
     Once the customer finishes the payment process, the upstream Payment Provider asynchronously triggers a webhook notification back to the CommercePay Gateway to communicate the transaction outcome.
   </Step>
   <Step title="Merchant Webhook/Callback">
-    Upon receiving and processing the provider's notification, CommercePay instantly fires a signed, asynchronous backend-to-backend HTTP POST callback notification to the merchant's server to securely share the final payment status.
+    Upon receiving and processing the provider's notification, CommercePay instantly fires a signed, asynchronous backend-to-backend HTTP POST callback notification to the merchant's server to securely share the final payment status. See [Callback Notifications](/docs/callback-notifications) for the payload and how to verify the signature.
   </Step>
   <Step title="Order Summary Page">
     The customer sees the final merchant payment result, receipt, or order status page based on the transaction updates processed by the merchant's backend.

@@ -70,7 +70,7 @@ The initial payment flow operates as follows:
     The payment provider asynchronously notifies CommercePay of the first payment and authorization outcome.
   </Step>
   <Step title="Merchant Callback">
-    CommercePay sends a signed backend-to-backend callback to the merchant with the first payment result. On success, the merchant activates the subscription record tied to **recurringPaymentInfo.id**.
+    CommercePay sends a signed backend-to-backend callback to the merchant with the first payment result. On success, the merchant activates the subscription record tied to **recurringPaymentInfo.id**. See [Callback Notifications](/docs/callback-notifications) for the payload and how to verify the signature.
   </Step>
   <Step title="Order Confirmation">
     The customer sees a receipt or subscription confirmation page.
