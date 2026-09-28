@@ -1,0 +1,170 @@
+---
+title: "Callback Notifications"
+description: "How CommercePay notifies your server of payment status changes via signed host-to-host callbacks."
+---
+
+Once CommercePay has verified a successful response from the payment provider and the customer has completed payment on the provider's page, CommercePay sends an asynchronous, host-to-host callback notification to the merchant server. This notification is sent to the `callbackUrl` supplied in the originating request — for example on [Direct Integration](/api-reference/direct-integration-api-request-payment), [Hosted Session Checkout](/api-reference/initial-session), or [Request Payout](/api-reference/payout-api-requestpayout).
+
+<Note>
+`callbackUrl` is optional on these endpoints. If it is omitted, CommercePay will not send a callback for that transaction — merchants who don't provide it must poll the [Query Payment](/api-reference/query-payment) endpoint instead.
+</Note>
+
+## Callback Payload
+
+The payload CommercePay posts to your `callbackUrl` differs slightly depending on whether the transaction originated from a session-based flow (e.g. Hosted Session Checkout).
+
+<Tabs>
+  <Tab title="Without Session">
+    ```json
+    {
+      "amount": 100,
+      "channelId": 4,
+      "currencyCode": "MYR",
+      "referenceCode": "string",
+      "status": 1,
+      "transactionNumber": "2005671137F81FD81D89D8",
+      "providerTransactionNumber": "string"
+    }
+    ```
+  </Tab>
+  <Tab title="With Session">
+    ```json
+    {
+      "amount": 100,
+      "channelId": 4,
+      "currencyCode": "MYR",
+      "referenceCode": "string",
+      "status": 1,
+      "transactionNumber": "2005671137F81FD81D89D8",
+      "paymentSessionNumber": "2037D293E60AEB67B59251030",
+      "providerTransactionNumber": "string"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+The exact set of fields returned may vary slightly by channel and provider.
+</Note>
+
+### Payload Fields
+
+<ResponseField name="amount" type="int64">
+  The transaction payment value. This field exclusively accepts integer units where the final decimals are represented as whole values (e.g., an amount value of `1000` translates to `10.00` in the system backend).
+</ResponseField>
+
+<ResponseField name="channelId" type="integer">
+  The CommercePay payment channel used for this transaction. Corresponds to the `id` from [Get Channel List](/api-reference/get-tenant-channels-by-country) — see the [Channel List](/docs/channel-list) for common values.
+</ResponseField>
+
+<ResponseField name="currencyCode" type="string">
+  Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).
+</ResponseField>
+
+<ResponseField name="referenceCode" type="string">
+  The merchant-side unique order reference or invoice tracking sequence code originally supplied on the request.
+</ResponseField>
+
+<ResponseField name="status" type="integer">
+  The resulting payment status code. See the Payment Status Code Table below.
+</ResponseField>
+
+<ResponseField name="transactionNumber" type="string">
+  Unique CommercePay Transaction Number mapped internally for auditing.
+</ResponseField>
+
+<ResponseField name="providerTransactionNumber" type="string">
+  The upstream payment provider's own transaction reference for this payment, when made available by the provider.
+</ResponseField>
+
+<ResponseField name="paymentSessionNumber" type="string">
+  **Session flow only.** The unique session identifier, present when the transaction originated from a session-based checkout such as [Hosted Session Checkout](/api-reference/initial-session).
+</ResponseField>
+
+### Payment Status Code Table
+
+| Value | Name | Meaning |
+| ----- | ---- | ------- |
+| 0 | `Pending` | Transaction is pending. |
+| 1 | `Success` | Transaction completed successfully. |
+| 2 | `Failed` | Transaction failed. |
+| 3 | `Cancelled` | Transaction was cancelled. |
+| 4 | `TransactionLimitExceeded` | Transaction exceeded the allowed limit. |
+| 5 | `MinTransactionAmountNotMeet` | Transaction amount is below the minimum allowed. |
+| 6 | `InsufficientFunds` | Customer's account had insufficient funds. |
+| 7 | `InvalidTransaction` | Transaction is invalid. |
+| 8 | `UserCancelled` | Customer abandoned or cancelled the transaction at the provider. |
+| 9 | `Authorized` | Pre-auth held, not yet captured. |
+| 10 | `TransactionExpired` | Transaction expired before completion. |
+| 11 | `Refunded` | Transaction was refunded. |
+| 12 | `ProcessingRefund` | Refund is being processed. |
+| 13 | `FailedRefund` | Refund attempt failed. |
+| 14 | `ProcessingTimeOut` | Provider did not respond in time. |
+| 15 | `Verified` | Transaction was verified. |
+| 16 | `RefundWithCharges` | Refunded, but provider/processing charges were deducted from the refunded amount. |
+| 17 | `RefundReverse` | A previously completed refund was reversed by the provider. |
+| 18 | `Voided` | Transaction was voided. |
+| 19 | `Cancelling` | Cancellation is in progress. |
+| 20 | `InstallmentInProgress` | Transaction is being processed as an installment plan. |
+
+## Verifying the Callback Signature
+
+Every callback is signed with the same `cap-signature` scheme used to sign your own requests — see [Generate Signature](/docs/generate-signature) for the full mechanics. To confirm a callback genuinely came from CommercePay and was not tampered with, recompute the signature yourself and compare it to the `cap-signature` header sent with the callback request.
+
+<Steps>
+  <Step title="Construct JSON (camelCase)">
+    Take the callback payload exactly as received, with all property names in camelCase.
+  </Step>
+  <Step title="Recursive Sorting (Ascending)">
+    Sort all keys in the JSON object in ascending (A-Z) alphabetical order.
+  </Step>
+  <Step title="Form the Signature String">
+    Concatenate your own `callbackUrl` (the exact URL you supplied on the original request) and the Sorted JSON string from Step 2, with no separator.
+
+    Format: `[YOUR_CALLBACK_URL][SORTED_JSON_STRING]`
+  </Step>
+  <Step title="Normalize to Lowercase">
+    Convert the entire combined string from Step 3 to lowercase.
+  </Step>
+  <Step title="Generate HMAC-SHA256 Hash">
+    Sign the lowercased string using the HMAC-SHA256 algorithm, using your Secret Key as the cryptographic key.
+  </Step>
+  <Step title="Compare to the cap-signature Header">
+    Convert the resulting hash into a hexadecimal string and compare it to the `cap-signature` header sent with the callback. If they match, the callback is authentic.
+  </Step>
+</Steps>
+
+### Verification Example
+
+**Merchant Callback URL:** `https://www.merchantcallbackurl.com`
+
+**Received Payload**
+```json
+{
+  "amount": 100,
+  "channelId": 4,
+  "currencyCode": "MYR",
+  "referenceCode": "string",
+  "status": 1,
+  "transactionNumber": "2005671137F81FD81D89D8",
+  "providerTransactionNumber": "string"
+}
+```
+
+### Transformation Walkthrough
+
+Step | Output / Action
+---------|----------
+1 & 2 | Sorted JSON: `{"amount":100,"channelId":4,"currencyCode":"MYR","providerTransactionNumber":"string","referenceCode":"string","status":1,"transactionNumber":"2005671137F81FD81D89D8"}`
+3 | Combined: `https://www.merchantcallbackurl.com{"amount":100,"channelId":4,"currencyCode":"MYR","providerTransactionNumber":"string","referenceCode":"string","status":1,"transactionNumber":"2005671137F81FD81D89D8"}`
+4 | Lowercased: `https://www.merchantcallbackurl.com{"amount":100,"channelid":4,"currencycode":"myr","providertransactionnumber":"string","referencecode":"string","status":1,"transactionnumber":"2005671137f81fd81d89d8"}`
+5 & 6 | Final `cap-signature`: `7e52da8c51078a6e65bb8405bb8243b1a6f706e8d03119875b9b36f7cc26ca7d`
+
+<Warning>
+#### Troubleshooting a Signature Mismatch
+- **Use your own `callbackUrl`:** Step 3 uses the exact `callbackUrl` value you originally sent CommercePay, not the request path the callback arrives on.
+- **Minification:** Ensure the JSON string is minified (no extra spaces, tabs, or newlines) before hashing.
+- **Lowercasing:** The entire concatenated string (URL + JSON) must be lowercased, including all keys and values — not just the values.
+- **Secret Key:** Verify you are using the correct Secret Key for the environment (Staging vs. Production) the callback was sent from.
+- **Session vs. non-session payloads:** Include `paymentSessionNumber` in the sorted JSON only when it is present in the received payload.
+</Warning>
