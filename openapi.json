@@ -159,7 +159,8 @@
           "metadata": {
             "title": "Get Channel List",
             "sidebarTitle": "Get Channel List"
-          }
+          },
+          "content": "See also: [Channel List](/docs/channel-list) for a reference of common `channelId` values by environment.\n\n"
         }
       },
       "parameters": []
@@ -249,7 +250,8 @@
           "metadata": {
             "title": "Get Provider Channels",
             "sidebarTitle": "Get Provider Channels"
-          }
+          },
+          "content": "See also: [Channel List](/docs/channel-list) for a reference of common `providerChannelId` values by environment.\n\n"
         }
       }
     },
