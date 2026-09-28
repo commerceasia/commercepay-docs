@@ -21,7 +21,8 @@
               "docs/api-credentials",
               "docs/service-environments",
               "docs/request-headers",
-              "docs/generate-signature"
+              "docs/generate-signature",
+              "docs/channel-list"
             ]
           },
           {
