@@ -47,8 +47,10 @@ An API endpoint used to request a payout and transfer funds to the specified rec
   Maximum string length: `50`
 </ParamField>
 
-<ParamField body="description" type="string">
-  Transaction description.
+<ParamField body="description" type="string" required>
+  Short free-text summary of the transaction.
+
+  Use English letters, numbers, spaces and basic punctuation (`. , - _ ( ) @ /`). Avoid emojis and non-English characters: some payment providers remove unsupported characters or shorten the text before using it, so the description shown by the provider may differ from what you sent. The payment is not rejected when characters are removed.
 
   Maximum string length: `100`
 </ParamField>

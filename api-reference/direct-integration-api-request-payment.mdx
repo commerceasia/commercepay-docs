@@ -58,8 +58,10 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
   Numeric timestamp in milliseconds representing request validation freshness (e.g., generated via `new Date().getTime()`).
 </ParamField>
 
-<ParamField body="description" type="string">
-  Text description summarized for transaction tracing logs.
+<ParamField body="description" type="string" required>
+  Short free-text summary of the transaction.
+
+  Use English letters, numbers, spaces and basic punctuation (`. , - _ ( ) @ /`). Avoid emojis and non-English characters: some payment providers remove unsupported characters or shorten the text before using it (for example, FPX keeps only the first 30 characters), so the description shown to the customer by the provider may differ from what you sent. The payment is not rejected when characters are removed.
 
   Maximum string length: `100`
 </ParamField>
