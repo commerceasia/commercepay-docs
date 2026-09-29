@@ -3,7 +3,7 @@
   "info": {
     "title": "CommercePay API",
     "version": "v1",
-    "description": "---\n**Credentials Accounts**\n\nEvery account is provided with separate keys for testing and for running live transactions. Once the merchant application has been approved, developers can begin the process of integrating the CommercePay API. The following details will be provided to get started with the integration. \n\n<a href=\"https://docs.commercepay.asia/docs/api/d19b0f3289ae0-get-started\" target=\"_blank\">Get Started</a>\n",
+    "description": "---\n**Credentials Accounts**\n\nEvery account is provided with separate keys for testing and for running live transactions. Once the merchant application has been approved, developers can begin the process of integrating the CommercePay API. The following details will be provided to get started with the integration. \n\n<a href=\"/get-started\">Get Started</a>\n",
     "contact": {}
   },
   "paths": {
@@ -54,7 +54,7 @@
             "description": "Invalid user name or password"
           }
         },
-        "description": "The following input parameters are expected to be provided by the Merchant to retrieve the access token.\n\n> - Pass the returned `accessToken` as `Authorization: Bearer {access token from authentication}` on subsequent API calls — see [Request Headers](/docs/request-headers) for the full header list.\n> - The token is valid for **24 hours** (`expireInSeconds`: 86400). Cache and reuse it across requests instead of calling this endpoint every time; once it expires, requests using it will be rejected and you'll need to call this endpoint again for a new one.",
+        "description": "The following input parameters are expected to be provided by the Merchant to retrieve the access token.\n\n> - Pass the returned `accessToken` as `Authorization: Bearer {access token from authentication}` on subsequent API calls — see [Request Headers](/request-headers) for the full header list.\n> - The token is valid for **24 hours** (`expireInSeconds`: 86400). Cache and reuse it across requests instead of calling this endpoint every time; once it expires, requests using it will be rejected and you'll need to call this endpoint again for a new one.",
         "parameters": [
           {
             "schema": {
@@ -160,7 +160,7 @@
             "title": "Get Channel List",
             "sidebarTitle": "Get Channel List"
           },
-          "content": "See also: [Channel List](/docs/channel-list) for a reference of common `channelId` values by environment.\n\n"
+          "content": "See also: [Channel List](/channel-list) for a reference of common `channelId` values by environment.\n\n"
         }
       },
       "parameters": []
@@ -251,7 +251,7 @@
             "title": "Get Provider Channels",
             "sidebarTitle": "Get Provider Channels"
           },
-          "content": "See also: [Channel List](/docs/channel-list) for a reference of common `providerChannelId` values by environment.\n\n"
+          "content": "See also: [Channel List](/channel-list) for a reference of common `providerChannelId` values by environment.\n\n"
         }
       }
     },
@@ -382,7 +382,7 @@
             "sidebarTitle": "Request Payment"
           }
         },
-        "description": "**The payment gateway requests a new payment**\n\nThe following input parameters are expected to be provided by the merchant to perform an online payment transaction.\n\n> - Channel Id may refer to the [Get Channel List](/api-reference/get-tenant-channels-by-country)\n> - If merchants would like to use [CommercePay Hosted Payment Web solution](/docs/hosted-session-checkout), merchants may skip Channel Id parameter.",
+        "description": "**The payment gateway requests a new payment**\n\nThe following input parameters are expected to be provided by the merchant to perform an online payment transaction.\n\n> - Channel Id may refer to the [Get Channel List](/api-reference/get-tenant-channels-by-country)\n> - If merchants would like to use [CommercePay Hosted Payment Web solution](/hosted-session-checkout), merchants may skip Channel Id parameter.",
         "operationId": "ApiServicesAppPaymentgatewayRequestpaymentPost",
         "requestBody": {
           "content": {
@@ -905,7 +905,7 @@
           },
           "content": "<Note>\nPass `amount` only when issuing a **partial refund**. Omit it (or leave it null) when issuing a **full refund**.\n</Note>\n\n## Errors\n\nIn addition to standard signature errors, this endpoint can return:\n\n| Code | Name | Meaning |\n| ---- | ---- | ------- |\n| 2010 | `TransactionNotFound` | `transactionNumber` does not match a transaction, or the transaction is not in `Success` status. |\n| 2042 | `FailedToRequestRefund` | Generic refund failure. The message names the specific cause, e.g. a refund is already in progress for this transaction, the requested amount exceeds what's still available to refund, the channel doesn't support partial refunds, or the provider is unavailable for this channel. |\n| 2044 | `MissingRequireField` | `reason` was not supplied. |\n| 2094 | `InvalidTenantProfile` | Tenant could not be resolved (no session tenant and no `tenantId` in the request body). |\n| 2124 | `RequestRefundTimeOut` | The provider's refund API timed out while processing the request. |\n| 2130 | `ChannelNotSupportRefund` | The original transaction's channel is configured to not support refunds. |\n| 2160 | `InvalidPaymentGatewaySetting` | The channel's provider settings are missing or misconfigured for this tenant. |\n\n> A refund amount of `0` (or negative) is also rejected via `FailedToRequestRefund` (2042), with the message \"Refund amount cannot be 0\"."
         },
-        "description": "**The payment gateway requests a refund payment**\n\nInitiate a full or partial refund for a successful payment transaction. See [Refund Integration](/docs/refund-integration) for full vs. partial refund behavior and bank support. The response's `refundStatus` reflects the outcome directly — if it comes back as `ProcessingRefund`, use [Query Refund Payment](/api-reference/query-refund-payment) to check when it completes.",
+        "description": "**The payment gateway requests a refund payment**\n\nInitiate a full or partial refund for a successful payment transaction. See [Refund Integration](/refund-integration) for full vs. partial refund behavior and bank support. The response's `refundStatus` reflects the outcome directly — if it comes back as `ProcessingRefund`, use [Query Refund Payment](/api-reference/query-refund-payment) to check when it completes.",
         "parameters": [
           {
             "$ref": "#/components/parameters/AbpTenantId"
@@ -1189,7 +1189,7 @@
         "in": "header",
         "name": "cap-signature",
         "required": true,
-        "description": "A unique security hash used to verify the integrity of the request body. See [Generate Signature](/docs/generate-signature) for how to generate this."
+        "description": "A unique security hash used to verify the integrity of the request body. See [Generate Signature](/generate-signature) for how to generate this."
       }
     },
     "schemas": {
@@ -2196,7 +2196,7 @@
           },
           "callbackUrl": {
             "type": "string",
-            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given, including for the automatic MYR 1.00 verification charge and its refund. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. See [Callback Notifications](/docs/callback-notifications) for the payload and signature verification steps.",
+            "description": "Callback URL is host-to-host communication. CommercePay sends the transaction response to the merchant callback server based on the callback URL given, including for the automatic MYR 1.00 verification charge and its refund. If the URL is provided, the callback will be triggered; otherwise, it would not trigger. See [Callback Notifications](/callback-notifications) for the payload and signature verification steps.",
             "maxLength": 500,
             "example": "https://callback.com/",
             "nullable": true
@@ -2834,7 +2834,7 @@
           },
           "callbackUrl": {
             "type": "string",
-            "description": "Target address utilized for asynchronous host-to-host webhook payment status change push actions. See [Callback Notifications](/docs/callback-notifications) for the payload and signature verification steps.",
+            "description": "Target address utilized for asynchronous host-to-host webhook payment status change push actions. See [Callback Notifications](/callback-notifications) for the payload and signature verification steps.",
             "maxLength": 500,
             "example": "https://callback.com/",
             "nullable": true

@@ -13,40 +13,40 @@
       {
         "tab": "Documentation",
         "pages": [
-          "docs/overview",
+          "overview",
           {
             "group": "Get Started",
             "pages": [
-              "docs/get-started",
-              "docs/api-credentials",
-              "docs/service-environments",
-              "docs/request-headers",
-              "docs/generate-signature",
-              "docs/callback-notifications",
-              "docs/channel-list"
+              "get-started",
+              "api-credentials",
+              "service-environments",
+              "request-headers",
+              "generate-signature",
+              "callback-notifications",
+              "channel-list"
             ]
           },
           {
             "group": "Payins",
             "pages": [
-              "docs/direct-integration",
-              "docs/hosted-session-checkout",
-              "docs/card-integration",
-              "docs/recurring-payments"
+              "direct-integration",
+              "hosted-session-checkout",
+              "card-integration",
+              "recurring-payments"
             ]
           },
           {
             "group": "Payouts",
             "pages": [
-              "docs/payout-integration",
-              "docs/payout-provider-channel",
-              "docs/payout-test-account"
+              "payout-integration",
+              "payout-provider-channel",
+              "payout-test-account"
             ]
           },
           {
             "group": "Refunds",
             "pages": [
-              "docs/refund-integration"
+              "refund-integration"
             ]
           }
         ]
@@ -146,7 +146,7 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "/docs/overview",
+      "destination": "/overview",
       "permanent": true
     }
   ]

@@ -54,7 +54,7 @@ The exact set of fields returned may vary slightly by channel and provider.
 </ResponseField>
 
 <ResponseField name="channelId" type="integer">
-  The CommercePay payment channel used for this transaction. Corresponds to the `id` from [Get Channel List](/api-reference/get-tenant-channels-by-country) — see the [Channel List](/docs/channel-list) for common values.
+  The CommercePay payment channel used for this transaction. Corresponds to the `id` from [Get Channel List](/api-reference/get-tenant-channels-by-country) — see the [Channel List](/channel-list) for common values.
 </ResponseField>
 
 <ResponseField name="currencyCode" type="string">
@@ -109,7 +109,7 @@ The exact set of fields returned may vary slightly by channel and provider.
 
 ## Verifying the Callback Signature
 
-Every callback is signed with the same `cap-signature` scheme used to sign your own requests — see [Generate Signature](/docs/generate-signature) for the full mechanics. To confirm a callback genuinely came from CommercePay and was not tampered with, recompute the signature yourself and compare it to the `cap-signature` header sent with the callback request.
+Every callback is signed with the same `cap-signature` scheme used to sign your own requests — see [Generate Signature](/generate-signature) for the full mechanics. To confirm a callback genuinely came from CommercePay and was not tampered with, recompute the signature yourself and compare it to the `cap-signature` header sent with the callback request.
 
 <Steps>
   <Step title="Construct JSON (camelCase)">

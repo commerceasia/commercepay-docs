@@ -24,11 +24,11 @@ An API endpoint used to request a payout and transfer funds to the specified rec
   | Staging | `15` |
   | Production | `9` |
 
-  See the [Channel List](/docs/channel-list) for other channel values.
+  See the [Channel List](/channel-list) for other channel values.
 </ParamField>
 
 <ParamField body="providerChannelId" type="string" required>
-  An identifier that represents the payment method (Bank or DuitNow Proxy). You can obtain the providerChannelId via the [Get Provider Channels API](/api-reference/get-provider-channels) or refer to it [here](/docs/payout-provider-channel).
+  An identifier that represents the payment method (Bank or DuitNow Proxy). You can obtain the providerChannelId via the [Get Provider Channels API](/api-reference/get-provider-channels) or refer to it [here](/payout-provider-channel).
 </ParamField>
 
 <ParamField body="currencyCode" type="string" required>
@@ -74,7 +74,7 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ParamField>
 
 <ParamField body="callbackUrl" type="string">
-  A URL provided by the merchant to receive server-to-server notifications from the system regarding transaction status updates. This URL is called automatically once the payment process is completed or when the transaction status changes. See [Callback Notifications](/docs/callback-notifications) for the payload and signature verification steps.
+  A URL provided by the merchant to receive server-to-server notifications from the system regarding transaction status updates. This URL is called automatically once the payment process is completed or when the transaction status changes. See [Callback Notifications](/callback-notifications) for the payload and signature verification steps.
 
   Maximum string length: `500`
 </ParamField>

@@ -21,11 +21,11 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
 </Note>
 
 <ParamField body="channelId" type="integer">
-  An identifier that represents the CommercePay payment channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country) endpoint, or see the [Channel List](/docs/channel-list) for common values. This parameter can be omitted if you choose to utilize the CommercePay Hosted Payment Web interface.
+  An identifier that represents the CommercePay payment channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country) endpoint, or see the [Channel List](/channel-list) for common values. This parameter can be omitted if you choose to utilize the CommercePay Hosted Payment Web interface.
 </ParamField>
 
 <ParamField body="providerChannelId" type="string">
-  An identifier that represents the specific upstream payment provider sub-channel (e.g., a bank code for online banking). This becomes **mandatory** if the chosen channel configuration has `isProviderHostChannel: true`. Obtain valid values from the [Get Provider Channels](/api-reference/get-provider-channels) endpoint, or see the [Channel List](/docs/channel-list) for common values.
+  An identifier that represents the specific upstream payment provider sub-channel (e.g., a bank code for online banking). This becomes **mandatory** if the chosen channel configuration has `isProviderHostChannel: true`. Obtain valid values from the [Get Provider Channels](/api-reference/get-provider-channels) endpoint, or see the [Channel List](/channel-list) for common values.
 </ParamField>
 
 <ParamField body="currencyCode" type="string" required>
@@ -67,7 +67,7 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
 </ParamField>
 
 <ParamField body="callbackUrl" type="string">
-  Target address utilized for asynchronous host-to-host webhook payment status change push actions. See [Callback Notifications](/docs/callback-notifications) for the payload and signature verification steps.
+  Target address utilized for asynchronous host-to-host webhook payment status change push actions. See [Callback Notifications](/callback-notifications) for the payload and signature verification steps.
 
   Maximum string length: `500`
 </ParamField>
