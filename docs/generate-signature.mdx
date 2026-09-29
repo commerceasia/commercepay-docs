@@ -5,6 +5,14 @@ description: "How to generate the cap-signature header for POST and GET requests
 
 To ensure the security and integrity of every transaction, the CommercePay API requires a digital signature in the cap-signature header for all API requests except Authentication endpoint. This signature allows our server to verify that the request body has not been tampered with and originated from an authorized source.
 
+<Note>
+  Field name matching is case-insensitive, so your actual HTTP request body does not strictly
+  need to use camelCase keys. What matters is that the **signature calculation** below is always
+  performed on a camelCase, recursively-sorted representation of your payload — we still recommend
+  sending your request body in camelCase too, simply to avoid confusion between what you send and
+  what you sign.
+</Note>
+
 <Tabs>
 <Tab title="POST Signature Generation">
 
@@ -14,6 +22,9 @@ Follow these 6 steps to generate the cap-signature for your request.
 <Steps>
   <Step title="Construct JSON (camelCase)">
     Prepare your request payload as a JSON object. Ensure all property names use camelCase (e.g., currencyCode, referenceCode).
+
+    **Omit any field that is null or was not provided.** Do not include it as `"key": null` —
+    fields with no value must be left out of the JSON entirely before you move to the next step.
   </Step>
   <Step title="Recursive Sorting (Ascending)">
     Sort all keys in the JSON object in ascending (A-Z) alphabetical order.
@@ -60,7 +71,7 @@ Step | Output / Action
  1 & 2 | Sorted JSON: `{"amount":100,"currencyCode":"MYR","customer":{"email":"test.user@example.com","name":"Test User"},"referenceCode":"TEST-111"}`
  3 | Combined: `https://staging-payments.commerce.asia/api/services/app/PaymentGateway/RequestPayment{"amount":100,"currencyCode":"MYR","customer":{"email":"test.user@example.com","name":"Test User"},"referenceCode":"TEST-111"}`
  4 | Lowercased: `https://staging-payments.commerce.asia/api/services/app/paymentgateway/requestpayment{"amount":100,"currencycode":"myr","customer":{"email":"test.user@example.com","name":"test user"},"referencecode":"test-111"}`
- 5 & 6 | Final Hash: `8b20a81c3db0c3d2e6344d4a5f5f8277493c7d20c019d8bd858ca2c41a159cb6`
+ 5 & 6 | Final Hash: `477d7efe6d3c319a722bd202d3434dbfde3fe19877febb0e5c62ef85e7d30efd`
 
 <Warning>
 #### Troubleshooting "Invalid Signature"
@@ -94,6 +105,9 @@ Follow these steps precisely to generate the signature for any GET request.
     **Original URL:** ...?merchantId=MICH-01&amount=100
 
     **Result:** `{"merchantId":"MICH-01","amount":100}`
+
+    **Omit any parameter that is null or was not supplied.** Do not include it as `"key": null` —
+    leave it out of the JSON entirely.
   </Step>
   <Step title="Recursive Sorting (Ascending)">
     Sort all keys in the JSON object in ascending (A-Z) alphabetical order. If any parameters contain nested objects or arrays, these must also be sorted internally.
