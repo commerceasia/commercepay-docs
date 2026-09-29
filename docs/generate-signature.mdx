@@ -13,6 +13,24 @@ To ensure the security and integrity of every transaction, the CommercePay API r
   what you sign.
 </Note>
 
+<Warning>
+  #### Encoding rules for the string you sign
+
+  - **Do not escape non-ASCII characters.** Sign the raw characters (e.g. `陈大文`, `Café`), not
+    `\uXXXX` escape sequences. Many JSON libraries escape non-ASCII by default (for example Python's
+    `json.dumps` — set `ensure_ascii=False`; .NET's `System.Text.Json` — use an unescaped encoder).
+    The signature is verified against the unescaped form, so an escaped string will be rejected
+    with "Invalid Signature". Your actual HTTP body may contain either form; only the string you
+    sign matters.
+  - **Do not escape anything beyond what JSON requires.** Only `"`, `\` and control characters are
+    escaped. Characters such as `+`, `<`, `>`, `&` and `'` must appear as-is (some serializers,
+    e.g. `System.Text.Json` by default, turn `a+b@x.com` into `a+b@x.com`).
+  - **Encode as UTF-8.** Convert both the final string and your Secret Key to UTF-8 bytes before
+    computing HMAC-SHA256.
+  - **Lowercasing applies to every character, including non-ASCII letters** (e.g. `É` becomes `é`).
+    Use a Unicode-aware lowercase function, not an A–Z-only one.
+</Warning>
+
 <Tabs>
 <Tab title="POST Signature Generation">
 
@@ -23,8 +41,9 @@ Follow these 6 steps to generate the cap-signature for your request.
   <Step title="Construct JSON (camelCase)">
     Prepare your request payload as a JSON object. Ensure all property names use camelCase (e.g., currencyCode, referenceCode).
 
-    **Omit any field that is null or was not provided.** Do not include it as `"key": null` —
-    fields with no value must be left out of the JSON entirely before you move to the next step.
+    **Omit any field that is null or was not provided — at every level, including inside nested
+    objects.** Do not include it as `"key": null`; leave it out of the JSON entirely before you move
+    to the next step. (An empty string `""` is a value, not null, and must be kept.)
   </Step>
   <Step title="Recursive Sorting (Ascending)">
     Sort all keys in the JSON object in ascending (A-Z) alphabetical order.
@@ -73,6 +92,35 @@ Step | Output / Action
  4 | Lowercased: `https://staging-payments.commerce.asia/api/services/app/paymentgateway/requestpayment{"amount":100,"currencycode":"myr","customer":{"email":"test.user@example.com","name":"test user"},"referencecode":"test-111"}`
  5 & 6 | Final Hash: `477d7efe6d3c319a722bd202d3434dbfde3fe19877febb0e5c62ef85e7d30efd`
 
+### Example with non-ASCII characters
+
+Same endpoint and Secret Key as above, with `customer.name` changed to `陈大文 Café`.
+
+**Raw Request Payload**
+```json
+{
+    "currencyCode": "MYR",
+    "amount": 100,
+    "referenceCode": "TEST-111",
+    "customer": {
+        "name": "陈大文 Café",
+        "email": "test.user@example.com"
+    }
+}
+```
+
+Step | Output / Action
+---------|----------
+ 1 & 2 | Sorted JSON (raw UTF-8, **not** escaped): `{"amount":100,"currencyCode":"MYR","customer":{"email":"test.user@example.com","name":"陈大文 Café"},"referenceCode":"TEST-111"}`
+ 3 & 4 | Combined and lowercased: `https://staging-payments.commerce.asia/api/services/app/paymentgateway/requestpayment{"amount":100,"currencycode":"myr","customer":{"email":"test.user@example.com","name":"陈大文 café"},"referencecode":"test-111"}`
+ 5 & 6 | Final Hash: `d6bb6d6b0e502ff08161655323df67deefddddb92088d2e144194ebfd18ead28`
+
+<Warning>
+  If you escape the non-ASCII characters (`"name":"陈大文 café"`) you will
+  compute `3ae10f257f2f5a85716f875132801794bf61c3c5688905fea51d9d29d7402768` instead, which the
+  server rejects as an invalid signature.
+</Warning>
+
 <Warning>
 #### Troubleshooting "Invalid Signature"
 If you are receiving a **401 Unauthorized** or **Signature Mismatch** error, check the following:
@@ -106,8 +154,9 @@ Follow these steps precisely to generate the signature for any GET request.
 
     **Result:** `{"merchantId":"MICH-01","amount":100}`
 
-    **Omit any parameter that is null or was not supplied.** Do not include it as `"key": null` —
-    leave it out of the JSON entirely.
+    **Omit any parameter that is null or was not supplied — at every level, including inside nested
+    objects.** Do not include it as `"key": null`; leave it out of the JSON entirely. (An empty
+    string `""` is a value, not null, and must be kept.)
   </Step>
   <Step title="Recursive Sorting (Ascending)">
     Sort all keys in the JSON object in ascending (A-Z) alphabetical order. If any parameters contain nested objects or arrays, these must also be sorted internally.
