@@ -142,5 +142,12 @@
       "github": "https://github.com/mintlify",
       "linkedin": "https://linkedin.com/company/mintlify"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/docs/overview",
+      "permanent": true
+    }
+  ]
 }
