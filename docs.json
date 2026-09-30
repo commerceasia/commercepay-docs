@@ -31,7 +31,6 @@
             "pages": [
               "direct-integration",
               "hosted-session-checkout",
-              "card-integration",
               "recurring-payments"
             ]
           },
