@@ -289,7 +289,7 @@
               "format": "int64",
               "example": 1621851652617
             },
-            "description": "new Date().getTime()"
+            "description": "Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`."
           },
           {
             "$ref": "#/components/parameters/AbpTenantId"
@@ -944,7 +944,7 @@
               "format": "int64",
               "example": 1621851652617
             },
-            "description": "new Date().getTime()",
+            "description": "Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.",
             "required": true
           },
           {
@@ -1537,7 +1537,7 @@
           },
           "currencyCode": {
             "type": "string",
-            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "description": "Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).",
             "maxLength": 3,
             "example": "MYR"
           },
@@ -1549,7 +1549,7 @@
           },
           "referenceCode": {
             "type": "string",
-            "description": "Merchant Reference Code",
+            "description": "The merchant-side unique order reference or invoice tracking sequence code.",
             "maxLength": 50
           },
           "description": {
@@ -1560,18 +1560,18 @@
           },
           "ipAddress": {
             "type": "string",
-            "description": "Customer’s IP address captured by the merchant system",
+            "description": "The customer's IP address captured by the merchant server.",
             "maxLength": 50
           },
           "userAgent": {
             "type": "string",
-            "description": "**[Conditional]** Customer’s user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay",
+            "description": "**[Conditional]** Customer's user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay.",
             "maxLength": 200,
             "nullable": true
           },
           "returnUrl": {
             "type": "string",
-            "description": "Return URL supplied by the merchant server for the payment response and used by CommercePay to redirect the customer's browser back to the desired page on the Merchant’s site",
+            "description": "The synchronous return URL where the customer's browser is automatically redirected after the transaction is completed.",
             "example": "https://returnurl.com/",
             "maxLength": 500
           },
@@ -1608,7 +1608,7 @@
           "timestamp": {
             "type": "integer",
             "format": "int64",
-            "description": "new Date().getTime()",
+            "description": "Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.",
             "example": 1621851652617
           },
           "ChannelDetails": {
@@ -1646,7 +1646,7 @@
         "properties": {
           "currencyCode": {
             "type": "string",
-            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "description": "Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).",
             "example": "MYR",
             "maxLength": 3,
             "nullable": true
@@ -1708,7 +1708,7 @@
           },
           "referenceCode": {
             "type": "string",
-            "description": "Merchant Reference Code",
+            "description": "The merchant-side unique order reference or invoice tracking sequence code.",
             "maxLength": 50,
             "nullable": true
           },
@@ -1720,7 +1720,7 @@
           },
           "currencyCode": {
             "type": "string",
-            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "description": "Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).",
             "example": "MYR",
             "maxLength": 3,
             "nullable": true
@@ -2061,18 +2061,18 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "An identifier that represents a CommercePay payments channel Refer id on response end points [Get Channel List](/api-reference/get-tenant-channels-by-country)"
+            "description": "An identifier that represents a CommercePay payment channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country) endpoint."
           },
           "tenantId": {
             "type": "integer",
             "format": "int32",
-            "description": "Fill in provided Tenant Id",
+            "description": "Your unique Merchant ID assigned by CommercePay.",
             "nullable": true
           },
           "timestamp": {
             "type": "integer",
             "format": "int64",
-            "description": "new Date().getTime()",
+            "description": "Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.",
             "example": 1621851652617
           }
         }
@@ -2163,34 +2163,34 @@
         "properties": {
           "currencyCode": {
             "type": "string",
-            "description": "Currency code with a 3-letter ISO 4217 standard code.",
+            "description": "Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).",
             "example": "MYR",
             "nullable": true
           },
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "An identifier that represents a CommercePay payments channel. Refer id on response end points [Get Channel List](/api-reference/get-tenant-channels-by-country). Must be a channel whose provider supports saved payments, otherwise the request fails with ChannelNotSupportPreAddPayment (2104)."
+            "description": "An identifier that represents a CommercePay payment channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country) endpoint. Must be a channel whose provider supports saved payments, otherwise the request fails with `ChannelNotSupportPreAddPayment` (2104)."
           },
           "referenceCode": {
             "type": "string",
-            "description": "Merchant Reference Code",
+            "description": "The merchant-side unique order reference or invoice tracking sequence code.",
             "maxLength": 50
           },
           "ipAddress": {
             "type": "string",
-            "description": "Customer’s IP address captured by the merchant system",
+            "description": "The customer's IP address captured by the merchant server.",
             "maxLength": 50
           },
           "userAgent": {
             "type": "string",
-            "description": "**[Conditional]** Customer’s user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay",
+            "description": "**[Conditional]** Customer's user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay.",
             "maxLength": 200,
             "nullable": true
           },
           "returnUrl": {
             "type": "string",
-            "description": "Return URL supplied by the merchant server for the payment response and used by CommercePay to redirect the customer's browser back to the desired page on the Merchant’s site",
+            "description": "The synchronous return URL where the customer's browser is automatically redirected after the transaction is completed.",
             "maxLength": 500,
             "example": "https://returnurl.com/"
           },
@@ -2207,13 +2207,13 @@
           "tenantId": {
             "type": "integer",
             "format": "int32",
-            "description": "Fill in provided Tenant Id.",
+            "description": "Your unique Merchant ID assigned by CommercePay.",
             "nullable": true
           },
           "timestamp": {
             "type": "integer",
             "format": "int64",
-            "description": "new Date().getTime()",
+            "description": "Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.",
             "example": 1621851652617
           }
         }
@@ -2308,18 +2308,18 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "An identifier that represents a CommercePay payments channel. Refer id on response end points [Get Channel List](/api-reference/get-tenant-channels-by-country)."
+            "description": "An identifier that represents a CommercePay payment channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country) endpoint."
           },
           "tenantId": {
             "type": "integer",
             "format": "int32",
-            "description": "Fill in provided Tenant Id.",
+            "description": "Your unique Merchant ID assigned by CommercePay.",
             "nullable": true
           },
           "timestamp": {
             "type": "integer",
             "format": "int64",
-            "description": "new Date().getTime()",
+            "description": "Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.",
             "example": 1621851652617
           }
         }
@@ -2354,7 +2354,7 @@
           "timestamp": {
             "type": "integer",
             "format": "int64",
-            "description": "new Date().getTime()",
+            "description": "Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.",
             "example": 1621851652617
           }
         }
@@ -2367,7 +2367,7 @@
           "tenantId": {
             "type": "integer",
             "format": "int64",
-            "description": "Merchant ID."
+            "description": "Your unique Merchant ID assigned by CommercePay."
           },
           "transactionNumber": {
             "type": "string",
@@ -2382,7 +2382,7 @@
           },
           "referenceCode": {
             "type": "string",
-            "description": "Merchant Reference Code",
+            "description": "The merchant-side unique order reference or invoice tracking sequence code.",
             "nullable": true
           },
           "amount": {
@@ -2393,7 +2393,7 @@
           },
           "currencyCode": {
             "type": "string",
-            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "description": "Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).",
             "example": "MYR",
             "maxLength": 3,
             "nullable": true
@@ -2671,11 +2671,11 @@
         "properties": {
           "tenantId": {
             "type": "integer",
-            "description": "Fill in provided Tenant Id"
+            "description": "Your unique Merchant ID assigned by CommercePay."
           },
           "timestamp": {
             "type": "integer",
-            "description": "new Date().getTime()",
+            "description": "Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.",
             "example": 1621851652617,
             "format": "int64"
           }
@@ -2686,7 +2686,8 @@
         "type": "object",
         "properties": {
           "tenantId": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Your unique Merchant ID assigned by CommercePay."
           },
           "tenantName": {
             "type": "string"
@@ -2705,7 +2706,7 @@
         "properties": {
           "currencyCode": {
             "type": "string",
-            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "description": "Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).",
             "maxLength": 3,
             "example": "MYR"
           },
@@ -2794,7 +2795,7 @@
         "properties": {
           "currencyCode": {
             "type": "string",
-            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "description": "Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).",
             "maxLength": 3,
             "example": "MYR"
           },
@@ -2806,7 +2807,7 @@
           },
           "referenceCode": {
             "type": "string",
-            "description": "Merchant Reference Code",
+            "description": "The merchant-side unique order reference or invoice tracking sequence code.",
             "maxLength": 50
           },
           "description": {
@@ -2817,18 +2818,18 @@
           },
           "ipAddress": {
             "type": "string",
-            "description": "Customer’s IP address captured by the merchant system",
+            "description": "The customer's IP address captured by the merchant server.",
             "maxLength": 50
           },
           "userAgent": {
             "type": "string",
-            "description": "**[Conditional]** Customer’s user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay",
+            "description": "**[Conditional]** Customer's user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay.",
             "maxLength": 200,
             "nullable": true
           },
           "returnUrl": {
             "type": "string",
-            "description": "Return URL supplied by the merchant server for the payment response and used by CommercePay to redirect the customer's browser back to the desired page on the Merchant’s site",
+            "description": "The synchronous return URL where the customer's browser is automatically redirected after the transaction is completed.",
             "maxLength": 500,
             "example": "https://returnurl.com/"
           },
@@ -2865,13 +2866,13 @@
           },
           "tenantId": {
             "type": "integer",
-            "description": "Fill in tenant id",
+            "description": "Your unique Merchant ID assigned by CommercePay.",
             "nullable": true
           },
           "timestamp": {
             "type": "integer",
             "format": "int64",
-            "description": "new Date().getTime()",
+            "description": "Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.",
             "example": 1621851652617
           }
         }
@@ -2972,7 +2973,7 @@
           },
           "currencyCode": {
             "type": "string",
-            "description": "Currency code with a 3-letter ISO 4217 standard code",
+            "description": "Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).",
             "maxLength": 3,
             "example": "MYR",
             "nullable": true

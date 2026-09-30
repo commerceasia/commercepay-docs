@@ -32,7 +32,7 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ParamField>
 
 <ParamField body="currencyCode" type="string" required>
-  Currency code with a 3-letter ISO 4217 standard code. Example: `MYR`.
+  Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).
 
   Maximum string length: `3`
 </ParamField>
@@ -42,7 +42,7 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ParamField>
 
 <ParamField body="referenceCode" type="string" required>
-  Merchant reference code.
+  The merchant-side unique order reference or invoice tracking sequence code.
 
   Maximum string length: `50`
 </ParamField>
@@ -56,19 +56,19 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ParamField>
 
 <ParamField body="ipAddress" type="string" required>
-  Customer's IP address captured by the merchant system.
+  The customer's IP address captured by the merchant server.
 
   Maximum string length: `50`
 </ParamField>
 
 <ParamField body="userAgent" type="string">
-  Customer's user agent.
+  **[Conditional]** Customer's user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay.
 
   Maximum string length: `200`
 </ParamField>
 
 <ParamField body="returnUrl" type="string" required>
-  A return URL provided by the merchant. The user can be redirected to the final destination page from the CommercePay receipt page after the transaction payment has been completed.
+  The synchronous return URL where the customer's browser is automatically redirected after the transaction is completed.
 
   Maximum string length: `500`
 </ParamField>
@@ -109,7 +109,7 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ParamField>
 
 <ParamField body="timestamp" type="int64" required>
-  Current timestamp. Example: `1621851652617`.
+  Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.
 </ParamField>
 
 ### Request Payload Sample

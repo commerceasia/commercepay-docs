@@ -29,7 +29,7 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
 </ParamField>
 
 <ParamField body="currencyCode" type="string" required>
-  Currency code formatted to standard 3-letter ISO 4217 specifications (e.g., `MYR`).
+  Currency code with a 3-letter ISO 4217 standard code (e.g., `MYR`).
 </ParamField>
 
 <ParamField body="amount" type="int64" required>
@@ -43,19 +43,25 @@ An API endpoint used to initiate a checkout transaction and obtain the secure pa
 </ParamField>
 
 <ParamField body="ipAddress" type="string" required>
-  The customer's valid IP address captured directly by the merchant server.
+  The customer's IP address captured by the merchant server.
 
   Maximum string length: `50`
 </ParamField>
 
+<ParamField body="userAgent" type="string">
+  **[Conditional]** Customer's user agent. It is recommended to input for a better user experience for specific channels due to different platforms such as desktop, mobile, or app view. Example channels impact: ShopeePay.
+
+  Maximum string length: `200`
+</ParamField>
+
 <ParamField body="returnUrl" type="string" required>
-  The synchronous return URL where the customer's browser is forwarded automatically after completing payment checkout steps.
+  The synchronous return URL where the customer's browser is automatically redirected after the transaction is completed.
 
   Maximum string length: `500`
 </ParamField>
 
 <ParamField body="timestamp" type="int64" required>
-  Numeric timestamp in milliseconds representing request validation freshness (e.g., generated via `new Date().getTime()`).
+  Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.
 </ParamField>
 
 <ParamField body="description" type="string" required>

@@ -17,11 +17,11 @@ An API endpoint used to retrieve wallet information, including wallet balance, s
 ### Body
 
 <ParamField body="tenantId" type="integer" required>
-  Merchant ID.
+  Your unique Merchant ID assigned by CommercePay.
 </ParamField>
 
 <ParamField body="timestamp" type="int64" required>
-  Current timestamp. Example: `1621851652617`.
+  Numeric timestamp in milliseconds representing request validation freshness, generated via `new Date().getTime()`. Example: `1621851652617`.
 </ParamField>
 
 ### Request Payload Sample
@@ -38,7 +38,7 @@ An API endpoint used to retrieve wallet information, including wallet balance, s
 ### Body
 
 <ResponseField name="tenantId" type="integer">
-  Merchant ID.
+  Your unique Merchant ID assigned by CommercePay.
 </ResponseField>
 
 <ResponseField name="tenantName" type="string">
