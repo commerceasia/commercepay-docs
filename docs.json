@@ -8,6 +8,11 @@
     "dark": "#5834E9"
   },
   "favicon": "/favicon.ico",
+  "seo": {
+    "metatags": {
+      "google-site-verification": "dUzHLcHfcaknXY13Nu97zc6gj2DguWeqMvoJWcgBCa4"
+    }
+  },
   "navigation": {
     "tabs": [
       {
