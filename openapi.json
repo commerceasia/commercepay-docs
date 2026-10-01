@@ -54,7 +54,7 @@
             "description": "Invalid user name or password"
           }
         },
-        "description": "The following input parameters are expected to be provided by the Merchant to retrieve the access token.\n\n> - Pass the returned `accessToken` as `Authorization: Bearer {access token from authentication}` on subsequent API calls — see [Request Headers](/request-headers) for the full header list.\n> - The token is valid for **24 hours** (`expireInSeconds`: 86400). Cache and reuse it across requests instead of calling this endpoint every time; once it expires, requests using it will be rejected and you'll need to call this endpoint again for a new one.",
+        "description": "The following input parameters are expected to be provided by the Merchant to retrieve the access token.\n\n> - Pass the returned `accessToken` as `Authorization: Bearer {access token from authentication}` on subsequent API calls — see [Request Headers](/request-headers) for the full header list.\n> - The token is valid for **24 hours** (`expireInSeconds`: 86400).",
         "parameters": [
           {
             "schema": {
@@ -73,7 +73,7 @@
             "title": "Get Access Token",
             "sidebarTitle": "Get Access Token"
           },
-          "content": "<Note>\n  **No signature required for this call.** Unlike other CommercePay endpoints, Authenticate does not require signature security checking — it's how you obtain the credentials used to sign every other request.\n</Note>"
+          "content": "<Note>\n  **No signature required for this call.** Unlike other CommercePay endpoints, Authenticate does not require signature security checking — it's how you obtain the credentials used to sign every other request.\n</Note>\n\n<Tip>\n  **Cache and reuse the access token** across requests instead of calling this endpoint every time. Once it expires, requests using it will be rejected and you'll need to call this endpoint again for a new one.\n</Tip>"
         }
       },
       "parameters": []
