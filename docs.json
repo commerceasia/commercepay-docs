@@ -10,7 +10,9 @@
   "favicon": "/favicon.ico",
   "seo": {
     "metatags": {
-      "google-site-verification": "dUzHLcHfcaknXY13Nu97zc6gj2DguWeqMvoJWcgBCa4"
+      "google-site-verification": "dUzHLcHfcaknXY13Nu97zc6gj2DguWeqMvoJWcgBCa4",
+      "og:image": "/images/commercepay-og-image.png",
+      "twitter:image": "/images/commercepay-og-image.png"
     }
   },
   "navigation": {
