@@ -2995,10 +2995,6 @@
     {
       "description": "Staging",
       "url": "https://staging-payments.commerce.asia"
-    },
-    {
-      "url": "https://payments.commerce.asia",
-      "description": "Production"
     }
   ]
 }
