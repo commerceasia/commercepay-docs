@@ -10,16 +10,36 @@ Recurring Payments let merchants automatically charge customers at scheduled int
 Recommended for: Subscription or membership merchants using Direct Integration who need to bill customers on a recurring schedule after a one-time authorization.
 
 <Warning>
+#### **Supported Channels**
+
+Recurring Payments are only supported for **Credit Card** and **TNG eWallet**. Other payment channels do not support recurring billing.
+</Warning>
+
+<Warning>
 #### **Important**
 
-Recurring Payments are only available through Direct Integration. They are not supported on Hosted Session Checkout or other integration methods (e.g., e-Commerce plugins).
+The API integration described on this page is only available through Direct Integration. It is not supported on Hosted Session Checkout or other integration methods (e.g., e-Commerce plugins). For a setup that does not require technical integration, see [Recurring Payment Forms](#recurring-payment-forms).
 </Warning>
 
 <Warning>
 #### Enabling Recurring Payments
 
-The **Recurring Payments** feature must be approved by our business team before it can be activated for your account. Once approved, the business team will also provide the specific recurring-enabled channel(s) your integration must use — not all payment channels support recurring billing.
+The **Recurring Payments** feature must be approved by our Business Development Team ([payments@commerce.asia](mailto:payments@commerce.asia)) before it can be activated for your account. Once approved, the Business Development Team will also provide the specific recurring-enabled channel(s) your integration must use.
 </Warning>
+
+## Recurring Payment Forms
+
+CommercePay also offers **Recurring Payment Forms**, which can be configured through the CommercePay Back-Office portal without technical knowledge. An example is shown below.
+
+<Frame caption="Example of a Recurring Payment Form">
+  ![Example of a Recurring Payment Form showing customer information and subscription details](/images/recurring_payment_form.png)
+</Frame>
+
+<Info>
+For more information about Recurring Payment Forms, please contact our Business Development Team at [payments@commerce.asia](mailto:payments@commerce.asia).
+</Info>
+
+The sections below describe how to integrate Recurring Payments through the API.
 
 ## Purchase Flow (Initial Payment & Authorization)
 
@@ -58,7 +78,7 @@ The initial payment flow operates as follows:
     The customer opts into a subscription or recurring billing plan on the merchant's website and confirms the terms.
   </Step>
   <Step title="Fetch Recurring-Enabled Channels">
-    The merchant confirms which channel(s) to use for recurring billing (provided by the CommercePay business team during enablement) and, if applicable, calls Get Provider Channels for deeper options.
+    The merchant confirms which channel(s) to use for recurring billing (provided by our Business Development Team at [payments@commerce.asia](mailto:payments@commerce.asia) during enablement) and, if applicable, calls Get Provider Channels for deeper options.
   </Step>
   <Step title="Initiate First Payment Request">
     The merchant backend calls the <Badge color="blue">API</Badge> [Request Payment](/api-reference/paymentgateway/request-payment) with the usual payment fields, plus a **recurringPaymentInfo** object that registers the subscription: **id, mode, numberOfPayments**... (**Channel-specific fields, see table below**)
