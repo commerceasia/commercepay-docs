@@ -73,7 +73,7 @@
             "title": "Get Access Token",
             "sidebarTitle": "Get Access Token"
           },
-          "content": "<Note>\n  **No signature required for this call.** Unlike other CommercePay endpoints, Authenticate does not require signature security checking — it's how you obtain the credentials used to sign every other request.\n</Note>\n\n<Tip>\n  **Cache and reuse the access token** across requests instead of calling this endpoint every time. Once it expires, requests using it will be rejected and you'll need to call this endpoint again for a new one.\n</Tip>"
+          "content": "<Note>\n  **No signature required for this call.** Unlike other CommercePay endpoints, Authenticate does not require signature security checking — it's how you obtain the credentials used to sign every other request.\n</Note>\n\n<Tip>\n  **Cache and reuse the access token** across requests instead of calling it every time. Once it expires, requests using it will be rejected and you'll need to call this endpoint again for a new one.\n</Tip>"
         }
       },
       "parameters": []
@@ -179,7 +179,7 @@
               "type": "integer",
               "format": "int32"
             },
-            "description": "An identifier that represents a CommercePay channel. Refer to the `id` from the response of the <Badge color=\"blue\">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country).",
+            "description": "An identifier that represents a CommercePay channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country).",
             "required": true
           },
           {
@@ -747,7 +747,7 @@
         ],
         "operationId": "ApiServicesAppPaymentgatewayRevoketokenizePost",
         "summary": "Revoke Saved Payment",
-        "description": "**Revoke a customer's saved payment method in Payment Gateway**\n\nAllow merchants to permanently remove a customer's previously saved (tokenized) payment details for a given channel. Once revoked, the saved payment method can no longer be used for future payments — the customer must save their payment method again (via the <Badge color=\"blue\">API</Badge> [Add Saved Payment](/api-reference/add-saved-payment)) if they wish to pay this way again.\n\n> - Merchants shall pass their customer's Unique Id to the **\"username\"** parameter — the same Unique Id originally supplied to `customer.username` when the payment method was saved.\n> - Channel Id may refer to the [Get Channel List](/api-reference/get-tenant-channels-by-country).\n> - Only channels/providers that support saved payments can be revoked through this endpoint. If the channel does not support it, or no saved payment is found for the given username on that channel, the request will fail.\n> - This endpoint returns no response body on success (HTTP 200, empty). Treat the absence of an error as confirmation the saved payment method was revoked.",
+        "description": "**Revoke a customer's saved payment method in Payment Gateway**\n\nAllow merchants to permanently remove a customer's previously saved (tokenized) payment details for a given channel. Once revoked, the saved payment method can no longer be used for future payments — the customer must save their payment method again (via the [Add Saved Payment](/api-reference/add-saved-payment)) if they wish to pay this way again.\n\n> - Merchants shall pass their customer's Unique Id to the **\"username\"** parameter — the same Unique Id originally supplied to `customer.username` when the payment method was saved.\n> - Channel Id may refer to the [Get Channel List](/api-reference/get-tenant-channels-by-country).\n> - Only channels/providers that support saved payments can be revoked through this endpoint. If the channel does not support it, or no saved payment is found for the given username on that channel, the request will fail.\n> - This endpoint returns no response body on success (HTTP 200, empty). Treat the absence of an error as confirmation the saved payment method was revoked.",
         "parameters": [
           {
             "$ref": "#/components/parameters/AbpTenantId"
@@ -1525,7 +1525,7 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "An identifier that represents a CommercePay payments channel. Refer to the `id` from the response of the <Badge color=\"blue\">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country).\n\nOptional: Send without channelId parameter to call Payment web",
+            "description": "An identifier that represents a CommercePay payments channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country).\n\nOptional: Send without channelId parameter to call Payment web",
             "example": 2,
             "nullable": true
           },
@@ -1666,7 +1666,7 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "Refer to the `id` from the response of the <Badge color=\"blue\">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country).",
+            "description": "Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country).",
             "nullable": true
           },
           "redirectionType": {
@@ -1734,7 +1734,7 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "Refer to the `id` from the response of the <Badge color=\"blue\">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country)."
+            "description": "Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country)."
           },
           "providerTransactionNumber": {
             "type": "string",
@@ -2061,7 +2061,7 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "An identifier that represents a CommercePay payment channel. Refer to the `id` from the response of the <Badge color=\"blue\">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country)."
+            "description": "An identifier that represents a CommercePay payment channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country)."
           },
           "tenantId": {
             "type": "integer",
@@ -2170,7 +2170,7 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "An identifier that represents a CommercePay payment channel. Refer to the `id` from the response of the <Badge color=\"blue\">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country). Must be a channel whose provider supports saved payments, otherwise the request fails with `ChannelNotSupportPreAddPayment` (2104)."
+            "description": "An identifier that represents a CommercePay payment channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country). Must be a channel whose provider supports saved payments, otherwise the request fails with `ChannelNotSupportPreAddPayment` (2104)."
           },
           "referenceCode": {
             "type": "string",
@@ -2308,7 +2308,7 @@
           "channelId": {
             "type": "integer",
             "format": "int32",
-            "description": "An identifier that represents a CommercePay payment channel. Refer to the `id` from the response of the <Badge color=\"blue\">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country)."
+            "description": "An identifier that represents a CommercePay payment channel. Refer to the `id` from the response of the [Get Channel List](/api-reference/get-tenant-channels-by-country)."
           },
           "tenantId": {
             "type": "integer",

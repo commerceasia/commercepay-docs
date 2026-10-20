@@ -61,7 +61,7 @@ The initial payment flow operates as follows:
     The merchant confirms which channel(s) to use for recurring billing (provided by the CommercePay business team during enablement) and, if applicable, calls Get Provider Channels for deeper options.
   </Step>
   <Step title="Initiate First Payment Request">
-    The merchant backend calls the <Badge color="blue">API</Badge> [Request Payment API](/api-reference/direct-integration-api-request-payment) with the usual payment fields, plus a **recurringPaymentInfo** object that registers the subscription: **id, mode, numberOfPayments**... (**Channel-specific fields, see table below**)
+    The merchant backend calls the <Badge color="blue">API</Badge> [Request Payment](/api-reference/paymentgateway/request-payment) with the usual payment fields, plus a **recurringPaymentInfo** object that registers the subscription: **id, mode, numberOfPayments**... (**Channel-specific fields, see table below**)
   </Step>
   <Step title="Provider Redirection & Consent">
     CommercePay contacts the payment provider, and the customer is redirected to the provider's page to complete the first payment and authorize future recurring charges (e.g., saving card details or DuitNow proxy consent).
@@ -111,7 +111,7 @@ The subsequent payment flow operates as follows:
     The merchant's own billing/scheduler system determines that a payment is due for a subscription, per the agreed cycle (Daily/Weekly/Monthly/Yearly).
   </Step>
   <Step title="Initiate Subsequent Payment Request">
-    The merchant backend calls the <Badge color="blue">API</Badge> [Request Payment API](/api-reference/direct-integration-api-request-payment) again, using the same channel and the same **recurringPaymentInfo.id** established during the first payment, with a new **referenceCode** and **amount** for this billing cycle. No customer redirection is involved.
+    The merchant backend calls the <Badge color="blue">API</Badge> [Request Payment](/api-reference/paymentgateway/request-payment) again, using the same channel and the same **recurringPaymentInfo.id** established during the first payment, with a new **referenceCode** and **amount** for this billing cycle. No customer redirection is involved.
   </Step>
   <Step title="Provider Processing">
     CommercePay forwards the charge to the payment provider, which processes it against the previously authorized instrument.
