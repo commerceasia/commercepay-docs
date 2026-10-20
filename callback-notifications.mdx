@@ -3,10 +3,10 @@ title: "Callback Notifications"
 description: "How CommercePay notifies your server of payment status changes via signed host-to-host callbacks."
 ---
 
-Once CommercePay has verified a successful response from the payment provider and the customer has completed payment on the provider's page, CommercePay sends an asynchronous, host-to-host callback notification to the merchant server. This notification is sent to the `callbackUrl` supplied in the originating request — for example on [Direct Integration](/api-reference/direct-integration-api-request-payment), [Hosted Session Checkout](/api-reference/initial-session), or [Request Payout](/api-reference/payout-api-requestpayout).
+Once CommercePay has verified a successful response from the payment provider and the customer has completed payment on the provider's page, CommercePay sends an asynchronous, host-to-host callback notification to the merchant server. This notification is sent to the `callbackUrl` supplied in the originating request — for example on <Badge color="blue">API</Badge> [Direct Integration](/api-reference/direct-integration-api-request-payment), <Badge color="blue">API</Badge> [Hosted Session Checkout](/api-reference/initial-session), or <Badge color="blue">API</Badge> [Request Payout](/api-reference/payout-api-requestpayout).
 
 <Note>
-`callbackUrl` is optional on these endpoints. If it is omitted, CommercePay will not send a callback for that transaction — merchants who don't provide it must poll the [Query Payment](/api-reference/query-payment) endpoint instead.
+`callbackUrl` is optional on these endpoints. If it is omitted, CommercePay will not send a callback for that transaction — merchants who don't provide it must poll the <Badge color="blue">API</Badge> [Query Payment](/api-reference/query-payment) instead.
 </Note>
 
 ## Callback Payload
@@ -54,7 +54,7 @@ The exact set of fields returned may vary slightly by channel and provider.
 </ResponseField>
 
 <ResponseField name="channelId" type="integer">
-  The CommercePay payment channel used for this transaction. Corresponds to the `id` from [Get Channel List](/api-reference/get-tenant-channels-by-country) — see the [Channel List](/channel-list) for common values.
+  The CommercePay payment channel used for this transaction. Corresponds to the `id` from <Badge color="blue">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country) — see the [Channel List](/channel-list) for common values.
 </ResponseField>
 
 <ResponseField name="currencyCode" type="string">
@@ -78,7 +78,7 @@ The exact set of fields returned may vary slightly by channel and provider.
 </ResponseField>
 
 <ResponseField name="paymentSessionNumber" type="string">
-  **Session flow only.** The unique session identifier, present when the transaction originated from a session-based checkout such as [Hosted Session Checkout](/api-reference/initial-session).
+  **Session flow only.** The unique session identifier, present when the transaction originated from a session-based checkout such as <Badge color="blue">API</Badge> [Hosted Session Checkout](/api-reference/initial-session).
 </ResponseField>
 
 ### Payment Status Code Table

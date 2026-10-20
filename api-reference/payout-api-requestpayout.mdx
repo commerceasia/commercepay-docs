@@ -6,7 +6,7 @@ api: "POST https://staging-payments.commerce.asia/api/services/app/PaymentGatewa
 
 import CommonHeaders from "/snippets/common-headers.mdx";
 
-An API endpoint used to request a payout and transfer funds to the specified recipients through a bank account or DuitNow Proxy.
+Used to request a payout and transfer funds to the specified recipients through a bank account or DuitNow Proxy.
 
 ## Request
 
@@ -28,7 +28,7 @@ An API endpoint used to request a payout and transfer funds to the specified rec
 </ParamField>
 
 <ParamField body="providerChannelId" type="string" required>
-  An identifier that represents the payment method (Bank or DuitNow Proxy). You can obtain the providerChannelId via the [Get Provider Channels API](/api-reference/get-provider-channels) or refer to it [here](/payout-provider-channel).
+  An identifier that represents the payment method (Bank or DuitNow Proxy). You can obtain the providerChannelId via the <Badge color="blue">API</Badge> [Get Provider Channels](/api-reference/get-provider-channels) or refer to it [here](/payout-provider-channel).
 </ParamField>
 
 <ParamField body="currencyCode" type="string" required>

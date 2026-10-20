@@ -3,14 +3,14 @@ title: "Channel List"
 description: "Reference list of channelId values for use with Direct Integration."
 ---
 
-When integrating with [Direct Integration](/direct-integration), you need to pass a `channelId` to identify which payment channel the customer selected. Use the table below as a quick reference instead of calling [Get Channel List](/api-reference/get-tenant-channels-by-country) during development.
+When integrating with [Direct Integration](/direct-integration), you need to pass a `channelId` to identify which payment channel the customer selected. Use the table below as a quick reference instead of calling <Badge color="blue">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country) during development.
 
 <Note>
-This list is provided for convenience during integration. Channel availability can change, so always confirm against a live [Get Channel List](/api-reference/get-tenant-channels-by-country) call before going live.
+This list is provided for convenience during integration. Channel availability can change, so always confirm against a live <Badge color="blue">API</Badge> [Get Channel List](/api-reference/get-tenant-channels-by-country) call before going live.
 </Note>
 
 <Warning>
-If the channel's `isProviderHostChannel` is `true`, passing `channelId` alone is not enough. You must also call [Get Provider Channels](/api-reference/get-provider-channels) with that `channelId` to retrieve the list of sub-channels (e.g. specific banks for FPX), and pass the selected sub-channel's `id` as `providerChannelId` in your [Direct Integration](/api-reference/direct-integration-api-request-payment) request. If `isProviderHostChannel` is `false`, omit `providerChannelId` entirely.
+If the channel's `isProviderHostChannel` is `true`, passing `channelId` alone is not enough. You must also call <Badge color="blue">API</Badge> [Get Provider Channels](/api-reference/get-provider-channels) with that `channelId` to retrieve the list of sub-channels (e.g. specific banks for FPX), and pass the selected sub-channel's `id` as `providerChannelId` in your <Badge color="blue">API</Badge> [Direct Integration](/api-reference/direct-integration-api-request-payment) request. If `isProviderHostChannel` is `false`, omit `providerChannelId` entirely.
 </Warning>
 
 <Tabs>
