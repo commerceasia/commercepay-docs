@@ -8,6 +8,18 @@ import CommonHeaders from "/snippets/common-headers.mdx";
 
 Used to request a payout and transfer funds to the specified recipients through a bank account or DuitNow Proxy.
 
+<Note>
+A successful response means the payout request was accepted and queued, not that the funds have been transferred. To get the final payout status, use the `callbackUrl` ([Callback Notifications](/callback-notifications)) or call <Badge color="blue">API</Badge> [Query Payment](/api-reference/query-payment).
+</Note>
+
+## Before you begin
+
+The request is rejected if any of the following is not met:
+
+- Your [wallet](/payout-integration#wallet) for the payout currency is active and has sufficient balance.
+- The payout channel is enabled for your merchant account.
+- The IP address of the server calling this API is whitelisted, if IP whitelisting is configured for your account.
+
 ## Request
 
 ### Headers
@@ -87,17 +99,17 @@ Used to request a payout and transfer funds to the specified recipients through 
       Maximum string length: `150`
     </ParamField>
     <ParamField body="customer.mobileNo" type="string">
-      Customer's mobile number. Required when processing a payout via DuitNow Proxy using a mobile number.
+      **[Conditional]** Customer's mobile number. Required when `providerChannelId` is `MBNO` (DuitNow Proxy using a mobile number).
 
       Maximum string length: `16`
     </ParamField>
     <ParamField body="customer.name" type="string">
-      Customer's name. Required when processing a payout via bank transfer.
+      **[Conditional]** Customer's name. For a bank payout, this is the beneficiary's account holder name. Required when `providerChannelId` is a bank code (payout via bank account).
 
       Maximum string length: `36`
     </ParamField>
     <ParamField body="customer.username" type="string">
-      A field for bank account number, national ID (NRIC) or Business Registration Number.
+      **[Conditional]** The beneficiary's bank account number, national ID (NRIC) or Business Registration Number. Required for a bank payout, and for DuitNow Proxy payouts where `providerChannelId` is `NRIC` or `BREG`. Not required when `providerChannelId` is `MBNO`; use `customer.mobileNo` instead.
 
       Maximum string length: `36`
     </ParamField>
@@ -209,10 +221,19 @@ Used to request a payout and transfer funds to the specified recipients through 
 
 ## Error Responses
 
-| Code | Message |
-| ---- | ------- |
-| 2056 | `Failed Payment Request` |
+| Code | Description |
+| ---- | ----------- |
 | 1 | `Invalid Signature.` |
+| 2002 | Invalid payment amount. |
+| 2004 | The currency is not supported by the payout channel. |
+| 2005 | The amount is below the minimum allowed for the channel. |
+| 2006 | The amount exceeds the maximum allowed for the channel. |
+| 2008 | `Failed Payment Request`. The request failed without a provider message. |
+| 2009 | Duplicate transaction. |
+| 2016 | The channel is not enabled for your merchant account. |
+| 2019 | `providerChannelId` is required. |
+| 2056 | The request was rejected by the payout provider. The `message` states the reason, for example `Failed Payment Request (Description: Missing CustomerUsername or CustomerName)`, `Failed Request (Description: Tenant wallet insufficient fund)`, `Failed request due to Wallet Inactive` or `Failed Request (Description: IP Address not in whitelist)`. |
+| 2196 | The channel has been switched off by the merchant. |
 
 ```json Response_400
 {
