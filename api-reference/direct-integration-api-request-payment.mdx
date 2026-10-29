@@ -120,20 +120,50 @@ Used to initiate a checkout transaction and obtain the secure payment provider r
 </ResponseField>
 
 <ResponseField name="redirectionType" type="integer">
-  Defines the browser execution pathway. `1` = UrlRedirection, `2` = Script execution redirection.
+  Defines how you present the payment to the customer. Check this value first, because it decides which of the other fields you use.
+
+  | Value | Name | What to do |
+  | ----- | ---- | ---------- |
+  | `1` | `UrlRedirection` | Redirect the customer's browser to `redirectUrl`. |
+  | `2` | `RenderScriptRedirection` | Render `clientScript` in the customer's browser. It submits the customer to the provider. |
+  | `4` | `RenderInQR` | Display `redirectUrl` as a QR code image or link (see `base64Image`). |
+  | `5` | `CashOnCounterRedirection` | Show the customer the `serialNumber` to pay at the counter before `transactionExpired`. |
+  | `6` | `RenderInQRBase64` | Display the QR code image from `base64Image`. |
+
+  Which values you receive depends on the channel. See the [Channel List](/channel-list).
 </ResponseField>
 
 <ResponseField name="redirectUrl" type="string">
-  The secure target destination link utilized to send the consumer browser to the payment selection page.
+  The target link for the payment. For `redirectionType` `1` it's the page to send the customer to. For `4` and `6` it holds the QR code link or payment link instead.
 </ResponseField>
 
 <ResponseField name="clientScript" type="string">
-  Customized script sequence injected onto client browsers to force payment redirection behaviors.
+  Script to render in the customer's browser. Only set when `redirectionType` is `2`, otherwise `null`.
+</ResponseField>
+
+<ResponseField name="paymentToken" type="string">
+  Token that identifies this transaction on CommercePay's hosted payment page. It's always returned, so you don't need to parse it out of `redirectUrl`, which may point to the payment provider instead.
+</ResponseField>
+
+<ResponseField name="base64Image" type="string">
+  Base64-encoded QR code image. Only set for QR channels (`redirectionType` `4` or `6`, channel dependent), otherwise `null`.
+</ResponseField>
+
+<ResponseField name="expiredInSeconds" type="integer">
+  How many seconds the payment stays valid from the time of this response, for example how long a QR code can be scanned. Only set for channels with a short validity period (QR channels and some card channels), otherwise `null`. Use `transactionExpired` for the exact deadline.
+</ResponseField>
+
+<ResponseField name="serialNumber" type="int64">
+  Payment serial number the customer quotes at the counter. Only set when `redirectionType` is `5`, otherwise `null`.
 </ResponseField>
 
 <ResponseField name="transactionExpired" type="string">
-  Expiration threshold deadline represented as an ISO 8601 date-time timestamp block.
+  Deadline for completing the payment as an ISO 8601 date-time. It can be `null` when the channel doesn't report one.
 </ResponseField>
+
+<Note>
+  Fields that don't apply to the channel are returned as `null`.
+</Note>
 
 ### Response Payload Sample
 
@@ -147,7 +177,37 @@ Used to initiate a checkout transaction and obtain the secure payment provider r
     "redirectionType": 1,
     "redirectUrl": "{URL}",
     "clientScript": null,
-    "transactionExpired": "2026-05-28T16:39:00.000Z"
+    "base64Image": null,
+    "expiredInSeconds": null,
+    "serialNumber": null,
+    "transactionExpired": "2026-05-28T16:39:00.000Z",
+    "paymentToken": "{PAYMENT_TOKEN}"
+  },
+  "targetUrl": null,
+  "success": true,
+  "error": null,
+  "unAuthorizedRequest": false,
+  "__abp": true
+}
+```
+
+For QR channels, `redirectionType` is `4` or `6` and the QR fields are filled in:
+
+```json Response_2XX_QR
+{
+  "result": {
+    "currencyCode": "MYR",
+    "amount": 1000,
+    "transactionNumber": "200F75CD1F0053299EB260528",
+    "channelId": 2,
+    "redirectionType": 4,
+    "redirectUrl": "{QR_URL}",
+    "clientScript": null,
+    "base64Image": "{BASE64_QR_IMAGE}",
+    "expiredInSeconds": 300,
+    "serialNumber": null,
+    "transactionExpired": "2026-05-28T16:39:00.000Z",
+    "paymentToken": "{PAYMENT_TOKEN}"
   },
   "targetUrl": null,
   "success": true,

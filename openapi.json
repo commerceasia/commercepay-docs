@@ -479,7 +479,12 @@
                       "channelId": 0,
                       "redirectionType": 1,
                       "redirectUrl": "string",
-                      "clientScript": "string"
+                      "clientScript": null,
+                      "base64Image": null,
+                      "expiredInSeconds": null,
+                      "serialNumber": null,
+                      "transactionExpired": "2026-05-28T16:39:00.000Z",
+                      "paymentToken": "string"
                     }
                   }
                 }
@@ -1679,13 +1684,36 @@
           },
           "clientScript": {
             "type": "string",
-            "description": "Client script used for the customer to redirect to the payment page",
+            "description": "Script to render in the customer's browser. Only set when `redirectionType` is 2.",
+            "nullable": true
+          },
+          "base64Image": {
+            "type": "string",
+            "description": "Base64-encoded QR code image. Only set for QR channels (`redirectionType` 4 or 6, channel dependent).",
+            "nullable": true
+          },
+          "expiredInSeconds": {
+            "type": "integer",
+            "format": "int32",
+            "description": "How many seconds the payment stays valid from the time of this response. Only set for channels with a short validity period (QR channels and some card channels). Use `transactionExpired` for the exact deadline.",
+            "nullable": true
+          },
+          "serialNumber": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Payment serial number the customer quotes at the counter. Only set when `redirectionType` is 5.",
             "nullable": true
           },
           "transactionExpired": {
             "type": "string",
             "format": "date-time",
-            "description": "Transaction Expired Date Time"
+            "description": "Deadline for completing the payment. Can be null when the channel doesn't report one.",
+            "nullable": true
+          },
+          "paymentToken": {
+            "type": "string",
+            "description": "Token that identifies this transaction on CommercePay's hosted payment page. Always returned, so you don't need to parse it out of `redirectUrl`, which may point to the payment provider instead.",
+            "nullable": true
           }
         }
       },
@@ -1945,15 +1973,21 @@
       "RedirectionType": {
         "enum": [
           1,
-          2
+          2,
+          4,
+          5,
+          6
         ],
         "type": "integer",
         "format": "int32",
         "x-enumNames": [
           "UrlRedirection",
-          "RenderScriptRedirection"
+          "RenderScriptRedirection",
+          "RenderInQR",
+          "CashOnCounterRedirection",
+          "RenderInQRBase64"
         ],
-        "description": "Notes: 1 = UrlRedirection\n"
+        "description": "How to present the payment to the customer.\n\n| Value | Name | What to do |\n| ----- | ---- | ---------- |\n| 1 | `UrlRedirection` | Redirect the customer's browser to `redirectUrl`. |\n| 2 | `RenderScriptRedirection` | Render `clientScript` in the customer's browser. |\n| 4 | `RenderInQR` | Display `redirectUrl` as a QR code image or link (see `base64Image`). |\n| 5 | `CashOnCounterRedirection` | Show the customer the `serialNumber` to pay at the counter. |\n| 6 | `RenderInQRBase64` | Display the QR code image from `base64Image`. |"
       },
       "ThirdPartyChannelStatus": {
         "enum": [
